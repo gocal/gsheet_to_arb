@@ -29,7 +29,8 @@ main(List<String> args) {
 
   parser.addOption("file-prefix",
       defaultsTo: config.arbFilePrefix,
-      callback: (x) => config.arbFilePrefix = x, help: 'arb file prefix');
+      callback: (x) => config.arbFilePrefix = x,
+      help: 'arb file prefix');
 
   parser.parse(args);
   if (args.length == 0) {
@@ -53,4 +54,3 @@ main(List<String> args) {
 
   sheetParser.parseSheet(config);
 }
-

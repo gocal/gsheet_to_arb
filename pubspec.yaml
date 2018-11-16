@@ -1,7 +1,7 @@
 name: gsheet_to_arb
 version: 0.0.1
 author: Marcin Marek Gocał <marcin.gocal@gmail.com>
-description: A starting point for Dart libraries or applications.
+description: Imports Application Resource Bundle (arb) from Google Sheets documents
 
 homepage: https://github.com/gocal/gsheet_to_arb
 
@@ -15,5 +15,7 @@ dependencies:
   intl: '>=0.15.3 <0.16.0'
   path: '>=0.9.0 <2.0.0'
   petitparser: '>=1.1.3 < 3.0.0'
+  googleapis_auth: ^0.2.6
+  googleapis: ^0.52.0+1
 dev_dependencies:
   test: ^1.2.0

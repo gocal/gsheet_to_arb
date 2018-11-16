@@ -12,7 +12,7 @@ pub run gsheet_to_arb:import
 
 ## Export ARB files to the Google Sheet
 
-To import arb files from Google Sheet run the `import` program.
+To import arb files from Google Sheet run the `export` program.
 
 ```
 pub run gsheet_to_arb:export

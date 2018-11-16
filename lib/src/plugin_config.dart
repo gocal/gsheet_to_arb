@@ -4,8 +4,6 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-import 'package:yaml/yaml.dart';
-
 class PluginConfig {
   var configFilePath = "gsheet_to_arb.yaml";
   var outputDirectoryPath = "build";
@@ -16,8 +14,4 @@ class PluginConfig {
   String documentId;
 
   PluginConfig();
-
-  PluginConfig.fromYaml(YamlNode yaml) {
-    // TODO add implementation
-  }
 }

@@ -5,13 +5,33 @@
  */
 
 class PluginConfig {
-  var configFilePath = "gsheet_to_arb.yaml";
-  var outputDirectoryPath = "build";
+  var outputDirectoryPath = "lib/src/i18n";
   var arbFilePrefix = "intl";
 
+  GoogleSheetConfig sheetConfig;
+
+  PluginConfig.fromYaml(Map<String, dynamic> yaml) {
+    arbFilePrefix = yaml['arb_file_prefix'];
+    outputDirectoryPath = yaml['output_directory'];
+
+    var sheetConfigYaml = yaml['gsheet'];
+    var clientId = sheetConfigYaml['client_id'];
+    var clientSecret = sheetConfigYaml['client_secret'];
+    var documentId = sheetConfigYaml['document_id'];
+
+    sheetConfig = GoogleSheetConfig(
+        clientId: clientId, clientSecret: clientSecret, documentId: documentId);
+  }
+
+  PluginConfig();
+}
+
+class GoogleSheetConfig {
   String clientId;
   String clientSecret;
   String documentId;
+  String sheetId;
 
-  PluginConfig();
+  GoogleSheetConfig(
+      {this.clientId, this.clientSecret, this.documentId, this.sheetId = '0'});
 }

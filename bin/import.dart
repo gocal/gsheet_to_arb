@@ -14,23 +14,12 @@ import 'package:yaml/yaml.dart';
 
 main(List<String> args) {
   var parser = new ArgParser();
-  var config = PluginConfig();
-  var sheetParser = SheetParser();
+  var configFilePath = "gsheet_to_arb.yaml";
 
   parser.addOption("config",
-      defaultsTo: config.configFilePath,
-      callback: (x) => config.configFilePath = x,
+      defaultsTo: configFilePath,
+      callback: (x) => configFilePath = x,
       help: 'config yaml file name');
-
-  parser.addOption("output-dir",
-      defaultsTo: config.outputDirectoryPath,
-      callback: (x) => config.outputDirectoryPath = x,
-      help: 'output directory path');
-
-  parser.addOption("file-prefix",
-      defaultsTo: config.arbFilePrefix,
-      callback: (x) => config.arbFilePrefix = x,
-      help: 'arb file prefix');
 
   parser.parse(args);
   if (args.length == 0) {
@@ -40,17 +29,18 @@ main(List<String> args) {
     exit(0);
   }
 
-  var configFile = File(config.configFilePath);
+  var yaml = _loadConfig(configFilePath);
+
+  var config = PluginConfig.fromYaml(yaml);
+
+  var sheetParser = SheetParser();
+  sheetParser.parseSheet(config);
+}
+
+Map<String, dynamic> _loadConfig(String path) {
+  var configFile = File(path);
   var configText = configFile.readAsStringSync();
   var configYaml = loadYaml(configText);
-
   var yaml = configYaml['gsheet_to_arb'];
-
-  var sheetConfig = yaml['gsheet'];
-
-  config.clientId = sheetConfig['client_id'];
-  config.clientSecret = sheetConfig['client_secret'];
-  config.documentId = sheetConfig['document_id'];
-
-  sheetParser.parseSheet(config);
+  return yaml;
 }

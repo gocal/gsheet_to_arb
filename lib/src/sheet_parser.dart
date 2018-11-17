@@ -18,11 +18,13 @@ class SheetParser {
 
   void parseSheet(PluginConfig config) {
     this.config = config;
-    var id = new ClientId(config.clientId, config.clientSecret);
+    var id = new ClientId(
+        config.sheetConfig.clientId, config.sheetConfig.clientSecret);
     var scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
     clientViaUserConsent(id, scopes, prompt).then(
-        (AuthClient client) => handleSheetsAuth(client, config.documentId));
+            (AuthClient client) =>
+            handleSheetsAuth(client, config.sheetConfig.documentId));
   }
 
   void prompt(String url) {

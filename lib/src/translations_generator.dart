@@ -6,15 +6,13 @@
 
 import 'dart:io';
 
-import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 
 class TranslationsGenerator {
 
-  void buildTranslations(ArbBundle arbBundle, Directory directory) {
-
-    var document = arbBundle.documents[0];
+  String buildTranslations(ArbDocument document, Directory directory) {
 
     var classBuilder = ClassBuilder();
     classBuilder.name = "Strings";
@@ -27,8 +25,6 @@ class TranslationsGenerator {
 
     var formatted = DartFormatter().format('${emitted}');
 
-    var filePath = "${directory.path}/Strings.dart";
-    var file = File(filePath);
-    file.writeAsString(formatted);
+    return formatted;
   }
 }

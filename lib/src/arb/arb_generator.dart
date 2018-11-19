@@ -4,11 +4,6 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:gsheet_to_arb/src/plugin_config.dart';
-
 class ArbBundle {
   final List<ArbDocument> documents;
 
@@ -24,25 +19,33 @@ class ArbDocument {
   Map<String, Object> toJson() {
     final Map<String, Object> _json = Map<String, Object>();
 
-    for (int i = 0; i < resources.length; i++) {
-      _json[resources[i].key] = resources[i].value;
-    }
+    resources.forEach((ArbEntry entry) {
+      _json[entry.key] = entry.value;
+      if (entry.hasAttributes) {
+        _json["@@${entry.key}"] = entry.attributes;
+      }
+    });
 
     return _json;
+  }
+
+  ArbDocument.fromJson(Map _json) {
+    _json.forEach((key, value) {});
   }
 }
 
 class ArbEntry {
   final String key;
   final String value;
-  final Map<String, String> attributes = Map();
+  final Map<String, Object> attributes = Map();
 
-  ArbEntry(this.key, this.value);
+  final bool hasAttributes;
 
-  Map<String, Object> toJson() {
-    final Map<String, Object> _json = Map<String, Object>();
-    _json[key] = value;
-    return _json;
+  ArbEntry(this.key, this.value, [this.hasAttributes = true]) {
+    if (hasAttributes) {
+      attributes['type'] = "Text";
+      attributes['placeholders'] = Map<String, Object>();
+    }
   }
 }
 
@@ -68,31 +71,10 @@ class ArbDocumentBuilder {
 }
 
 class LocaleArbResource extends ArbEntry {
-  LocaleArbResource(String value) : super("_locale", value);
+  LocaleArbResource(String value) : super("_locale", value, false);
 }
 
 class LastModifiedArbResource extends ArbEntry {
   LastModifiedArbResource(DateTime lastModified)
-      : super("@@last_modified", lastModified.toIso8601String());
-}
-
-class ArbSerializer {
-
-  void saveArbBundle(ArbBundle bundle, PluginConfig config) {
-    print("save arb files in ${config.outputDirectoryPath}");
-    var targetDir = Directory(config.outputDirectoryPath);
-    targetDir.createSync();
-    bundle.documents
-        .forEach((document) => _saveArbDocument(document, targetDir));
-  }
-
-  void _saveArbDocument(ArbDocument document, Directory directory) {
-    var filePath = "${directory.path}/${document.locale}.arb";
-    print("  => $filePath");
-    var file = File(filePath);
-    file.createSync();
-    var encoder = new JsonEncoder.withIndent('  ');
-    var arbContent = encoder.convert(document.toJson());
-    file.writeAsString(arbContent);
-  }
+      : super("@@last_modified", lastModified.toIso8601String(), false);
 }

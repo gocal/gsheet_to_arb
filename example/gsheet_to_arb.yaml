@@ -1,0 +1,5 @@
+gsheet_to_arb:
+  gsheet:
+    client_id: '<client_id>'
+    client_secret: '<client_secret>'
+    document_id: '<document_id>'

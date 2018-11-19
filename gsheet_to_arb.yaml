@@ -1,7 +1,0 @@
-gsheet_to_arb:
-  arb_file_prefix: 'intl'
-  output_directory: 'build'
-  gsheet:
-    client_id: '275159975504-unhtf74cvvjgb0qrm3g4bh3sbcsijteb.apps.googleusercontent.com'
-    client_secret: 'ESH-7uAKVN5q8_Aw0GEk27D-'
-    document_id: '1QvULNos0kgMT7d3ic6P9xt-yZNTfL9N_w0ez3A3R7jw'

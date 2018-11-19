@@ -43,8 +43,8 @@ class ArbDocument {
       } else if ("@@last_modified" == key) {
         lastModified = DateTime.parse(value);
       } else if (key.startsWith("@@")) {
-        // TODO load attributes
         var entry = entriesMap[key.substring(2)];
+        entry.attributes.addAll(value);
       } else {
         var entry = ArbEntry(key, value);
         entries.add(entry);
@@ -81,8 +81,8 @@ class ArbDocumentBuilder {
     return bundle;
   }
 
-  ArbDocumentBuilder add(String key, String value) {
-    entries.add(ArbEntry(key, value));
+  ArbDocumentBuilder add(ArbEntry entry) {
+    entries.add(entry);
     return this;
   }
 }

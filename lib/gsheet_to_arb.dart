@@ -9,8 +9,9 @@
 /// More dartdocs go here.
 library gsheet_to_arb;
 
+export 'package:gsheet_to_arb/src/sheet/sheet_parser.dart';
+
 export 'src/arb/arb_generator.dart';
 export 'src/arb/arb_serializer.dart';
+export 'src/arb_to_class_generator.dart';
 export 'src/plugin_config.dart';
-export 'src/sheet_parser.dart';
-export 'src/translations_generator.dart';

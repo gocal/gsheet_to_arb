@@ -37,5 +37,5 @@ main(List<String> args) async {
 
   var generator = TranslationsGenerator();
 
-  generator.buildTranslations(document, config.outputDirectoryPath);
+  generator.buildTranslations(document, config.outputDirectoryPath, "L10n");
 }

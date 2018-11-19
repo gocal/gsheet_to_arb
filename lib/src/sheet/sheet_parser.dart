@@ -5,6 +5,7 @@
  */
 
 import 'dart:async';
+
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
@@ -51,22 +52,45 @@ class SheetParser {
 
     var lastModified = DateTime.now();
 
+    var firstLanguageColumn = 2; // key, description
+
     // Store languages
-    for (var lang = 1; lang < headerValues.length; lang++) {
+    for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
       var languageKey = headerValues[lang].formattedValue;
       _languages.add(ArbDocumentBuilder(languageKey, lastModified));
     }
 
     // Skip header row
-    for (var i = 1; i < rows.length; i++) {
+    var firstTranslationsRow = 1;
+
+    var currentContext = "";
+
+    for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var values = row.values;
 
-      var key = values[0].formattedValue;
+      if (values.length == 1) {
+        currentContext = values[0].formattedValue;
+        continue;
+      }
 
-      for (var langValue = 1; langValue < values.length; langValue++) {
+      var key = values[0].formattedValue;
+      var description = values[1].formattedValue;
+      if (description == null) {
+        description = "";
+      }
+
+      for (var langValue = firstLanguageColumn; langValue < values.length;
+      langValue++) {
         var value = values[langValue].formattedValue;
-        _languages[langValue - 1].add(key, value);
+        var builder = _languages[langValue - firstLanguageColumn];
+
+        var entry = ArbEntry(key, value);
+
+        entry.attributes['context'] = currentContext;
+        entry.attributes['description'] = description;
+
+        builder.add(entry);
       }
     }
 

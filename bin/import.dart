@@ -10,9 +10,8 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
-import 'package:yaml/yaml.dart';
 
-main(List<String> args) {
+main(List<String> args) async {
   var parser = new ArgParser();
   var configFilePath = "gsheet_to_arb.yaml";
 
@@ -29,18 +28,11 @@ main(List<String> args) {
     exit(0);
   }
 
-  var yaml = _loadConfig(configFilePath);
-
-  var config = PluginConfig.fromYaml(yaml);
+  var config = PluginConfig.fromYamlFile(configFilePath);
 
   var sheetParser = SheetParser();
-  sheetParser.parseSheet(config);
-}
+  var bundle = await sheetParser.parseSheet(config.sheetConfig);
 
-Map<String, dynamic> _loadConfig(String path) {
-  var configFile = File(path);
-  var configText = configFile.readAsStringSync();
-  var configYaml = loadYaml(configText);
-  var yaml = configYaml['gsheet_to_arb'];
-  return yaml;
+  var arbSerializer = ArbSerializer();
+  arbSerializer.saveArbBundle(bundle, config);
 }

@@ -4,45 +4,43 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-import 'dart:convert';
-import 'dart:io';
-
+import 'dart:async';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 
 class SheetParser {
-  PluginConfig config;
+  var _languages = List<ArbDocumentBuilder>();
+  var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
-  var languages = List<ArbBundleBuilder>();
+  Future<ArbBundle> parseSheet(GoogleSheetConfig config) async {
+    var id = new ClientId(config.clientId, config.clientSecret);
 
-  void parseSheet(PluginConfig config) {
-    this.config = config;
-    var id = new ClientId(
-        config.sheetConfig.clientId, config.sheetConfig.clientSecret);
-    var scopes = [SheetsApi.SpreadsheetsReadonlyScope];
-
-    clientViaUserConsent(id, scopes, prompt).then(
-            (AuthClient client) =>
-            handleSheetsAuth(client, config.sheetConfig.documentId));
+    var authClient = await clientViaUserConsent(id, _scopes, _prompt);
+    var arbBundle = await _handleSheetsAuth(authClient, config.documentId);
+    return arbBundle;
   }
 
-  void prompt(String url) {
+  void _prompt(String url) {
     print("Please go to the following URL and grant Google Spreasheet access:");
     print("  => $url");
     print("");
   }
 
-  void handleSheetsAuth(AuthClient client, String documentId) {
+  Future<ArbBundle> _handleSheetsAuth(
+      AuthClient client, String documentId) async {
     var sheetsApi = SheetsApi(client);
-    sheetsApi.spreadsheets
-        .get(documentId, includeGridData: true)
-        .then(handleSpreadsheet, onError: handleSpreadsheetError);
+    var spreadsheet =
+        await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
+
+    var bundle = _handleSpreadsheet(spreadsheet);
 
     client.close();
+
+    return bundle;
   }
 
-  void handleSpreadsheet(Spreadsheet spreadsheet) {
+  ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
     print("Opening ${spreadsheet.spreadsheetUrl}");
 
     var sheet = spreadsheet.sheets[0];
@@ -56,7 +54,7 @@ class SheetParser {
     // Store languages
     for (var lang = 1; lang < headerValues.length; lang++) {
       var languageKey = headerValues[lang].formattedValue;
-      languages.add(ArbBundleBuilder(languageKey, lastModified));
+      _languages.add(ArbDocumentBuilder(languageKey, lastModified));
     }
 
     // Skip header row
@@ -68,32 +66,14 @@ class SheetParser {
 
       for (var langValue = 1; langValue < values.length; langValue++) {
         var value = values[langValue].formattedValue;
-        languages[langValue - 1].add(key, value);
+        _languages[langValue - 1].add(key, value);
       }
     }
 
-    saveArbFiles();
-  }
+    var documents = List<ArbDocument>();
 
-  void handleSpreadsheetError() {
-    print("handleSpreadsheetError");
-  }
+    _languages.forEach((builder) => documents.add(builder.build()));
 
-  void saveArbFiles() {
-    print("save arb files in ${config.outputDirectoryPath}");
-    var targetDir = Directory(config.outputDirectoryPath);
-    targetDir.createSync();
-    languages.forEach(
-        (builder) => saveArb(builder.build(), targetDir, builder.locale));
-  }
-
-  void saveArb(ArbBundle bundle, Directory directory, String name) {
-    var filePath = "${directory.path}/${config.arbFilePrefix}_${name}.arb";
-    print("  => $filePath");
-    var file = File(filePath);
-    file.createSync();
-    var encoder = new JsonEncoder.withIndent('  ');
-    var arbContent = encoder.convert(bundle.toJson());
-    file.writeAsString(arbContent);
+    return ArbBundle(documents);
   }
 }

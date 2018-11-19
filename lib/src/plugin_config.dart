@@ -4,11 +4,19 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
+import 'dart:io';
+import 'package:yaml/yaml.dart';
+
 class PluginConfig {
   var outputDirectoryPath = "lib/src/i18n";
   var arbFilePrefix = "intl";
 
   GoogleSheetConfig sheetConfig;
+
+  PluginConfig.fromYamlFile(String filePath) {
+    var yaml = _loadYamlFile(filePath);
+    PluginConfig.fromYaml(yaml);
+  }
 
   PluginConfig.fromYaml(Map<String, dynamic> yaml) {
     arbFilePrefix = yaml['arb_file_prefix'];
@@ -22,8 +30,6 @@ class PluginConfig {
     sheetConfig = GoogleSheetConfig(
         clientId: clientId, clientSecret: clientSecret, documentId: documentId);
   }
-
-  PluginConfig();
 }
 
 class GoogleSheetConfig {
@@ -34,4 +40,12 @@ class GoogleSheetConfig {
 
   GoogleSheetConfig(
       {this.clientId, this.clientSecret, this.documentId, this.sheetId = '0'});
+}
+
+Map<String, dynamic> _loadYamlFile(String path) {
+  var configFile = File(path);
+  var configText = configFile.readAsStringSync();
+  var configYaml = loadYaml(configText);
+  var yaml = configYaml['gsheet_to_arb'];
+  return yaml;
 }

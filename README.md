@@ -63,6 +63,25 @@ Imports Application Resource Bundle (ARB) from Google Sheets
 
 3. Log-in to the Google Account
 
+4. Accept permissions to read the Google Spreadsheet
+
 ## Create Google Sheet template from existing ARB file
 
 Not implemented yet.
+
+
+## TODO
+
+### Milestone 1 - 0.1.x
+
+- [ ] Support translations sections
+- [ ] Generate dart code from ARB files (via intl dependency)
+
+### Milestone 2 - 0.2.x
+
+- [ ] Server side authentication (for CI)
+
+### Milestone 3 - 0.3.x
+
+- [ ] Export as Android XML resource 
+- [ ] Import Google Sheet from ARB file

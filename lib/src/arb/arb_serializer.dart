@@ -8,12 +8,24 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
-import 'package:gsheet_to_arb/src/plugin_config.dart';
 
 class ArbSerializer {
-  void saveArbBundle(ArbBundle bundle, PluginConfig config) {
-    print("save arb files in ${config.outputDirectoryPath}");
-    var targetDir = Directory(config.outputDirectoryPath);
+
+  String serialize(ArbDocument document) {
+    var encoder = new JsonEncoder.withIndent('  ');
+    var arbContent = encoder.convert(document.toJson());
+    return arbContent;
+  }
+
+  ArbDocument deserialize(String json) {
+    var decoder = new JsonDecoder();
+    ArbDocument arbContent = ArbDocument.fromJson(decoder.convert(json));
+    return arbContent;
+  }
+
+  void saveArbBundle(ArbBundle bundle, String directory) {
+    print("save arb files in ${directory}");
+    var targetDir = Directory(directory);
     targetDir.createSync();
     bundle.documents
         .forEach((document) => _saveArbDocument(document, targetDir));
@@ -24,8 +36,14 @@ class ArbSerializer {
     print("  => $filePath");
     var file = File(filePath);
     file.createSync();
-    var encoder = new JsonEncoder.withIndent('  ');
-    var arbContent = encoder.convert(document.toJson());
+    var arbContent = serialize(document);
     file.writeAsString(arbContent);
   }
+
+  ArbDocument loadArbDocument(String filePath) {
+    var file = File(filePath);
+    var content = file.readAsStringSync();
+    return deserialize(content);
+  }
+
 }

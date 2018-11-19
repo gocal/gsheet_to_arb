@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 
+
 main(List<String> args) async {
   var parser = new ArgParser();
   var configFilePath = "./.gsheet_to_arb.yaml";
@@ -29,6 +30,11 @@ main(List<String> args) async {
   }
 
   var config = PluginConfig.fromYamlFile(configFilePath);
+
+  var serializer = ArbSerializer();
+
+  var document = serializer.loadArbDocument(
+      "${config.outputDirectoryPath}/intl_en.arb");
 
   var generator = TranslationsGenerator();
 

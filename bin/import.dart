@@ -35,5 +35,5 @@ main(List<String> args) async {
   var bundle = await sheetParser.parseSheet(config.sheetConfig);
 
   var arbSerializer = ArbSerializer();
-  arbSerializer.saveArbBundle(bundle, config);
+  arbSerializer.saveArbBundle(bundle, config.outputDirectoryPath);
 }

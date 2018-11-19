@@ -12,14 +12,18 @@ class ArbBundle {
 
 class ArbDocument {
   String locale;
-  List<ArbEntry> resources;
+  DateTime lastModified;
+  List<ArbEntry> entries;
 
-  ArbDocument(this.locale, this.resources);
+  ArbDocument(this.locale, this.lastModified, this.entries);
 
   Map<String, Object> toJson() {
     final Map<String, Object> _json = Map<String, Object>();
 
-    resources.forEach((ArbEntry entry) {
+    _json['locale'] = locale;
+    _json['@@last_modified'] = lastModified.toIso8601String();
+
+    entries.forEach((ArbEntry entry) {
       _json[entry.key] = entry.value;
       if (entry.hasAttributes) {
         _json["@@${entry.key}"] = entry.attributes;
@@ -29,8 +33,24 @@ class ArbDocument {
     return _json;
   }
 
-  ArbDocument.fromJson(Map _json) {
-    _json.forEach((key, value) {});
+  ArbDocument.fromJson(Map<String, dynamic> _json) {
+    var entriesMap = Map<String, ArbEntry>();
+    entries = List<ArbEntry>();
+
+    _json.forEach((key, value) {
+      if ("_locale" == key) {
+        locale = value;
+      } else if ("@@last_modified" == key) {
+        lastModified = DateTime.parse(value);
+      } else if (key.startsWith("@@")) {
+        // TODO load attributes
+        var entry = entriesMap[key.substring(2)];
+      } else {
+        var entry = ArbEntry(key, value);
+        entries.add(entry);
+        entriesMap[key] = entry;
+      }
+    });
   }
 }
 
@@ -52,29 +72,17 @@ class ArbEntry {
 class ArbDocumentBuilder {
   String locale;
   DateTime lastModified;
-  List<ArbEntry> resources = List();
+  List<ArbEntry> entries = List();
 
-  ArbDocumentBuilder(this.locale, this.lastModified) {
-    resources.add(LocaleArbResource(locale));
-    resources.add(LastModifiedArbResource(lastModified));
-  }
+  ArbDocumentBuilder(this.locale, this.lastModified) {}
 
   ArbDocument build() {
-    ArbDocument bundle = ArbDocument(locale, resources);
+    ArbDocument bundle = ArbDocument(locale, lastModified, entries);
     return bundle;
   }
 
   ArbDocumentBuilder add(String key, String value) {
-    resources.add(ArbEntry(key, value));
+    entries.add(ArbEntry(key, value));
     return this;
   }
-}
-
-class LocaleArbResource extends ArbEntry {
-  LocaleArbResource(String value) : super("_locale", value, false);
-}
-
-class LastModifiedArbResource extends ArbEntry {
-  LastModifiedArbResource(DateTime lastModified)
-      : super("@@last_modified", lastModified.toIso8601String(), false);
 }

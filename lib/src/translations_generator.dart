@@ -11,20 +11,41 @@ import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 
 class TranslationsGenerator {
+  void buildTranslations(ArbDocument document, String directory) {
+    var className = "L10n";
 
-  String buildTranslations(ArbDocument document, Directory directory) {
+    var translationClass = Class((ClassBuilder builder) {
+      builder.name = className;
+      builder.docs.add(
+          "\n//ignore_for_file: type_annotate_public_apis, non_constant_identifier_names");
+      document.entries.forEach((ArbEntry entry) {
+        var method = _getFieldGetter(entry);
+        builder.methods.add(method);
+      });
+    });
 
-    var classBuilder = ClassBuilder();
-    classBuilder.name = "Strings";
+    final library = Library((LibraryBuilder builder) {
+      builder.directives.add(Directive.import("package:intl/intl.dart"));
+      builder.body.add(translationClass);
+    });
 
-    var translationClass = classBuilder.build();
-
-    final emitter = DartEmitter();
-
-    var emitted = translationClass.accept(emitter);
-
+    var emitter = DartEmitter(Allocator.simplePrefixing());
+    var emitted = library.accept(emitter);
     var formatted = DartFormatter().format('${emitted}');
 
-    return formatted;
+    var file = File("${directory}/${className.toLowerCase()}.dart");
+    file.createSync();
+    file.writeAsString(formatted);
+  }
+
+  Method _getFieldGetter(ArbEntry entry) {
+    Method method = Method((MethodBuilder builder) {
+      builder.name = "${entry.key}";
+      builder.type = MethodType.getter;
+      builder.lambda = true;
+      builder.body =
+          Code("""Intl.message("${entry.value}", name: "${entry.key}")""");
+    });
+    return method;
   }
 }

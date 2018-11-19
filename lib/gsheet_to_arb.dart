@@ -9,7 +9,7 @@
 /// More dartdocs go here.
 library gsheet_to_arb;
 
-export 'src/arb_generator.dart';
+export 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 export 'src/plugin_config.dart';
 export 'src/sheet_parser.dart';
 export 'src/translations_generator.dart';

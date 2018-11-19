@@ -77,6 +77,7 @@ class LastModifiedArbResource extends ArbEntry {
 }
 
 class ArbSerializer {
+
   void saveArbBundle(ArbBundle bundle, PluginConfig config) {
     print("save arb files in ${config.outputDirectoryPath}");
     var targetDir = Directory(config.outputDirectoryPath);

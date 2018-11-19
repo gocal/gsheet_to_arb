@@ -6,7 +6,7 @@
 
 import 'dart:io';
 
-import 'package:gsheet_to_arb/src/arb_generator.dart';
+import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 

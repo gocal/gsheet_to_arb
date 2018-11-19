@@ -15,14 +15,16 @@ class PluginConfig {
 
   PluginConfig.fromYamlFile(String filePath) {
     var yaml = _loadYamlFile(filePath);
-    PluginConfig.fromYaml(yaml);
+    _fromYaml(yaml);
   }
 
-  PluginConfig.fromYaml(Map<String, dynamic> yaml) {
-    arbFilePrefix = yaml['arb_file_prefix'];
-    outputDirectoryPath = yaml['output_directory'];
+  _fromYaml(Map<dynamic, dynamic> yaml) {
+    var config = yaml['gsheet_to_arb'];
 
-    var sheetConfigYaml = yaml['gsheet'];
+    arbFilePrefix = config['arb_file_prefix'];
+    outputDirectoryPath = config['output_directory'];
+
+    var sheetConfigYaml = config['gsheet'];
     var clientId = sheetConfigYaml['client_id'];
     var clientSecret = sheetConfigYaml['client_secret'];
     var documentId = sheetConfigYaml['document_id'];
@@ -42,10 +44,9 @@ class GoogleSheetConfig {
       {this.clientId, this.clientSecret, this.documentId, this.sheetId = '0'});
 }
 
-Map<String, dynamic> _loadYamlFile(String path) {
+YamlMap _loadYamlFile(String path) {
   var configFile = File(path);
   var configText = configFile.readAsStringSync();
-  var configYaml = loadYaml(configText);
-  var yaml = configYaml['gsheet_to_arb'];
+  var yaml = loadYaml(configText);
   return yaml;
 }

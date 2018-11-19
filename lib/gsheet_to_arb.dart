@@ -12,3 +12,4 @@ library gsheet_to_arb;
 export 'src/arb_generator.dart';
 export 'src/plugin_config.dart';
 export 'src/sheet_parser.dart';
+export 'src/translations_generator.dart';

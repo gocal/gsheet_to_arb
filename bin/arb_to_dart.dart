@@ -13,8 +13,8 @@ import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 import 'package:intl_translation/extract_messages.dart';
 import 'package:intl_translation/generate_localized.dart';
-import 'package:intl_translation/src/intl_message.dart';
 import 'package:intl_translation/src/icu_parser.dart';
+import 'package:intl_translation/src/intl_message.dart';
 import 'package:path/path.dart' as path;
 
 main(List<String> args) async {
@@ -34,7 +34,7 @@ main(List<String> args) async {
     exit(0);
   }
 
-  var config = PluginConfig.fromYamlFile(configFilePath);
+  var config = PluginUtils().fromYamlFile(configFilePath);
 
   var serializer = ArbSerializer();
 

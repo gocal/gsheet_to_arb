@@ -10,7 +10,6 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
-import 'package:gsheet_to_arb/src/arb/arb_serializer.dart';
 
 main(List<String> args) async {
   var parser = new ArgParser();
@@ -29,7 +28,7 @@ main(List<String> args) async {
     exit(0);
   }
 
-  var config = PluginConfig.fromYamlFile(configFilePath);
+  var config = PluginUtils().fromYamlFile(configFilePath);
 
   var sheetParser = SheetParser();
   var bundle = await sheetParser.parseSheet(config.sheetConfig);

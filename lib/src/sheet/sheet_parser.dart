@@ -15,7 +15,8 @@ class SheetParser {
   var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(GoogleSheetConfig config) async {
-    var id = new ClientId(config.clientId, config.clientSecret);
+    var id = new ClientId(
+        config.secretAuth.clientId, config.secretAuth.clientSecret);
 
     var authClient = await clientViaUserConsent(id, _scopes, _prompt);
     var arbBundle = await _handleSheetsAuth(authClient, config.documentId);

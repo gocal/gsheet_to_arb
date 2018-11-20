@@ -22,15 +22,17 @@ Map<String, dynamic> _$PluginConfigRootToJson(PluginConfigRoot instance) =>
 
 PluginConfig _$PluginConfigFromJson(Map<String, dynamic> json) {
   return PluginConfig(
-      json['outputDirectoryPath'] as String,
-      json['arbFilePrefix'] as String,
-      GoogleSheetConfig.fromJson(json['gsheet'] as Map<String, dynamic>));
+      json['output_directory'] as String ?? 'lib/src/i18n',
+      json['arb_file_prefix'] as String ?? 'intl',
+      GoogleSheetConfig.fromJson(json['gsheet'] as Map<String, dynamic>))
+    ..localizationFileName = json['localization_file_name'] as String ?? 'S';
 }
 
 Map<String, dynamic> _$PluginConfigToJson(PluginConfig instance) =>
     <String, dynamic>{
-      'outputDirectoryPath': instance.outputDirectoryPath,
-      'arbFilePrefix': instance.arbFilePrefix,
+      'output_directory': instance.outputDirectoryPath,
+      'arb_file_prefix': instance.arbFilePrefix,
+      'localization_file_name': instance.localizationFileName,
       'gsheet': instance.sheetConfig
     };
 
@@ -66,10 +68,12 @@ Map<String, dynamic> _$SecretAuthToJson(SecretAuth instance) =>
     };
 
 KeyAuth _$KeyAuthFromJson(Map<String, dynamic> json) {
-  return KeyAuth(json['client_id'] as String, json['sheet_id'] as String);
+  return KeyAuth(json['client_id'] as String, json['email'] as String,
+      json['private_key'] as String);
 }
 
 Map<String, dynamic> _$KeyAuthToJson(KeyAuth instance) => <String, dynamic>{
       'client_id': instance.clientId,
-      'sheet_id': instance.clientSecret
+  'email': instance.email,
+  'private_key': instance.privateKey
     };

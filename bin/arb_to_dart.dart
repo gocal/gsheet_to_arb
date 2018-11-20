@@ -41,16 +41,19 @@ main(List<String> args) async {
   var document =
   serializer.loadArbDocument("${config.outputDirectoryPath}/intl_en.arb");
 
-  var generator = TranslationsGenerator();
+  var localizationFileName = config.localizationFileName;
 
-  generator.buildTranslations(document, config.outputDirectoryPath, "L10n");
+  var generator = TranslationsGenerator();
+  generator.buildTranslations(
+      document, config.outputDirectoryPath, localizationFileName);
 
   var extraction = new MessageExtraction();
   var generation = new MessageGeneration();
 
   generation.generatedFilePrefix = "_";
 
-  var dartFiles = ["${config.outputDirectoryPath}/l10n.dart"];
+  var dartFiles = [
+    "${config.outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart"];
 
   var jsonFiles = Directory(config.outputDirectoryPath).listSync().where((file) => file.path.endsWith(".arb")).map<String>((file) => file.path);
 

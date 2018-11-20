@@ -30,8 +30,15 @@ class PluginConfigRoot {
 ///
 @JsonSerializable()
 class PluginConfig {
-  var outputDirectoryPath = "lib/src/i18n";
-  var arbFilePrefix = "intl";
+
+  @JsonKey(name: 'output_directory', defaultValue: "lib/src/i18n")
+  String outputDirectoryPath;
+
+  @JsonKey(name: 'arb_file_prefix', defaultValue: "intl")
+  String arbFilePrefix;
+
+  @JsonKey(name: 'localization_file_name', defaultValue: "S")
+  String localizationFileName;
 
   @JsonKey(name: 'gsheet', nullable: false)
   GoogleSheetConfig sheetConfig;
@@ -99,11 +106,14 @@ class KeyAuth {
   @JsonKey(name: 'client_id')
   String clientId;
 
-  @JsonKey(name: 'sheet_id')
-  String clientSecret;
+  @JsonKey(name: 'email')
+  String email;
+
+  @JsonKey(name: 'private_key')
+  String privateKey;
 
 
-  KeyAuth(this.clientId, this.clientSecret);
+  KeyAuth(this.clientId, this.email, this.privateKey);
 
   factory KeyAuth.fromJson(Map<String, dynamic> json) =>
       _$KeyAuthFromJson(json);

@@ -34,7 +34,7 @@ class TranslationsGenerator {
 
     var file = File("${directory}/${className.toLowerCase()}.dart");
     file.createSync();
-    file.writeAsString(formatted);
+    file.writeAsStringSync(formatted);
   }
 
   Method _getFieldGetter(ArbEntry entry) {

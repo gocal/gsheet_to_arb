@@ -20,7 +20,7 @@ class ArbDocument {
   Map<String, Object> toJson() {
     final Map<String, Object> _json = Map<String, Object>();
 
-    _json['locale'] = locale;
+    _json['_locale'] = locale;
     _json['@@last_modified'] = lastModified.toIso8601String();
 
     entries.forEach((ArbEntry entry) {

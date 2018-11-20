@@ -10,7 +10,6 @@ import 'dart:io';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 
 class ArbSerializer {
-
   String serialize(ArbDocument document) {
     var encoder = new JsonEncoder.withIndent('  ');
     var arbContent = encoder.convert(document.toJson());
@@ -45,5 +44,4 @@ class ArbSerializer {
     var content = file.readAsStringSync();
     return deserialize(content);
   }
-
 }

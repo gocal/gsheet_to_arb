@@ -5,6 +5,7 @@
  */
 
 import 'dart:io';
+
 import 'package:yaml/yaml.dart';
 
 class PluginConfig {

@@ -80,8 +80,9 @@ class SheetParser {
         description = "";
       }
 
-      for (var langValue = firstLanguageColumn; langValue < values.length;
-      langValue++) {
+      for (var langValue = firstLanguageColumn;
+          langValue < values.length;
+          langValue++) {
         var value = values[langValue].formattedValue;
         var builder = _languages[langValue - firstLanguageColumn];
 

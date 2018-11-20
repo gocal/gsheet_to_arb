@@ -11,8 +11,8 @@ import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 
 class TranslationsGenerator {
-  void buildTranslations(ArbDocument document, String directory,
-      String className) {
+  void buildTranslations(
+      ArbDocument document, String directory, String className) {
     var translationClass = Class((ClassBuilder builder) {
       builder.name = className;
       builder.docs.add(
@@ -56,11 +56,9 @@ class TranslationsGenerator {
       builder.name = key;
       builder.type = MethodType.getter;
       builder.lambda = true;
-      builder.body =
-          Code("""Intl.message("${entry
-              .value}", name: "${key}", desc: "${description}")""");
+      builder.body = Code(
+          """Intl.message("${entry.value}", name: "${key}", desc: "${description}")""");
       builder.docs.add("\t/// ${description}");
-
     });
     return method;
   }

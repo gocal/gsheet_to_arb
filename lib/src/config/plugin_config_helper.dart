@@ -13,6 +13,18 @@ import '../utils/file_utils.dart';
 import 'plugin_config.dart';
 
 class PluginConfigHelper {
+  String createTemplate() {
+    var config = PluginConfig(
+        "lib/src/i18n",
+        "intl",
+        GoogleSheetConfig(
+            Auth(null, null, null, "~/.ssh/gsheet-to-arb-server-config.json"),
+            "<DOCUMENT_ID>",
+            "0"));
+
+    return jsonEncode(PluginConfigRoot(config).toJson());
+  }
+
   PluginConfig fromYamlFile(String filePath) {
     var yaml = _loadYamlFile(filePath);
     var map = jsonDecode(jsonEncode(yaml));

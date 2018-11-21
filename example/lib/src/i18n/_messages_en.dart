@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018, Marcin Marek Gocał
+ * All rights reserved. Use of this source code is governed by a
+ * BSD-style license that can be found in the LICENSE file.
+ */
+
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
 // This is a library that provides messages for a en locale. All the
 // messages from the main program should be duplicated here with the same
@@ -18,8 +24,18 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
+  static m0(name) => "Single ${name} argument";
+
+  static m1(first, second) => "Argument ${first} and ${second}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-
+    "app_name": MessageLookupByLibrary.simpleMessage("Sample Application"),
+    "login": MessageLookupByLibrary.simpleMessage("Login"),
+    "message": MessageLookupByLibrary.simpleMessage("Message"),
+    "register": MessageLookupByLibrary.simpleMessage("Register"),
+    "single_argument": m0,
+    "title": MessageLookupByLibrary.simpleMessage("Title"),
+    "two_arguments": m1
   };
 }

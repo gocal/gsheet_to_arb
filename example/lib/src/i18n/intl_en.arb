@@ -1,6 +1,6 @@
 {
   "_locale": "en",
-  "@@last_modified": "2018-11-21T15:32:07.630057",
+  "@@last_modified": "2018-11-21T22:04:26.699694",
   "title": "Title",
   "@@title": {
     "type": "Text",
@@ -34,6 +34,27 @@
     "type": "Text",
     "placeholders": {},
     "context": "signup",
+    "description": "contains registration"
+  },
+  "placeholders": null,
+  "@@placeholders": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
     "description": ""
+  },
+  "single_argument": "Single {name} argument",
+  "@@single_argument": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
+    "description": "Single named argument"
+  },
+  "two_arguments": "Argument {first} and {second}",
+  "@@two_arguments": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
+    "description": "Two named arguments"
   }
 }

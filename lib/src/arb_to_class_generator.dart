@@ -8,7 +8,8 @@ import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
+import 'package:gsheet_to_arb/src/arb/arb.dart';
+import 'package:recase/recase.dart';
 
 class TranslationsGenerator {
   void buildTranslations(
@@ -17,8 +18,8 @@ class TranslationsGenerator {
       builder.name = className;
       builder.docs.add(
           "\n//ignore_for_file: type_annotate_public_apis, non_constant_identifier_names");
-      document.entries.forEach((ArbEntry entry) {
-        var method = _getFieldGetter(entry);
+      document.entries.forEach((ArbResource entry) {
+        var method = _getResourceMethod(entry);
         builder.methods.add(method);
       });
     });
@@ -37,29 +38,64 @@ class TranslationsGenerator {
     file.writeAsStringSync(formatted);
   }
 
-  Method _getFieldGetter(ArbEntry entry) {
+  Method _getResourceMethod(ArbResource resource) {
+    if (resource.value.hasPlaceholders) {
+      Method method = Method((MethodBuilder builder) {
+        var description = resource.attributes['description'];
+        if (description == null) {
+          description = resource.id.text;
+        }
+
+        var key = resource.id.text;
+        var value = resource.value.text;
+
+        builder.name = _getMethodName(key);
+
+        var args = List<String>();
+        resource.value.placeholders
+            .forEach((ArbResourcePlaceholder placeholder) {
+          builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
+            args.add(placeholder.name);
+            builder.name = placeholder.name;
+            builder.type = const Reference('String');
+          }));
+        });
+
+        builder.returns = const Reference('String');
+        builder.lambda = true;
+        builder.body = Code(
+            """Intl.message("${value}", name: "${key}", args: [${args.join(
+                ", ")}], desc: "${description}")""");
+        builder.docs.add("\t/// ${description}");
+      });
+      return method;
+    } else {
+      return _getResourceGetter(resource);
+    }
+  }
+
+  Method _getResourceGetter(ArbResource resource) {
     Method method = Method((MethodBuilder builder) {
-      var context = entry.attributes['context'];
-      var description = entry.attributes['description'];
+      var description = resource.attributes['description'];
       if (description == null) {
-        description = entry.key;
+        description = resource.id.text;
       }
 
-      var key;
+      var key = resource.id.text;
+      var value = resource.value.text;
 
-      if (context != null) {
-        key = "${context}_${entry.key}";
-      } else {
-        key = "${entry.key}";
-      }
-
-      builder.name = key;
+      builder.name = _getMethodName(key);
       builder.type = MethodType.getter;
+      builder.returns = const Reference('String');
       builder.lambda = true;
       builder.body = Code(
-          """Intl.message("${entry.value}", name: "${key}", desc: "${description}")""");
+          """Intl.message("${value}", name: "${key}", desc: "${description}")""");
       builder.docs.add("\t/// ${description}");
     });
     return method;
+  }
+
+  String _getMethodName(String key) {
+    return ReCase(key).camelCase;
   }
 }

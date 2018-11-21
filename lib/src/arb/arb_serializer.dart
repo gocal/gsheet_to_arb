@@ -7,8 +7,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
-import 'package:gsheet_to_arb/src/utils/log.dart';
+import '../utils/log.dart';
+import 'arb.dart';
+import 'arb_generator.dart';
 
 class ArbSerializer {
   String serialize(ArbDocument document) {

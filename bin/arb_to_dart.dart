@@ -44,6 +44,5 @@ main(List<String> args) async {
       document, config.outputDirectoryPath, localizationFileName);
 
   IntlTranslationHelper helper = IntlTranslationHelper();
-
   helper.aaa(config.outputDirectoryPath, config.localizationFileName);
 }

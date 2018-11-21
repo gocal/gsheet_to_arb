@@ -5,10 +5,10 @@
  */
 
 import 'dart:io';
+
 import 'package:file_utils/file_utils.dart';
 
 class FileUtils {
-
   static String getFileContentSync(String filePath) {
     var expandedFilePath = FilePath.expand(filePath);
     var file = File(expandedFilePath);

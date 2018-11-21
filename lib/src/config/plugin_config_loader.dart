@@ -7,9 +7,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../utils/file_utils.dart';
 import 'package:yaml/yaml.dart';
 
+import '../utils/file_utils.dart';
 import 'plugin_config.dart';
 
 class PluginConfigLoader {

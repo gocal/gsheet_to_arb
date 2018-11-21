@@ -98,7 +98,6 @@ class Auth {
 ///
 @JsonSerializable()
 class OAuthClientId {
-
   @JsonKey(name: 'clientId', nullable: false)
   String clientId;
 
@@ -148,9 +147,17 @@ class ServiceAccountKey {
   @JsonKey(name: 'client_x509_cert_url', nullable: false)
   String clientX509CertUrl;
 
-  ServiceAccountKey(this.type, this.projectId, this.privateKeyId,
-      this.privateKey, this.clientEmail, this.clientId, this.authUri,
-      this.tokenUri, this.authProviderX509CertUrl, this.clientX509CertUrl);
+  ServiceAccountKey(
+      this.type,
+      this.projectId,
+      this.privateKeyId,
+      this.privateKey,
+      this.clientEmail,
+      this.clientId,
+      this.authUri,
+      this.tokenUri,
+      this.authProviderX509CertUrl,
+      this.clientX509CertUrl);
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>
       _$ServiceAccountKeyFromJson(json);

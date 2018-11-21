@@ -10,6 +10,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 main(List<String> args) async {
   var parser = new ArgParser();
@@ -22,9 +23,9 @@ main(List<String> args) async {
 
   parser.parse(args);
   if (args.length == 0) {
-    print('Imports ARB file from exisiting GSheet document');
-    print('Usage: gsheet_to_arb [options]');
-    print(parser.usage);
+    Log.i('Imports ARB file from exisiting GSheet document');
+    Log.i('Usage: gsheet_to_arb [options]');
+    Log.i(parser.usage);
     exit(0);
   }
 

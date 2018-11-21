@@ -1,0 +1,39 @@
+{
+  "_locale": "pl",
+  "@@last_modified": "2018-11-21T15:32:07.630057",
+  "title": "Tytuł",
+  "@@title": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains title"
+  },
+  "message": "Wiadomość",
+  "@@message": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains message"
+  },
+  "app_name": "Aplikacja",
+  "@@app_name": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains app name"
+  },
+  "login": "Zaloguj",
+  "@@login": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "login",
+    "description": "contains login"
+  },
+  "register": "Zarejestruj",
+  "@@register": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
+    "description": ""
+  }
+}

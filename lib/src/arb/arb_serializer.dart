@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class ArbSerializer {
   String serialize(ArbDocument document) {
@@ -23,16 +24,16 @@ class ArbSerializer {
   }
 
   void saveArbBundle(ArbBundle bundle, String directory) {
-    print("save arb files in ${directory}");
+    Log.i("save arb files in ${directory}");
     var targetDir = Directory(directory);
-    targetDir.createSync();
+    targetDir.createSync(recursive: true);
     bundle.documents
         .forEach((document) => _saveArbDocument(document, targetDir));
   }
 
   void _saveArbDocument(ArbDocument document, Directory directory) {
     var filePath = "${directory.path}/intl_${document.locale}.arb";
-    print("  => $filePath");
+    Log.i("  => $filePath");
     var file = File(filePath);
     file.createSync();
     var arbContent = serialize(document);

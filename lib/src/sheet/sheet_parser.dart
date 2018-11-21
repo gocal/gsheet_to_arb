@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class SheetParser {
   var _languages = List<ArbDocumentBuilder>();
@@ -39,9 +40,9 @@ class SheetParser {
   }
 
   void _prompt(String url) {
-    print("Please go to the following URL and grant Google Spreasheet access:");
-    print("  => $url");
-    print("");
+    Log.i("Please go to the following URL and grant Google Spreasheet access:");
+    Log.i("  => $url");
+    Log.i("");
   }
 
   Future<ArbBundle> _handleSheetsAuth(
@@ -58,7 +59,7 @@ class SheetParser {
   }
 
   ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
-    print("Opening ${spreadsheet.spreadsheetUrl}");
+    Log.i("Opening ${spreadsheet.spreadsheetUrl}");
 
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;

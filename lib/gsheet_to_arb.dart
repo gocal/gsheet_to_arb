@@ -16,3 +16,5 @@ export 'src/arb/arb_serializer.dart';
 export 'src/arb_to_class_generator.dart';
 export 'src/config/plugin_config.dart';
 export 'src/config/plugin_config_loader.dart';
+export 'src/arb/intl_translation_helper.dart';
+export 'src/utils/log.dart';

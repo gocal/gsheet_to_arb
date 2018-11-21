@@ -29,7 +29,7 @@ main(List<String> args) async {
     exit(0);
   }
 
-  var config = PluginConfigLoader().fromYamlFile(configFilePath);
+  var config = PluginConfigHelper().fromYamlFile(configFilePath);
 
   var sheetParser = SheetParser();
   var bundle = await sheetParser.parseSheet(config.sheetConfig);

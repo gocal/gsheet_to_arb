@@ -12,7 +12,7 @@ import 'package:yaml/yaml.dart';
 import '../utils/file_utils.dart';
 import 'plugin_config.dart';
 
-class PluginConfigLoader {
+class PluginConfigHelper {
   PluginConfig fromYamlFile(String filePath) {
     var yaml = _loadYamlFile(filePath);
     var map = jsonDecode(jsonEncode(yaml));

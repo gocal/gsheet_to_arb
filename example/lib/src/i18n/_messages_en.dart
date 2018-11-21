@@ -24,18 +24,11 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
-  static m0(name) => "Single ${name} argument";
-
-  static m1(first, second) => "Argument ${first} and ${second}";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "app_name": MessageLookupByLibrary.simpleMessage("Sample Application"),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
     "message": MessageLookupByLibrary.simpleMessage("Message"),
     "register": MessageLookupByLibrary.simpleMessage("Register"),
-    "single_argument": m0,
-    "title": MessageLookupByLibrary.simpleMessage("Title"),
-    "two_arguments": m1
+    "title": MessageLookupByLibrary.simpleMessage("Title")
   };
 }

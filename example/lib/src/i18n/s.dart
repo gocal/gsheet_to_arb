@@ -17,12 +17,11 @@ class S {
       Intl.message("Message", name: "message", desc: "contains message");
 
   /// contains app name
-  String get app_name => Intl.message("Sample Application",
+  String get appName =>
+      Intl.message("Sample Application",
       name: "app_name", desc: "contains app name");
 
   /// contains login
-  /// ggg
-  /// gggg
   String get login =>
       Intl.message("Login", name: "login", desc: "contains login");
 
@@ -30,16 +29,13 @@ class S {
   String get register =>
       Intl.message("Register", name: "register", desc: "contains registration");
 
-  ///
-  String get placeholders =>
-      Intl.message("null", name: "placeholders", desc: "");
-
   /// Single named argument
-  String single_argument(String name) => Intl.message("Single {name} argument",
+  String singleArgument(String name) =>
+      Intl.message("Single {name} argument",
       name: "single_argument", args: [name], desc: "Single named argument");
 
   /// Two named arguments
-  String two_arguments(String first, String second) =>
+  String twoArguments(String first, String second) =>
       Intl.message("Argument {first} and {second}",
           name: "two_arguments",
           args: [first, second],

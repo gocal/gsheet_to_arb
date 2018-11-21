@@ -1,5 +1,7 @@
 # GSheet to ARB
 
+[![pub package](https://img.shields.io/pub/v/gsheet_to_arb.svg)](https://pub.dartlang.org/packages/gsheet_to_arb)
+
 Imports Application Resource Bundle (ARB) from Google Sheets 
 
 https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification

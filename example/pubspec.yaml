@@ -5,4 +5,5 @@ environment:
   sdk: '>=2.0.0 <3.0.0'
 
 dev_dependencies:
-  gsheet_to_arb: ^0.0.2
+  gsheet_to_arb:
+    path: ../

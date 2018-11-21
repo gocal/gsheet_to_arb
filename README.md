@@ -2,6 +2,8 @@
 
 Imports Application Resource Bundle (ARB) from Google Sheets 
 
+https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification
+
 ## Setup
 
 ### Google Sheet API key
@@ -30,7 +32,7 @@ Imports Application Resource Bundle (ARB) from Google Sheets
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.0.2
+      gsheet_to_arb: ^0.0.4
     ```
 
 2. ```pub update```
@@ -38,31 +40,28 @@ Imports Application Resource Bundle (ARB) from Google Sheets
 3. Create plugin configuration e.g. ```gsheet_to_arb.yaml```
     ```yaml
     gsheet_to_arb:
+      arb_file_prefix: 'intl'
+      output_directory: 'build'
       gsheet:
-        client_id: '<google_api_client_id>'
-        client_secret: '<google_api_secret>'
-        document_id: '<google_sheet_id>'
+        document_id: '<document_id>'
+        sheet_id: '0'
+        auth:
+          service_account_key_path: "~/.ssh/gsheet-to-arb-server-config.json"
     ```
-
- You shouldn't share API secrets in VCSs, so add it to the .gitingore list
 
 ## Import ARB files from the Google Sheet
 
 1. To import ARB files from Google Sheet run the `gsheet_to_arb:import` program.
 
     ```
-    pub run gsheet_to_arb:import --config gsheet_to_arb.yaml --output-dir=lib/src/i18n
+    pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-2. Click on the link displayed in the console 
-
-    ```
-    Please go to the following URL and grant Google Spreasheet access:
-      => https://accounts.google.com/o/oauth2/auth?response_type=code&...
-    ```
-
-3. Log-in to the Google Account
+2. If need - authenticate Google Sheet Access
 
 ## Create Google Sheet template from existing ARB file
 
 Not implemented yet.
+
+
+## TODO

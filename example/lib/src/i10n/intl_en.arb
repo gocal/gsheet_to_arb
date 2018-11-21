@@ -1,0 +1,39 @@
+{
+  "_locale": "en",
+  "@@last_modified": "2018-11-21T15:32:07.630057",
+  "title": "Title",
+  "@@title": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains title"
+  },
+  "message": "Message",
+  "@@message": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains message"
+  },
+  "app_name": "Sample Application",
+  "@@app_name": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains app name"
+  },
+  "login": "Login",
+  "@@login": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "login",
+    "description": "contains login"
+  },
+  "register": "Register",
+  "@@register": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
+    "description": ""
+  }
+}

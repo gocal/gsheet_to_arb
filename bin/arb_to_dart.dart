@@ -10,7 +10,6 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
-import 'package:gsheet_to_arb/src/utils/log.dart';
 
 main(List<String> args) async {
   var parser = new ArgParser();
@@ -20,6 +19,8 @@ main(List<String> args) async {
       defaultsTo: configFilePath,
       callback: (x) => configFilePath = x,
       help: 'config yaml file name');
+
+  parser.addFlag("help", help: 'show helps');
 
   parser.parse(args);
   if (args.length == 0) {
@@ -31,9 +32,18 @@ main(List<String> args) async {
 
   var config = PluginConfigLoader().fromYamlFile(configFilePath);
 
-  var sheetParser = SheetParser();
-  var bundle = await sheetParser.parseSheet(config.sheetConfig);
+  var serializer = ArbSerializer();
 
-  var arbSerializer = ArbSerializer();
-  arbSerializer.saveArbBundle(bundle, config.outputDirectoryPath);
+  var document =
+      serializer.loadArbDocument("${config.outputDirectoryPath}/intl_en.arb");
+
+  var localizationFileName = config.localizationFileName;
+
+  var generator = TranslationsGenerator();
+  generator.buildTranslations(
+      document, config.outputDirectoryPath, localizationFileName);
+
+  IntlTranslationHelper helper = IntlTranslationHelper();
+
+  helper.aaa(config.outputDirectoryPath, config.localizationFileName);
 }

@@ -37,7 +37,7 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 
 ### 2. Authenticate
 
-Create [Google Sheets API credentials](docs/Authentication.md) either by using Client or Server authentication.
+Create [Google Sheets API credentials](doc/Authentication.md) either by using Client or Server authentication.
 
 ### 3. Configure your Dart project
 

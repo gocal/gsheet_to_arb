@@ -2,6 +2,8 @@
 
 Imports Application Resource Bundle (ARB) from Google Sheets 
 
+https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification
+
 ## Setup
 
 ### Google Sheet API key

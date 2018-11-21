@@ -13,3 +13,7 @@
 ## 0.0.4
 
 - Server-side (private key) authentication
+
+## 0.0.5
+
+- Support placeholders in ARB resources

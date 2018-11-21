@@ -8,15 +8,15 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 
 ### Import ARB files from the Google Sheet
 
+0. [Setup](#setup) plugin configuration
+
 1. To import ARB files from Google Sheet run the `gsheet_to_arb:import` program.
 
     ```
     pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-2. If need - authenticate Google Sheet Access
-
-3. Optionally generate Dart classes from the ARB files.
+2. Optionally generate Dart classes from the ARB files using `gsheet_to_arb:arb_to_dart` program.
 
     ```
     pub run gsheet_to_arb:arb_to_dart --config gsheet_to_arb.yaml
@@ -24,7 +24,7 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 
 ## Setup
 
-### Copy Google Sheet template
+### 1. Copy Google Sheet template
 
 1. Open sample Google spreadsheet template available at:
     - https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing
@@ -35,11 +35,11 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 3. Save `DOCUMENT_ID` of the Google spreadsheet
     - https://docs.google.com/spreadsheets/d/DOCUMENT_ID/edit#gid=0
 
-### Authenticate
+### 2. Authenticate
 
-[Authenticate](docs/Authentication.md) API access either by using Client or Server authentication.
+Create [Google Sheets API credentials](docs/Authentication.md) either by using Client or Server authentication.
 
-### Configure your Dart project
+### 3. Configure your Dart project
 
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml

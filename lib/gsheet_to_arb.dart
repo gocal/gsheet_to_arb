@@ -15,4 +15,4 @@ export 'src/arb/arb_generator.dart';
 export 'src/arb/arb_serializer.dart';
 export 'src/arb_to_class_generator.dart';
 export 'src/config/plugin_config.dart';
-export 'src/config/plugin_utils.dart';
+export 'src/config/plugin_config_loader.dart';

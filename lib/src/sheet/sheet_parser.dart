@@ -15,22 +15,24 @@ class SheetParser {
   var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(GoogleSheetConfig config) async {
-    var authClient = await _authClient(config);
+    var authClient = await _authClient(config.auth);
 
     var arbBundle = await _handleSheetsAuth(authClient, config.documentId);
     return arbBundle;
   }
 
-  Future<AuthClient> _authClient(GoogleSheetConfig config) async {
+  Future<AuthClient> _authClient(Auth auth) async {
     var authClient;
 
-    if (config.keyAuth != null) {
-      var accountCredentials = ServiceAccountCredentials(config.keyAuth.email,
-          ClientId(config.keyAuth.clientId, null), config.keyAuth.privateKey);
+    if (auth.serviceAccountKey != null) {
+      var accountCredentials = ServiceAccountCredentials(
+          auth.serviceAccountKey.clientEmail,
+          ClientId(auth.serviceAccountKey.clientId, null),
+          auth.serviceAccountKey.privateKey);
       authClient = await clientViaServiceAccount(accountCredentials, _scopes);
-    } else if (config.secretAuth != null) {
+    } else if (auth.oauthClientId != null) {
       var id = new ClientId(
-          config.secretAuth.clientId, config.secretAuth.clientSecret);
+          auth.oauthClientId.clientId, auth.oauthClientId.clientSecret);
       authClient = await clientViaUserConsent(id, _scopes, _prompt);
     }
     return authClient;

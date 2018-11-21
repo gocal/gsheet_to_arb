@@ -9,11 +9,10 @@ import 'package:json_annotation/json_annotation.dart';
 part 'plugin_config.g.dart';
 
 ///
-/// PluginConfig
+/// PluginConfigRoot
 ///
 @JsonSerializable()
 class PluginConfigRoot {
-
   @JsonKey(name: 'gsheet_to_arb', nullable: false)
   PluginConfig config;
 
@@ -30,7 +29,6 @@ class PluginConfigRoot {
 ///
 @JsonSerializable()
 class PluginConfig {
-
   @JsonKey(name: 'output_directory', defaultValue: "lib/src/i18n")
   String outputDirectoryPath;
 
@@ -56,21 +54,16 @@ class PluginConfig {
 ///
 @JsonSerializable()
 class GoogleSheetConfig {
-
-  @JsonKey(name: 'secret_auth', nullable: true)
-  SecretAuth secretAuth;
-
-  @JsonKey(name: 'key_auth', nullable: true)
-  KeyAuth keyAuth;
+  @JsonKey(name: 'auth')
+  Auth auth;
 
   @JsonKey(name: 'document_id')
   String documentId;
 
-  @JsonKey(name: 'sheetId', defaultValue: "0")
+  @JsonKey(name: 'sheet_id', defaultValue: "0")
   String sheetId;
 
-  GoogleSheetConfig(this.secretAuth, this.keyAuth, this.documentId,
-      this.sheetId);
+  GoogleSheetConfig(this.auth, this.documentId, this.sheetId);
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
@@ -78,45 +71,89 @@ class GoogleSheetConfig {
   Map<String, dynamic> toJson() => _$GoogleSheetConfigToJson(this);
 }
 
-///
-/// PluginConfig
-///
 @JsonSerializable()
-class SecretAuth {
-  @JsonKey(name: 'client_id', nullable: false)
-  String clientId;
+class Auth {
+  @JsonKey(name: 'oauth_client_id', nullable: true)
+  OAuthClientId oauthClientId;
 
-  @JsonKey(name: 'client_secret', nullable: false)
-  String clientSecret;
+  @JsonKey(name: 'oauth_client_id_path', nullable: true)
+  String oauthClientIdPath;
 
-  SecretAuth(this.clientId, this.clientSecret);
+  @JsonKey(name: 'service_account_key', nullable: true)
+  ServiceAccountKey serviceAccountKey;
 
-  factory SecretAuth.fromJson(Map<String, dynamic> json) =>
-      _$SecretAuthFromJson(json);
+  @JsonKey(name: 'service_account_key_path', nullable: true)
+  String serviceAccountKeyPath;
 
-  Map<String, dynamic> toJson() => _$SecretAuthToJson(this);
+  Auth(this.oauthClientId, this.oauthClientIdPath, this.serviceAccountKey,
+      this.serviceAccountKeyPath);
+
+  factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthToJson(this);
 }
 
 ///
-/// PluginConfig
+/// OAuthClientId
 ///
 @JsonSerializable()
-class KeyAuth {
+class OAuthClientId {
 
-  @JsonKey(name: 'client_id')
+  @JsonKey(name: 'clientId', nullable: false)
   String clientId;
 
-  @JsonKey(name: 'email')
-  String email;
+  @JsonKey(name: 'clientSecret', nullable: false)
+  String clientSecret;
 
-  @JsonKey(name: 'private_key')
+  OAuthClientId(this.clientId, this.clientSecret);
+
+  factory OAuthClientId.fromJson(Map<String, dynamic> json) =>
+      _$OAuthClientIdFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OAuthClientIdToJson(this);
+}
+
+///
+/// ServiceAccountKey
+///
+@JsonSerializable()
+class ServiceAccountKey {
+  @JsonKey(name: 'type', nullable: false)
+  String type;
+
+  @JsonKey(name: 'project_id', nullable: false)
+  String projectId;
+
+  @JsonKey(name: 'private_key_id', nullable: false)
+  String privateKeyId;
+
+  @JsonKey(name: 'private_key', nullable: false)
   String privateKey;
 
+  @JsonKey(name: 'client_email', nullable: false)
+  String clientEmail;
 
-  KeyAuth(this.clientId, this.email, this.privateKey);
+  @JsonKey(name: 'client_id', nullable: false)
+  String clientId;
 
-  factory KeyAuth.fromJson(Map<String, dynamic> json) =>
-      _$KeyAuthFromJson(json);
+  @JsonKey(name: 'auth_uri', nullable: false)
+  String authUri;
 
-  Map<String, dynamic> toJson() => _$KeyAuthToJson(this);
+  @JsonKey(name: 'token_uri', nullable: false)
+  String tokenUri;
+
+  @JsonKey(name: 'auth_provider_x509_cert_url', nullable: false)
+  String authProviderX509CertUrl;
+
+  @JsonKey(name: 'client_x509_cert_url', nullable: false)
+  String clientX509CertUrl;
+
+  ServiceAccountKey(this.type, this.projectId, this.privateKeyId,
+      this.privateKey, this.clientEmail, this.clientId, this.authUri,
+      this.tokenUri, this.authProviderX509CertUrl, this.clientX509CertUrl);
+
+  factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>
+      _$ServiceAccountKeyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ServiceAccountKeyToJson(this);
 }

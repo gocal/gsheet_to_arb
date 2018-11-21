@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2018, Marcin Marek Gocał
- * All rights reserved. Use of this source code is governed by a
- * BSD-style license that can be found in the LICENSE file.
- */
-
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'plugin_config.dart';
@@ -38,42 +32,76 @@ Map<String, dynamic> _$PluginConfigToJson(PluginConfig instance) =>
 
 GoogleSheetConfig _$GoogleSheetConfigFromJson(Map<String, dynamic> json) {
   return GoogleSheetConfig(
-      json['secret_auth'] == null
+      json['auth'] == null
           ? null
-          : SecretAuth.fromJson(json['secret_auth'] as Map<String, dynamic>),
-      json['key_auth'] == null
-          ? null
-          : KeyAuth.fromJson(json['key_auth'] as Map<String, dynamic>),
+          : Auth.fromJson(json['auth'] as Map<String, dynamic>),
       json['document_id'] as String,
       json['sheetId'] as String ?? '0');
 }
 
 Map<String, dynamic> _$GoogleSheetConfigToJson(GoogleSheetConfig instance) =>
     <String, dynamic>{
-      'secret_auth': instance.secretAuth,
-      'key_auth': instance.keyAuth,
+      'auth': instance.auth,
       'document_id': instance.documentId,
       'sheetId': instance.sheetId
     };
 
-SecretAuth _$SecretAuthFromJson(Map<String, dynamic> json) {
-  return SecretAuth(
-      json['client_id'] as String, json['client_secret'] as String);
+Auth _$AuthFromJson(Map<String, dynamic> json) {
+  return Auth(
+      json['oauth_client_id'] == null
+          ? null
+          : OAuthClientId.fromJson(
+              json['oauth_client_id'] as Map<String, dynamic>),
+      json['oauth_client_id_path'] as String,
+      json['service_account_key'] == null
+          ? null
+          : ServiceAccountKey.fromJson(
+              json['service_account_key'] as Map<String, dynamic>),
+      json['service_account_key_path'] as String);
 }
 
-Map<String, dynamic> _$SecretAuthToJson(SecretAuth instance) =>
-    <String, dynamic>{
-      'client_id': instance.clientId,
-      'client_secret': instance.clientSecret
+Map<String, dynamic> _$AuthToJson(Auth instance) => <String, dynamic>{
+      'oauth_client_id': instance.oauthClientId,
+      'oauth_client_id_path': instance.oauthClientIdPath,
+      'service_account_key': instance.serviceAccountKey,
+      'service_account_key_path': instance.serviceAccountKeyPath
     };
 
-KeyAuth _$KeyAuthFromJson(Map<String, dynamic> json) {
-  return KeyAuth(json['client_id'] as String, json['email'] as String,
-      json['private_key'] as String);
+OAuthClientId _$OAuthClientIdFromJson(Map<String, dynamic> json) {
+  return OAuthClientId(
+      json['clientId'] as String, json['clientSecret'] as String);
 }
 
-Map<String, dynamic> _$KeyAuthToJson(KeyAuth instance) => <String, dynamic>{
+Map<String, dynamic> _$OAuthClientIdToJson(OAuthClientId instance) =>
+    <String, dynamic>{
+      'clientId': instance.clientId,
+      'clientSecret': instance.clientSecret
+    };
+
+ServiceAccountKey _$ServiceAccountKeyFromJson(Map<String, dynamic> json) {
+  return ServiceAccountKey(
+      json['type'] as String,
+      json['project_id'] as String,
+      json['private_key_id'] as String,
+      json['private_key'] as String,
+      json['client_email'] as String,
+      json['client_id'] as String,
+      json['auth_uri'] as String,
+      json['token_uri'] as String,
+      json['auth_provider_x509_cert_url'] as String,
+      json['client_x509_cert_url'] as String);
+}
+
+Map<String, dynamic> _$ServiceAccountKeyToJson(ServiceAccountKey instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'project_id': instance.projectId,
+      'private_key_id': instance.privateKeyId,
+      'private_key': instance.privateKey,
+      'client_email': instance.clientEmail,
       'client_id': instance.clientId,
-  'email': instance.email,
-  'private_key': instance.privateKey
+      'auth_uri': instance.authUri,
+      'token_uri': instance.tokenUri,
+      'auth_provider_x509_cert_url': instance.authProviderX509CertUrl,
+      'client_x509_cert_url': instance.clientX509CertUrl
     };

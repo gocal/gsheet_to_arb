@@ -26,6 +26,9 @@ main(List<String> args) async {
       callback: (x) => configFilePath = x,
       help: 'config yaml file name');
 
+  parser.addFlag("help",
+      help: 'show helps');
+
   parser.parse(args);
   if (args.length == 0) {
     print('Imports ARB file from exisiting GSheet document');

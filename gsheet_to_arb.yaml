@@ -1,8 +1,0 @@
-gsheet_to_arb:
-  arb_file_prefix: 'intl'
-  output_directory: 'lib/src/i10n'
-  gsheet:
-    document_id: '1QvULNos0kgMT7d3ic6P9xt-yZNTfL9N_w0ez3A3R7jw'
-    sheet_id: '0'
-    auth:
-      service_account_key_path: "~/.ssh/gsheet-to-arb-server-config.json"

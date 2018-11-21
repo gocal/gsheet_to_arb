@@ -30,7 +30,7 @@ Imports Application Resource Bundle (ARB) from Google Sheets
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.0.2
+      gsheet_to_arb: ^0.0.4
     ```
 
 2. ```pub update```
@@ -38,32 +38,24 @@ Imports Application Resource Bundle (ARB) from Google Sheets
 3. Create plugin configuration e.g. ```gsheet_to_arb.yaml```
     ```yaml
     gsheet_to_arb:
+      arb_file_prefix: 'intl'
+      output_directory: 'build'
       gsheet:
-        client_id: '<google_api_client_id>'
-        client_secret: '<google_api_secret>'
-        document_id: '<google_sheet_id>'
+        document_id: '<document_id>'
+        sheet_id: '0'
+        auth:
+          service_account_key_path: "~/.ssh/gsheet-to-arb-server-config.json"
     ```
-
- You shouldn't share API secrets in VCSs, so add it to the .gitingore list
 
 ## Import ARB files from the Google Sheet
 
 1. To import ARB files from Google Sheet run the `gsheet_to_arb:import` program.
 
     ```
-    pub run gsheet_to_arb:import --config gsheet_to_arb.yaml --output-dir=lib/src/i18n
+    pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-2. Click on the link displayed in the console 
-
-    ```
-    Please go to the following URL and grant Google Spreasheet access:
-      => https://accounts.google.com/o/oauth2/auth?response_type=code&...
-    ```
-
-3. Log-in to the Google Account
-
-4. Accept permissions to read the Google Spreadsheet
+2. If need - authenticate Google Sheet Access
 
 ## Create Google Sheet template from existing ARB file
 
@@ -71,17 +63,3 @@ Not implemented yet.
 
 
 ## TODO
-
-### Milestone 1 - 0.1.x
-
-- [ ] Support translations sections
-- [ ] Generate dart code from ARB files (via intl dependency)
-
-### Milestone 2 - 0.2.x
-
-- [ ] Server side authentication (for CI)
-
-### Milestone 3 - 0.3.x
-
-- [ ] Export as Android XML resource 
-- [ ] Import Google Sheet from ARB file

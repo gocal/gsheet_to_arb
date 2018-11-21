@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
+import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class SheetParser {
@@ -103,7 +104,7 @@ class SheetParser {
         var value = values[langValue].formattedValue;
         var builder = _languages[langValue - firstLanguageColumn];
 
-        var entry = ArbEntry(key, value);
+        var entry = ArbResource(key, value);
 
         entry.attributes['context'] = currentContext;
         entry.attributes['description'] = description;

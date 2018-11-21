@@ -15,7 +15,6 @@ import 'package:intl_translation/src/intl_message.dart';
 import 'package:path/path.dart' as path;
 
 class IntlTranslationHelper {
-
   void aaa(String outputDirectoryPath, String localizationFileName) {
     var extraction = new MessageExtraction();
     var generation = new MessageGeneration();
@@ -113,10 +112,10 @@ class IntlTranslationHelper {
 /// up its original messages in our [messages].class
 
 class BasicTranslatedMessage extends TranslatedMessage {
-
   Map<String, List<MainMessage>> messages;
 
-  BasicTranslatedMessage(String name, translated, this.messages) : super(name, translated);
+  BasicTranslatedMessage(String name, translated, this.messages)
+      : super(name, translated);
 
   List<MainMessage> get originalMessages => (super.originalMessages == null)
       ? _findOriginals()
@@ -126,5 +125,3 @@ class BasicTranslatedMessage extends TranslatedMessage {
   //key in [messages].
   List<MainMessage> _findOriginals() => originalMessages = messages[id];
 }
-
-

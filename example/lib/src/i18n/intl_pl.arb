@@ -1,6 +1,6 @@
 {
   "_locale": "pl",
-  "@@last_modified": "2018-11-21T15:32:07.630057",
+  "@@last_modified": "2018-11-21T22:17:32.013372",
   "title": "Tytuł",
   "@@title": {
     "type": "Text",
@@ -34,6 +34,20 @@
     "type": "Text",
     "placeholders": {},
     "context": "signup",
-    "description": ""
+    "description": "contains registration"
+  },
+  "single_argument": "Single {name} argument",
+  "@@single_argument": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "placeholders",
+    "description": "Single named argument"
+  },
+  "two_arguments": "Argument {first} and {second}",
+  "@@two_arguments": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "placeholders",
+    "description": "Two named arguments"
   }
 }

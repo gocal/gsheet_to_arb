@@ -6,7 +6,7 @@
 
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 
-var _regex = RegExp("\\{(.+?)\\}");
+var _regex = RegExp("\\{(\w+?)\\}");
 
 List<ArbResourcePlaceholder> findPlaceholders(String text) {
   if (text == null || text.isEmpty) {

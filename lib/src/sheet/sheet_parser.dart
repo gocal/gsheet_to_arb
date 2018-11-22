@@ -115,8 +115,8 @@ class SheetParser {
           continue;
         } else if (pluralStatus == PluralsParserStatus.completed) {
           var entry = ArbResource(pluralParser.key, pluralParser.value);
-          entry.attributes['context'] = currentCategory;
-          entry.attributes['description'] = description;
+          entry.attributes['context'] = ""; // TODO
+          entry.attributes['description'] = ""; // TODO
           languages[language - firstLanguageColumn].add(entry);
         }
 
@@ -164,9 +164,11 @@ class PluralsParser {
         }
 
         var builder = StringBuffer();
-        _plurals.forEach((String prefix, String value) =>
-            builder.write("{$prefix : $value}"));
-        _value = "$_keyValue ${_plurals.toString()}";
+        _plurals.forEach((String prefix, String value) {
+          builder.write(" $prefix: {$value}");
+        });
+        _value =
+            _keyValue.replaceAll("plural}", "plural,${builder.toString()}}");
 
         return PluralsParserStatus.completed;
       }

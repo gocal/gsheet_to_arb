@@ -18,7 +18,6 @@ class SheetParser {
 
   SheetParser({this.auth, this.categoryPrefix});
 
-  var _languages = List<ArbDocumentBuilder>();
   var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(String documentId) async {
@@ -67,10 +66,13 @@ class SheetParser {
   ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
     Log.i("Opening ${spreadsheet.spreadsheetUrl}");
 
+    var languages = List<ArbDocumentBuilder>();
+    var langToPlural = Map<int, PluralsParser>();
+
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
-    var header = rows[0];
 
+    var header = rows[0];
     var headerValues = header.values;
 
     var lastModified = DateTime.now();
@@ -78,9 +80,10 @@ class SheetParser {
     var firstLanguageColumn = 2; // key, description
 
     // Store languages
-    for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
-      var languageKey = headerValues[lang].formattedValue;
-      _languages.add(ArbDocumentBuilder(languageKey, lastModified));
+    for (var i = firstLanguageColumn; i < headerValues.length; i++) {
+      var language = headerValues[i].formattedValue;
+      languages.add(ArbDocumentBuilder(language, lastModified));
+      langToPlural[i] = PluralsParser();
     }
 
     // Skip header row
@@ -90,39 +93,108 @@ class SheetParser {
 
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
-      var values = row.values;
+      var columns = row.values;
 
-      if (values[0].formattedValue.startsWith(categoryPrefix)) {
-        currentCategory =
-            values[0].formattedValue.substring(categoryPrefix.length);
+      var key = columns[0].formattedValue;
+
+      if (key.startsWith(categoryPrefix)) {
+        currentCategory = key.substring(categoryPrefix.length);
         continue;
       }
 
-      var key = values[0].formattedValue;
-      var description = values[1].formattedValue;
-      if (description == null) {
-        description = "";
-      }
+      var description = columns[1].formattedValue ?? "";
 
-      for (var langValue = firstLanguageColumn;
-      langValue < values.length;
-      langValue++) {
-        var value = values[langValue].formattedValue;
-        var builder = _languages[langValue - firstLanguageColumn];
+      for (var language = firstLanguageColumn;
+      language < columns.length;
+      language++) {
+        var value = columns[language].formattedValue;
+
+        var pluralParser = langToPlural[language];
+        var pluralStatus = pluralParser.parse(key, value);
+        if (pluralStatus == PluralsParserStatus.consumed) {
+          continue;
+        } else if (pluralStatus == PluralsParserStatus.completed) {
+          var entry = ArbResource(pluralParser.key, pluralParser.value);
+          entry.attributes['context'] = currentCategory;
+          entry.attributes['description'] = description;
+          languages[language - firstLanguageColumn].add(entry);
+        }
 
         var entry = ArbResource(key, value);
-
         entry.attributes['context'] = currentCategory;
         entry.attributes['description'] = description;
-
-        builder.add(entry);
+        languages[language - firstLanguageColumn].add(entry);
       }
     }
 
+    // build all documents
     var documents = List<ArbDocument>();
-
-    _languages.forEach((builder) => documents.add(builder.build()));
-
+    languages.forEach((builder) => documents.add(builder.build()));
     return ArbBundle(documents);
   }
+}
+
+class PluralsParser {
+  static final _regex = RegExp("\\{(.+?), plural\\}"); // {(.+?), plural\s?}
+
+  final pluralKeywords = ["zero", "one", "two", "few", "many", "other"];
+
+  bool _parsing = false;
+
+  String _key;
+  String _keyValue;
+  String _value;
+
+  var _plurals = Map<String, String>();
+
+  String get key => _key;
+
+  String get value => _value;
+
+  PluralsParserStatus parse(String key, String value) {
+    // Already parsing
+    if (_parsing) {
+      if (key.startsWith(_key)) {
+        var pluralPrefix = key.substring(_key.length + 1);
+        _plurals[pluralPrefix] = value;
+        return PluralsParserStatus.consumed;
+      } else {
+        if (_plurals.isEmpty) {
+          throw Exception("Expected at least one plural element");
+        }
+
+        var builder = StringBuffer();
+        _plurals.forEach((String prefix, String value) =>
+            builder.write("{$prefix : $value}"));
+        _value = "$_keyValue ${_plurals.toString()}";
+
+        return PluralsParserStatus.completed;
+      }
+    }
+
+    var matches = _regex.allMatches(value);
+
+    if (matches.length == 0) {
+      _key = null;
+      _plurals.clear();
+      _parsing = false;
+      return PluralsParserStatus.notFound;
+    }
+
+    if (matches.length > 1) {
+      throw Exception("Only single plural parameter allowed");
+    }
+
+    // Start parsing
+    _key = key;
+    _keyValue = value;
+    _parsing = true;
+    return PluralsParserStatus.consumed;
+  }
+}
+
+enum PluralsParserStatus {
+  notFound,
+  consumed,
+  completed,
 }

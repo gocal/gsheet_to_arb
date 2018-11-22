@@ -1,6 +1,6 @@
 {
   "_locale": "pl",
-  "@@last_modified": "2018-11-22T19:14:23.736222",
+  "@@last_modified": "2018-11-22T21:36:58.222257",
   "title": "Tytuł",
   "@@title": {
     "type": "Text",
@@ -49,5 +49,19 @@
     "placeholders": {},
     "context": "placeholders",
     "description": "Two named arguments"
+  },
+  "earned_points": "{name} you've earned {points, plural}! {zero: zero punktów, one: jeden punkt, two: dwa punkty, few: {points} punkty, many: {points} punktów}",
+  "@@earned_points": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "plurals",
+    "description": "Test message"
+  },
+  "test_message": "Wiadomość testowa",
+  "@@test_message": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "plurals",
+    "description": "Test message"
   }
 }

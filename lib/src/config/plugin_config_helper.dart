@@ -19,7 +19,8 @@ class PluginConfigHelper {
         "intl",
         GoogleSheetConfig(
             auth: Auth(
-                serviceAccountKeyPath: "~/.ssh/gsheet-to-arb-server-config.json"),
+                serviceAccountKeyPath:
+                "~/.ssh/gsheet-to-arb-server-config.json"),
             documentId: "<DOCUMENT_ID>",
             sheetId: "0",
             categoryPrefix: "#_"));

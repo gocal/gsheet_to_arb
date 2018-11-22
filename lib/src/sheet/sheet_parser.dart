@@ -13,7 +13,6 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class SheetParser {
-
   final Auth auth;
   final String categoryPrefix;
 
@@ -52,7 +51,8 @@ class SheetParser {
     Log.i("");
   }
 
-  Future<ArbBundle> _handleSheetsAuth(AuthClient client, String documentId) async {
+  Future<ArbBundle> _handleSheetsAuth(AuthClient client,
+      String documentId) async {
     var sheetsApi = SheetsApi(client);
     var spreadsheet =
     await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
@@ -93,7 +93,8 @@ class SheetParser {
       var values = row.values;
 
       if (values[0].formattedValue.startsWith(categoryPrefix)) {
-        currentCategory = values[0].formattedValue;
+        currentCategory =
+            values[0].formattedValue.substring(categoryPrefix.length);
         continue;
       }
 

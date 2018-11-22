@@ -1,3 +1,7 @@
+## 0.0.6
+
+- Category prefix configuration
+
 ## 0.0.5
 
 - Support placeholders in ARB resources

@@ -5,6 +5,7 @@
  */
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
 part 'plugin_config.g.dart';
 
@@ -63,7 +64,11 @@ class GoogleSheetConfig {
   @JsonKey(name: 'sheet_id', defaultValue: "0")
   String sheetId;
 
-  GoogleSheetConfig(this.auth, this.documentId, this.sheetId);
+  @JsonKey(name: 'category_prefix', defaultValue: "# ")
+  String categoryPrefix;
+
+  GoogleSheetConfig(
+      {this.auth, this.documentId, this.sheetId, this.categoryPrefix});
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
@@ -85,8 +90,10 @@ class Auth {
   @JsonKey(name: 'service_account_key_path', nullable: true)
   String serviceAccountKeyPath;
 
-  Auth(this.oauthClientId, this.oauthClientIdPath, this.serviceAccountKey,
-      this.serviceAccountKeyPath);
+  Auth({this.oauthClientId,
+    this.oauthClientIdPath,
+    this.serviceAccountKey,
+    this.serviceAccountKeyPath});
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
 
@@ -104,7 +111,7 @@ class OAuthClientId {
   @JsonKey(name: 'client_secret', nullable: false)
   String clientSecret;
 
-  OAuthClientId(this.clientId, this.clientSecret);
+  OAuthClientId({@required this.clientId, @required this.clientSecret});
 
   factory OAuthClientId.fromJson(Map<String, dynamic> json) =>
       _$OAuthClientIdFromJson(json);
@@ -147,17 +154,16 @@ class ServiceAccountKey {
   @JsonKey(name: 'client_x509_cert_url', nullable: false)
   String clientX509CertUrl;
 
-  ServiceAccountKey(
-      this.type,
-      this.projectId,
-      this.privateKeyId,
-      this.privateKey,
-      this.clientEmail,
+  ServiceAccountKey({this.type,
+    @required this.projectId,
+    @required this.privateKeyId,
+    @required this.privateKey,
+    @required this.clientEmail,
       this.clientId,
       this.authUri,
       this.tokenUri,
       this.authProviderX509CertUrl,
-      this.clientX509CertUrl);
+    this.clientX509CertUrl});
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>
       _$ServiceAccountKeyFromJson(json);

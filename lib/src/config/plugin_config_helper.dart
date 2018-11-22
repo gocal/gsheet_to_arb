@@ -18,9 +18,11 @@ class PluginConfigHelper {
         "lib/src/i18n",
         "intl",
         GoogleSheetConfig(
-            Auth(null, null, null, "~/.ssh/gsheet-to-arb-server-config.json"),
-            "<DOCUMENT_ID>",
-            "0"));
+            auth: Auth(
+                serviceAccountKeyPath: "~/.ssh/gsheet-to-arb-server-config.json"),
+            documentId: "<DOCUMENT_ID>",
+            sheetId: "0",
+            categoryPrefix: "#_"));
 
     return jsonEncode(PluginConfigRoot(config).toJson());
   }

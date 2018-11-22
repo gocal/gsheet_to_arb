@@ -31,8 +31,11 @@ main(List<String> args) async {
 
   var config = PluginConfigHelper().fromYamlFile(configFilePath);
 
-  var sheetParser = SheetParser();
-  var bundle = await sheetParser.parseSheet(config.sheetConfig);
+  var sheetConfig = config.sheetConfig;
+
+  var sheetParser = SheetParser(
+      auth: sheetConfig.auth, categoryPrefix: sheetConfig.categoryPrefix);
+  var bundle = await sheetParser.parseSheet(sheetConfig.documentId);
 
   var arbSerializer = ArbSerializer();
   arbSerializer.saveArbBundle(bundle, config.outputDirectoryPath);

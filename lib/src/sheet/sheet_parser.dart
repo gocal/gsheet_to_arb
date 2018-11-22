@@ -13,13 +13,18 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class SheetParser {
+  final Auth auth;
+  final String categoryPrefix;
+
+  SheetParser({this.auth, this.categoryPrefix});
+
   var _languages = List<ArbDocumentBuilder>();
   var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
-  Future<ArbBundle> parseSheet(GoogleSheetConfig config) async {
-    var authClient = await _authClient(config.auth);
+  Future<ArbBundle> parseSheet(String documentId) async {
+    var authClient = await _authClient(auth);
 
-    var arbBundle = await _handleSheetsAuth(authClient, config.documentId);
+    var arbBundle = await _handleSheetsAuth(authClient, documentId);
     return arbBundle;
   }
 
@@ -46,11 +51,11 @@ class SheetParser {
     Log.i("");
   }
 
-  Future<ArbBundle> _handleSheetsAuth(
-      AuthClient client, String documentId) async {
+  Future<ArbBundle> _handleSheetsAuth(AuthClient client,
+      String documentId) async {
     var sheetsApi = SheetsApi(client);
     var spreadsheet =
-        await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
+    await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
 
     var bundle = _handleSpreadsheet(spreadsheet);
 
@@ -81,14 +86,15 @@ class SheetParser {
     // Skip header row
     var firstTranslationsRow = 1;
 
-    var currentContext = "";
+    var currentCategory = "";
 
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var values = row.values;
 
-      if (values.length == 1) {
-        currentContext = values[0].formattedValue;
+      if (values[0].formattedValue.startsWith(categoryPrefix)) {
+        currentCategory =
+            values[0].formattedValue.substring(categoryPrefix.length);
         continue;
       }
 
@@ -99,14 +105,14 @@ class SheetParser {
       }
 
       for (var langValue = firstLanguageColumn;
-          langValue < values.length;
-          langValue++) {
+      langValue < values.length;
+      langValue++) {
         var value = values[langValue].formattedValue;
         var builder = _languages[langValue - firstLanguageColumn];
 
         var entry = ArbResource(key, value);
 
-        entry.attributes['context'] = currentContext;
+        entry.attributes['context'] = currentCategory;
         entry.attributes['description'] = description;
 
         builder.add(entry);

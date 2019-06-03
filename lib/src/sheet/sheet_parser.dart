@@ -79,8 +79,11 @@ class SheetParser {
 
     // Store languages
     for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
-      var languageKey = headerValues[lang].formattedValue;
-      _languages.add(ArbDocumentBuilder(languageKey, lastModified));
+      //Ignore empty header columns
+      if(headerValues[lang].formattedValue != null){
+        var languageKey = headerValues[lang].formattedValue;
+        _languages.add(ArbDocumentBuilder(languageKey, lastModified));
+      }
     }
 
     // Skip header row
@@ -91,8 +94,12 @@ class SheetParser {
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var values = row.values;
-      Log.i(values[0]);
-      Log.i(values[0].formattedValue);
+
+      //Stop if empty row is found
+      if(values[0].formattedValue == null) {
+        break;
+      }
+
       if (values[0].formattedValue.startsWith(categoryPrefix)) {
         currentCategory =
             values[0].formattedValue.substring(categoryPrefix.length);
@@ -106,7 +113,7 @@ class SheetParser {
       }
 
       for (var langValue = firstLanguageColumn;
-      langValue < values.length;
+      langValue < _languages.length;
       langValue++) {
         var value = values[langValue].formattedValue;
         var builder = _languages[langValue - firstLanguageColumn];

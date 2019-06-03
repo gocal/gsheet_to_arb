@@ -101,11 +101,11 @@ class Auth {
 }
 
 ///
-/// OAuthClientId
+/// OAuthClientId 
 ///
 @JsonSerializable()
 class OAuthClientId {
-  @JsonKey(name: 'client_Id', nullable: false)
+  @JsonKey(name: 'client_id', nullable: false)
   String clientId;
 
   @JsonKey(name: 'client_secret', nullable: false)

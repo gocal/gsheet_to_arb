@@ -91,7 +91,8 @@ class SheetParser {
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var values = row.values;
-
+      Log.i(values[0]);
+      Log.i(values[0].formattedValue);
       if (values[0].formattedValue.startsWith(categoryPrefix)) {
         currentCategory =
             values[0].formattedValue.substring(categoryPrefix.length);

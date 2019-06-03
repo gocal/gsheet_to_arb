@@ -18,6 +18,7 @@ class SheetParser {
 
   SheetParser({this.auth, this.categoryPrefix});
 
+  var _languages = List<ArbDocumentBuilder>();
   var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(String documentId) async {
@@ -66,13 +67,10 @@ class SheetParser {
   ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
     Log.i("Opening ${spreadsheet.spreadsheetUrl}");
 
-    var languages = List<ArbDocumentBuilder>();
-    var langToPlural = Map<int, PluralsParser>();
-
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
-
     var header = rows[0];
+
     var headerValues = header.values;
 
     var lastModified = DateTime.now();
@@ -81,9 +79,12 @@ class SheetParser {
 
     // Store languages
     for (var i = firstLanguageColumn; i < headerValues.length; i++) {
-      var language = headerValues[i].formattedValue;
-      languages.add(ArbDocumentBuilder(language, lastModified));
-      langToPlural[i] = PluralsParser();
+      //Ignore empty header columns
+      if(headerValues[lang].formattedValue != null) {
+        var language = headerValues[i].formattedValue;
+        languages.add(ArbDocumentBuilder(language, lastModified));
+        langToPlural[i] = PluralsParser();
+      }
     }
 
     // Skip header row
@@ -100,6 +101,11 @@ class SheetParser {
       if (key.startsWith(categoryPrefix)) {
         currentCategory = key.substring(categoryPrefix.length);
         continue;
+      }
+
+      //Stop if empty row is found
+      if(values[0].formattedValue == null) {
+        break;
       }
 
       var description = columns[1].formattedValue ?? "";

@@ -70,6 +70,7 @@ class SheetParser {
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
     var header = rows[0];
+    var langToPlural = Map<int, PluralsParser>();
 
     var headerValues = header.values;
 
@@ -78,12 +79,12 @@ class SheetParser {
     var firstLanguageColumn = 2; // key, description
 
     // Store languages
-    for (var i = firstLanguageColumn; i < headerValues.length; i++) {
+    for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
       //Ignore empty header columns
       if(headerValues[lang].formattedValue != null) {
-        var language = headerValues[i].formattedValue;
-        languages.add(ArbDocumentBuilder(language, lastModified));
-        langToPlural[i] = PluralsParser();
+        var language = headerValues[lang].formattedValue;
+        _languages.add(ArbDocumentBuilder(language, lastModified));
+
       }
     }
 
@@ -104,7 +105,7 @@ class SheetParser {
       }
 
       //Stop if empty row is found
-      if(values[0].formattedValue == null) {
+      if(columns[0].formattedValue == null) {
         break;
       }
 
@@ -114,7 +115,6 @@ class SheetParser {
       language < columns.length;
       language++) {
         var value = columns[language].formattedValue;
-
         var pluralParser = langToPlural[language];
         var pluralStatus = pluralParser.parse(key, value);
         if (pluralStatus == PluralsParserStatus.consumed) {
@@ -123,19 +123,19 @@ class SheetParser {
           var entry = ArbResource(pluralParser.key, pluralParser.value);
           entry.attributes['context'] = ""; // TODO
           entry.attributes['description'] = ""; // TODO
-          languages[language - firstLanguageColumn].add(entry);
+          _languages[language - firstLanguageColumn].add(entry);
         }
 
         var entry = ArbResource(key, value);
         entry.attributes['context'] = currentCategory;
         entry.attributes['description'] = description;
-        languages[language - firstLanguageColumn].add(entry);
+        _languages[language - firstLanguageColumn].add(entry);
       }
     }
 
     // build all documents
     var documents = List<ArbDocument>();
-    languages.forEach((builder) => documents.add(builder.build()));
+    _languages.forEach((builder) => documents.add(builder.build()));
     return ArbBundle(documents);
   }
 }

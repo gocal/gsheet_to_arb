@@ -112,11 +112,11 @@ class SheetParser {
         description = "";
       }
 
-      for (var langValue = firstLanguageColumn;
+      for (var langValue = 0;
       langValue < _languages.length;
       langValue++) {
-        var value = values[langValue].formattedValue;
-        var builder = _languages[langValue - firstLanguageColumn];
+        var value = values[langValue + firstLanguageColumn].formattedValue;
+        var builder = _languages[langValue];
 
         var entry = ArbResource(key, value);
 

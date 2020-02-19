@@ -13,15 +13,15 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 
 ### Import ARB files from the Google Sheet
 
-0. [Setup](#setup) plugin configuration
+1. [Setup](#setup) plugin configuration yaml file - you only need to do it once.
 
-1. To import ARB files from Google Sheet run the `gsheet_to_arb:import` program.
+2. To import ARB files from Google Sheet run the `gsheet_to_arb:import` program.
 
     ```
     pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-2. Optionally generate Dart classes from the ARB files using `gsheet_to_arb:arb_to_dart` program.
+3. Optionally generate Dart classes from the ARB files using `gsheet_to_arb:arb_to_dart` program.
 
     ```
     pub run gsheet_to_arb:arb_to_dart --config gsheet_to_arb.yaml

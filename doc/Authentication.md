@@ -3,8 +3,14 @@
 gsheet_to_arb plugin requires Google Sheets API access in order to fetch the data from Google Spreadsheet document.
 There two possible options to provide such a access:
 
-- Client Authentication (OAuthClientId)
-- Server Authentication (ServiceAccountKey)
+### Client Authentication (OAuthClientId)
+- Used from the local environment
+- Requires to login via browser
+
+
+### Server Authentication (ServiceAccountKey) - CI/CD login
+- Used for automatic CI/CD deployment
+- Requires Service Account Key
 
 ## Client Authentication
 

@@ -4,9 +4,6 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
 library gsheet_to_arb;
 
 export 'src/arb/arb_generator.dart';

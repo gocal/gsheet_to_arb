@@ -1,4 +1,4 @@
-# GSheet to ARB - Export Google Sheet Translaction to Dart ARB File
+# GSheet to ARB - Import ARB Translation files from Google Sheet 
 
 [![pub package](https://img.shields.io/pub/v/gsheet_to_arb.svg)](https://pub.dartlang.org/packages/gsheet_to_arb)
 

@@ -19,10 +19,10 @@ class IntlTranslationHelper {
     var extraction = MessageExtraction();
     var generation = MessageGeneration();
 
-    generation.generatedFilePrefix = "_";
+    generation.generatedFilePrefix = '_';
 
     var dartFiles = [
-      "${outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart"
+      '${outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart'
     ];
 
     var jsonFiles = Directory(outputDirectoryPath)
@@ -35,7 +35,7 @@ class IntlTranslationHelper {
     extraction.suppressWarnings = true;
     var allMessages = dartFiles.map((each) => extraction.parseFile(File(each)));
 
-    messages = Map();
+    messages = {};
     for (var eachMap in allMessages) {
       eachMap.forEach(
           (key, value) => messages.putIfAbsent(key, () => []).add(value));
@@ -82,7 +82,7 @@ class IntlTranslationHelper {
     }
     generation.allLocales.add(locale);
 
-    List<TranslatedMessage> translations = [];
+    var translations = <TranslatedMessage>[];
     data.forEach((id, messageData) {
       TranslatedMessage message = recreateIntlObjects(id, messageData);
       if (message != null) {
@@ -97,7 +97,7 @@ class IntlTranslationHelper {
   /// [data] to be a String. For metadata we expect [id] to start with "@"
   /// and [data] to be a Map or null. For metadata we return null.
   BasicTranslatedMessage recreateIntlObjects(String id, data) {
-    if (id.startsWith("@")) return null;
+    if (id.startsWith('@')) return null;
     if (data == null) return null;
     var parsed = pluralAndGenderParser.parse(data).value;
     if (parsed is LiteralString && parsed.string.isEmpty) {

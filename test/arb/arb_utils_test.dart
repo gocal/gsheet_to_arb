@@ -15,13 +15,13 @@ void main() {
       var list = findPlaceholders("");
       assert(list.isEmpty);
 
-      list = findPlaceholders("no matches");
+      list = findPlaceholders('no matches');
       assert(list.isEmpty);
 
-      list = findPlaceholders("Hi {name}!");
+      list = findPlaceholders('Hi {name}!');
       assert(list.length == 1);
 
-      list = findPlaceholders("Hi {name} {name2}!");
+      list = findPlaceholders('Hi {name} {name2}!');
       assert(list.length == 2);
     });
   });

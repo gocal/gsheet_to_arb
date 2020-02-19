@@ -15,15 +15,15 @@ import 'plugin_config.dart';
 class PluginConfigHelper {
   String createTemplate() {
     var config = PluginConfig(
-        "lib/src/i18n",
-        "intl",
+        'lib/src/i18n',
+        'intl',
         GoogleSheetConfig(
             auth: Auth(
                 serviceAccountKeyPath:
-                    "~/.ssh/gsheet-to-arb-server-config.json"),
-            documentId: "<DOCUMENT_ID>",
-            sheetId: "0",
-            categoryPrefix: "#_"));
+                    '~/.ssh/gsheet-to-arb-server-config.json'),
+            documentId: '<DOCUMENT_ID>',
+            sheetId: '0',
+            categoryPrefix: '#_'));
 
     return jsonEncode(PluginConfigRoot(config).toJson());
   }
@@ -52,7 +52,7 @@ class PluginConfigHelper {
         auth.oauthClientIdPath == null &&
         auth.serviceAccountKey == null &&
         auth.serviceAccountKeyPath == null) {
-      throw Exception("Missing auth configuration");
+      throw Exception('Missing auth configuration');
     }
 
     if (auth.oauthClientId == null && auth.oauthClientIdPath != null) {

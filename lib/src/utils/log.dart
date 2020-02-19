@@ -21,7 +21,7 @@ class Log {
   final Logger _log = Logger('gsheet_to_arb');
   bool _verbose = false;
 
-  static final Log _singleton = new Log._internal();
+  static final Log _singleton = Log._internal();
 
   Log._internal() {
     Logger.root.onRecord.listen((LogRecord rec) {
@@ -30,11 +30,11 @@ class Log {
     verbose = false;
   }
 
-  static i(String text) {
+  static void i(String text) {
     _singleton._log.config(text);
   }
 
-  static v(String text) {
+  static void v(String text) {
     _singleton._log.info(text);
   }
 }

@@ -17,7 +17,7 @@ class TranslationsGenerator {
     var translationClass = Class((ClassBuilder builder) {
       builder.name = className;
       builder.docs.add(
-          "\n//ignore_for_file: type_annotate_public_apis, non_constant_identifier_names");
+          '\n//ignore_for_file: type_annotate_public_apis, non_constant_identifier_names');
       document.entries.forEach((ArbResource entry) {
         var method = _getResourceMethod(entry);
         builder.methods.add(method);
@@ -25,7 +25,7 @@ class TranslationsGenerator {
     });
 
     final library = Library((LibraryBuilder builder) {
-      builder.directives.add(Directive.import("package:intl/intl.dart"));
+      builder.directives.add(Directive.import('package:intl/intl.dart'));
       builder.body.add(translationClass);
     });
 
@@ -33,14 +33,14 @@ class TranslationsGenerator {
     var emitted = library.accept(emitter);
     var formatted = DartFormatter().format('${emitted}');
 
-    var file = File("${directory}/${className.toLowerCase()}.dart");
+    var file = File('${directory}/${className.toLowerCase()}.dart');
     file.createSync();
     file.writeAsStringSync(formatted);
   }
 
   Method _getResourceMethod(ArbResource resource) {
     if (resource.value.hasPlaceholders) {
-      Method method = Method((MethodBuilder builder) {
+      var method = Method((MethodBuilder builder) {
         var description = resource.attributes['description'];
         if (description == null) {
           description = resource.id.text;
@@ -74,7 +74,7 @@ class TranslationsGenerator {
   }
 
   Method _getResourceGetter(ArbResource resource) {
-    Method method = Method((MethodBuilder builder) {
+    final method = Method((MethodBuilder builder) {
       var description = resource.attributes['description'];
       if (description == null) {
         description = resource.id.text;
@@ -83,18 +83,17 @@ class TranslationsGenerator {
       var key = resource.id.text;
       var value = resource.value.text;
 
-      builder.name = _getMethodName(key);
-      builder.type = MethodType.getter;
-      builder.returns = const Reference('String');
-      builder.lambda = true;
-      builder.body = Code(
-          """Intl.message("${value}", name: "${key}", desc: "${description}")""");
-      builder.docs.add("\t/// ${description}");
+      builder
+        ..name = _getMethodName(key)
+        ..type = MethodType.getter
+        ..returns = const Reference('String')
+        ..lambda = true
+        ..body = Code(
+            '''Intl.message("${value}", name: "${key}", desc: "${description}")''')
+        ..docs.add('\t/// ${description}');
     });
     return method;
   }
 
-  String _getMethodName(String key) {
-    return ReCase(key).camelCase;
-  }
+  String _getMethodName(String key) => ReCase(key).camelCase;
 }

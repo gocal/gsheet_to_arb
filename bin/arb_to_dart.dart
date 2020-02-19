@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -24,25 +24,21 @@ main(List<String> args) async {
 
   parser.parse(args);
   if (args.length == 0) {
-    Log.i('Imports ARB file from exisiting GSheet document');
+    Log.i('Converts ARB file to Dart i18n');
     Log.i('Usage: gsheet_to_arb [options]');
     Log.i(parser.usage);
     exit(0);
   }
 
-  var config = PluginConfigHelper().fromYamlFile(configFilePath);
-
-  var serializer = ArbSerializer();
-
-  var document =
+  final config = PluginConfigHelper().fromYamlFile(configFilePath);
+  final serializer = ArbSerializer();
+  final document =
       serializer.loadArbDocument("${config.outputDirectoryPath}/intl_en.arb");
-
-  var localizationFileName = config.localizationFileName;
-
-  var generator = TranslationsGenerator();
+  final localizationFileName = config.localizationFileName;
+  final generator = TranslationsGenerator();
   generator.buildTranslations(
       document, config.outputDirectoryPath, localizationFileName);
 
-  IntlTranslationHelper helper = IntlTranslationHelper();
+  final helper = IntlTranslationHelper();
   helper.aaa(config.outputDirectoryPath, config.localizationFileName);
 }

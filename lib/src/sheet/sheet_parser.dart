@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -51,11 +51,11 @@ class SheetParser {
     Log.i("");
   }
 
-  Future<ArbBundle> _handleSheetsAuth(AuthClient client,
-      String documentId) async {
+  Future<ArbBundle> _handleSheetsAuth(
+      AuthClient client, String documentId) async {
     var sheetsApi = SheetsApi(client);
     var spreadsheet =
-    await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
+        await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
 
     var bundle = _handleSpreadsheet(spreadsheet);
 
@@ -80,7 +80,7 @@ class SheetParser {
     // Store languages
     for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
       //Ignore empty header columns
-      if(headerValues[lang].formattedValue != null){
+      if (headerValues[lang].formattedValue != null) {
         var languageKey = headerValues[lang].formattedValue;
         _languages.add(ArbDocumentBuilder(languageKey, lastModified));
       }
@@ -96,7 +96,7 @@ class SheetParser {
       var values = row.values;
 
       //Stop if empty row is found
-      if(values[0].formattedValue == null) {
+      if (values[0].formattedValue == null) {
         break;
       }
 
@@ -112,9 +112,7 @@ class SheetParser {
         description = "";
       }
 
-      for (var langValue = 0;
-      langValue < _languages.length;
-      langValue++) {
+      for (var langValue = 0; langValue < _languages.length; langValue++) {
         var value = values[langValue + firstLanguageColumn].formattedValue;
         var builder = _languages[langValue];
 

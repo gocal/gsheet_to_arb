@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -17,8 +17,7 @@ class S {
       Intl.message("Message", name: "message", desc: "contains message");
 
   /// contains app name
-  String get appName =>
-      Intl.message("Sample Application",
+  String get appName => Intl.message("Sample Application",
       name: "app_name", desc: "contains app name");
 
   /// contains login
@@ -30,8 +29,7 @@ class S {
       Intl.message("Register", name: "register", desc: "contains registration");
 
   /// Single named argument
-  String singleArgument(String name) =>
-      Intl.message("Single {name} argument",
+  String singleArgument(String name) => Intl.message("Single {name} argument",
       name: "single_argument", args: [name], desc: "Single named argument");
 
   /// Two named arguments

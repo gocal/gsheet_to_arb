@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -64,8 +64,7 @@ class TranslationsGenerator {
         builder.returns = const Reference('String');
         builder.lambda = true;
         builder.body = Code(
-            """Intl.message("${value}", name: "${key}", args: [${args.join(
-                ", ")}], desc: "${description}")""");
+            """Intl.message("${value}", name: "${key}", args: [${args.join(", ")}], desc: "${description}")""");
         builder.docs.add("\t/// ${description}");
       });
       return method;

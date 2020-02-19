@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -29,14 +29,11 @@ main(List<String> args) async {
     exit(0);
   }
 
-  var config = PluginConfigHelper().fromYamlFile(configFilePath);
-
-  var sheetConfig = config.sheetConfig;
-
-  var sheetParser = SheetParser(
+  final config = PluginConfigHelper().fromYamlFile(configFilePath);
+  final sheetConfig = config.sheetConfig;
+  final sheetParser = SheetParser(
       auth: sheetConfig.auth, categoryPrefix: sheetConfig.categoryPrefix);
-  var bundle = await sheetParser.parseSheet(sheetConfig.documentId);
-
-  var arbSerializer = ArbSerializer();
+  final bundle = await sheetParser.parseSheet(sheetConfig.documentId);
+  final arbSerializer = ArbSerializer();
   arbSerializer.saveArbBundle(bundle, config.outputDirectoryPath);
 }

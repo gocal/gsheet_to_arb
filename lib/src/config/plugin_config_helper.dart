@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -20,7 +20,7 @@ class PluginConfigHelper {
         GoogleSheetConfig(
             auth: Auth(
                 serviceAccountKeyPath:
-                "~/.ssh/gsheet-to-arb-server-config.json"),
+                    "~/.ssh/gsheet-to-arb-server-config.json"),
             documentId: "<DOCUMENT_ID>",
             sheetId: "0",
             categoryPrefix: "#_"));

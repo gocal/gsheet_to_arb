@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -25,10 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "login": MessageLookupByLibrary.simpleMessage("Login"),
-    "message": MessageLookupByLibrary.simpleMessage("Message"),
-    "register": MessageLookupByLibrary.simpleMessage("Register"),
-    "title": MessageLookupByLibrary.simpleMessage("Title")
-  };
+  static _notInlinedMessages(_) => <String, Function>{
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "message": MessageLookupByLibrary.simpleMessage("Message"),
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "title": MessageLookupByLibrary.simpleMessage("Title")
+      };
 }

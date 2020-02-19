@@ -15,12 +15,12 @@ class ArbBundle {
 class ArbDocumentBuilder {
   String locale;
   DateTime lastModified;
-  List<ArbResource> entries = List();
+  List<ArbResource> entries = [];
 
-  ArbDocumentBuilder(this.locale, this.lastModified) {}
+  ArbDocumentBuilder(this.locale, this.lastModified);
 
   ArbDocument build() {
-    ArbDocument bundle = ArbDocument(locale, lastModified, entries);
+    var bundle = ArbDocument(locale, lastModified, entries);
     return bundle;
   }
 

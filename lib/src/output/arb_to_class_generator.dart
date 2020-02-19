@@ -42,16 +42,14 @@ class TranslationsGenerator {
     if (resource.value.hasPlaceholders) {
       var method = Method((MethodBuilder builder) {
         var description = resource.attributes['description'];
-        if (description == null) {
-          description = resource.id.text;
-        }
+        description ??= resource.id.text;
 
         var key = resource.id.text;
         var value = resource.value.text;
 
         builder.name = _getMethodName(key);
 
-        var args = List<String>();
+        var args = <String>[];
         resource.value.placeholders
             .forEach((ArbResourcePlaceholder placeholder) {
           builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
@@ -65,7 +63,7 @@ class TranslationsGenerator {
         builder.lambda = true;
         builder.body = Code(
             """Intl.message("${value}", name: "${key}", args: [${args.join(", ")}], desc: "${description}")""");
-        builder.docs.add("\t/// ${description}");
+        builder.docs.add('\t/// ${description}');
       });
       return method;
     } else {
@@ -76,9 +74,7 @@ class TranslationsGenerator {
   Method _getResourceGetter(ArbResource resource) {
     final method = Method((MethodBuilder builder) {
       var description = resource.attributes['description'];
-      if (description == null) {
-        description = resource.id.text;
-      }
+      description ??= resource.id.text;
 
       var key = resource.id.text;
       var value = resource.value.text;

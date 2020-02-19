@@ -12,7 +12,7 @@ void main() {
     setUp(() {});
 
     test('findPlaceholders Test', () {
-      var list = findPlaceholders("");
+      var list = findPlaceholders('');
       assert(list.isEmpty);
 
       list = findPlaceholders('no matches');

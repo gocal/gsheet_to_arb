@@ -109,27 +109,19 @@ class SheetParser {
 
       var key = values[0].formattedValue;
       var description = values[1].formattedValue;
-      if (description == null) {
-        description = "";
-      }
+      description ??= '';
 
       for (var langValue = 0; langValue < _languages.length; langValue++) {
         var value = values[langValue + firstLanguageColumn].formattedValue;
         var builder = _languages[langValue];
-
         var entry = ArbResource(key, value);
-
         entry.attributes['context'] = currentCategory;
         entry.attributes['description'] = description;
-
         builder.add(entry);
       }
     }
-
-    var documents = List<ArbDocument>();
-
+    var documents = <ArbDocument>[];
     _languages.forEach((builder) => documents.add(builder.build()));
-
     return ArbBundle(documents);
   }
 }

@@ -14,7 +14,7 @@ class ArbDocument {
   ArbDocument(this.locale, this.lastModified, this.entries);
 
   Map<String, Object> toJson() {
-    final Map<String, Object> _json = Map<String, Object>();
+    final _json = <String, Object>{};
 
     _json['_locale'] = locale;
     _json['@@last_modified'] = lastModified.toIso8601String();
@@ -22,7 +22,7 @@ class ArbDocument {
     entries.forEach((ArbResource resource) {
       _json[resource.id.text] = resource.value.text;
       if (resource.hasAttributes) {
-        _json["@@${resource.id.text}"] = resource.attributes;
+        _json['@@${resource.id.text}'] = resource.attributes;
       }
     });
 
@@ -30,15 +30,15 @@ class ArbDocument {
   }
 
   ArbDocument.fromJson(Map<String, dynamic> _json) {
-    var entriesMap = Map<String, ArbResource>();
-    entries = List<ArbResource>();
+    var entriesMap = <String, ArbResource>{};
+    entries = <ArbResource>[];
 
     _json.forEach((key, value) {
-      if ("_locale" == key) {
+      if ('_locale' == key) {
         locale = value;
-      } else if ("@@last_modified" == key) {
+      } else if ('@@last_modified' == key) {
         lastModified = DateTime.parse(value);
-      } else if (key.startsWith("@@")) {
+      } else if (key.startsWith('@@')) {
         var entry = entriesMap[key.substring(2)];
         entry.attributes.addAll(value);
       } else {
@@ -53,16 +53,16 @@ class ArbDocument {
 class ArbResource {
   final ArbResourceId id;
   final ArbResourceValue value;
-  final Map<String, Object> attributes = Map();
+  final Map<String, Object> attributes = {};
 
   final bool hasAttributes;
 
   ArbResource(String id, String value, [this.hasAttributes = true])
-      : this.id = ArbResourceId(id),
-        this.value = ArbResourceValue(value) {
+      : id = ArbResourceId(id),
+        value = ArbResourceValue(value) {
     if (hasAttributes) {
-      attributes['type'] = "Text";
-      attributes['placeholders'] = Map<String, Object>();
+      attributes['type'] = 'Text';
+      attributes['placeholders'] = <String, Object>{};
     }
   }
 }
@@ -75,7 +75,7 @@ class ArbResourceId {
 
 class ArbResourceValue {
   final String text;
-  final placeholders = List<ArbResourcePlaceholder>();
+  final placeholders = <ArbResourcePlaceholder>[];
 
   bool get hasPlaceholders => placeholders.isNotEmpty;
 

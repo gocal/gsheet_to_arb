@@ -27,7 +27,7 @@ class IntlTranslationHelper {
 
     var jsonFiles = Directory(outputDirectoryPath)
         .listSync()
-        .where((file) => file.path.endsWith(".arb"))
+        .where((file) => file.path.endsWith('.arb'))
         .map<String>((file) => file.path);
 
     var targetDir = outputDirectoryPath;
@@ -103,7 +103,7 @@ class IntlTranslationHelper {
     if (parsed is LiteralString && parsed.string.isEmpty) {
       parsed = plainParser.parse(data).value;
     }
-    return new BasicTranslatedMessage(id, parsed, messages);
+    return BasicTranslatedMessage(id, parsed, messages);
   }
 }
 
@@ -116,6 +116,7 @@ class BasicTranslatedMessage extends TranslatedMessage {
   BasicTranslatedMessage(String name, translated, this.messages)
       : super(name, translated);
 
+  @override
   List<MainMessage> get originalMessages => (super.originalMessages == null)
       ? _findOriginals()
       : super.originalMessages;

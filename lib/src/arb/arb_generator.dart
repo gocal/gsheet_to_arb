@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -15,12 +15,12 @@ class ArbBundle {
 class ArbDocumentBuilder {
   String locale;
   DateTime lastModified;
-  List<ArbResource> entries = List();
+  List<ArbResource> entries = [];
 
-  ArbDocumentBuilder(this.locale, this.lastModified) {}
+  ArbDocumentBuilder(this.locale, this.lastModified);
 
   ArbDocument build() {
-    ArbDocument bundle = ArbDocument(locale, lastModified, entries);
+    var bundle = ArbDocument(locale, lastModified, entries);
     return bundle;
   }
 

@@ -57,10 +57,11 @@ Create [Google Sheets API credentials](doc/Authentication.md) either by using Cl
 
 3. Create plugin configuration
     ```yaml
-    pub run gsheet_to_arb:import --create-config gsheet_to_arb.yaml
+    pub run gsheet_to_arb:import --create-config
     ```
+It will create `gsheet_to_arb.yaml` file in the root directory
 
-3. Update plugin configuration  ```gsheet_to_arb.yaml``` e.g.
+4. Update plugin configuration  ```gsheet_to_arb.yaml``` e.g.
     ```yaml
     gsheet_to_arb:
       arb_file_prefix: 'intl'

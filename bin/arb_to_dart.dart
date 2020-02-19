@@ -11,19 +11,19 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 
-main(List<String> args) async {
-  var parser = new ArgParser();
-  var configFilePath = "./gsheet_to_arb.yaml";
+void main(List<String> args) async {
+  var parser = ArgParser();
+  var configFilePath = './gsheet_to_arb.yaml';
 
-  parser.addOption("config",
+  parser.addOption('config',
       defaultsTo: configFilePath,
       callback: (x) => configFilePath = x,
       help: 'config yaml file name');
 
-  parser.addFlag("help", help: 'show helps');
+  parser.addFlag('help', help: 'show helps');
 
   parser.parse(args);
-  if (args.length == 0) {
+  if (args.isEmpty) {
     Log.i('Converts ARB file to Dart i18n');
     Log.i('Usage: gsheet_to_arb [options]');
     Log.i(parser.usage);
@@ -33,7 +33,7 @@ main(List<String> args) async {
   final config = PluginConfigHelper().fromYamlFile(configFilePath);
   final serializer = ArbSerializer();
   final document =
-      serializer.loadArbDocument("${config.outputDirectoryPath}/intl_en.arb");
+      serializer.loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
   final localizationFileName = config.localizationFileName;
   final generator = TranslationsGenerator();
   generator.buildTranslations(

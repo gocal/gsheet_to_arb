@@ -18,8 +18,8 @@ class SheetParser {
 
   SheetParser({this.auth, this.categoryPrefix});
 
-  var _languages = List<ArbDocumentBuilder>();
-  var _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
+  final _languages = <ArbDocumentBuilder>[];
+  final _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(String documentId) async {
     var authClient = await _authClient(auth);
@@ -38,7 +38,7 @@ class SheetParser {
           auth.serviceAccountKey.privateKey);
       authClient = await clientViaServiceAccount(accountCredentials, _scopes);
     } else if (auth.oauthClientId != null) {
-      var id = new ClientId(
+      var id = ClientId(
           auth.oauthClientId.clientId, auth.oauthClientId.clientSecret);
       authClient = await clientViaUserConsent(id, _scopes, _prompt);
     }
@@ -46,9 +46,10 @@ class SheetParser {
   }
 
   void _prompt(String url) {
-    Log.i("Please go to the following URL and grant Google Spreasheet access:");
-    Log.i("  => $url");
-    Log.i("");
+    Log.i(
+        'Please go to the following URL and grant Google Spreadsheet access:');
+    Log.i('  => $url');
+    Log.i('');
   }
 
   Future<ArbBundle> _handleSheetsAuth(
@@ -65,7 +66,7 @@ class SheetParser {
   }
 
   ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
-    Log.i("Opening ${spreadsheet.spreadsheetUrl}");
+    Log.i('Opening ${spreadsheet.spreadsheetUrl}');
 
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
@@ -89,7 +90,7 @@ class SheetParser {
     // Skip header row
     var firstTranslationsRow = 1;
 
-    var currentCategory = "";
+    var currentCategory = '';
 
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];

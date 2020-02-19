@@ -16,8 +16,8 @@ import 'package:path/path.dart' as path;
 
 class IntlTranslationHelper {
   void aaa(String outputDirectoryPath, String localizationFileName) {
-    var extraction = new MessageExtraction();
-    var generation = new MessageGeneration();
+    var extraction = MessageExtraction();
+    var generation = MessageGeneration();
 
     generation.generatedFilePrefix = "_";
 
@@ -33,27 +33,26 @@ class IntlTranslationHelper {
     var targetDir = outputDirectoryPath;
 
     extraction.suppressWarnings = true;
-    var allMessages =
-        dartFiles.map((each) => extraction.parseFile(new File(each)));
+    var allMessages = dartFiles.map((each) => extraction.parseFile(File(each)));
 
-    messages = new Map();
+    messages = Map();
     for (var eachMap in allMessages) {
       eachMap.forEach(
           (key, value) => messages.putIfAbsent(key, () => []).add(value));
     }
     for (var arg in jsonFiles) {
-      var file = new File(arg);
+      var file = File(arg);
       generateLocaleFile(file, targetDir, generation);
     }
 
-    var mainImportFile = new File(path.join(
+    var mainImportFile = File(path.join(
         targetDir, '${generation.generatedFilePrefix}messages_all.dart'));
     mainImportFile.writeAsStringSync(generation.generateMainImportFile());
   }
 
-  final pluralAndGenderParser = new IcuParser().message;
+  final pluralAndGenderParser = IcuParser().message;
 
-  final plainParser = new IcuParser().nonIcuMessage;
+  final plainParser = IcuParser().nonIcuMessage;
 
   /// Keeps track of all the messages we have processed so far, keyed by message
   /// name.
@@ -70,15 +69,15 @@ class IntlTranslationHelper {
       File file, String targetDir, MessageGeneration generation) {
     var src = file.readAsStringSync();
     var data = jsonDecoder.decode(src);
-    var locale = data["@@locale"] ?? data["_locale"];
+    var locale = data['@@locale'] ?? data['_locale'];
     if (locale == null) {
       // Get the locale from the end of the file name. This assumes that the file
       // name doesn't contain any underscores except to begin the language tag
       // and to separate language from country. Otherwise we can't tell if
       // my_file_fr.arb is locale "fr" or "file_fr".
       var name = path.basenameWithoutExtension(file.path);
-      locale = name.split("_").skip(1).join("_");
-      Log.i("No @@locale or _locale field found in $name, "
+      locale = name.split('_').skip(1).join('_');
+      Log.i('No @@locale or _locale field found in $name, '
           "assuming '$locale' based on the file name.");
     }
     generation.allLocales.add(locale);

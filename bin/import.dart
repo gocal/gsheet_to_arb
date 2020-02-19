@@ -12,17 +12,17 @@ import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
-main(List<String> args) async {
-  var parser = new ArgParser();
-  var configFilePath = "./gsheet_to_arb.yaml";
+void main(List<String> args) async {
+  var parser = ArgParser();
+  var configFilePath = './gsheet_to_arb.yaml';
 
-  parser.addOption("config",
+  parser.addOption('config',
       defaultsTo: configFilePath,
       callback: (x) => configFilePath = x,
       help: 'config yaml file name');
 
   parser.parse(args);
-  if (args.length == 0) {
+  if (args.isEmpty) {
     Log.i('Imports ARB file from exisiting GSheet document');
     Log.i('Usage: gsheet_to_arb [options]');
     Log.i(parser.usage);

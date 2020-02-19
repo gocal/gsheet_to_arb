@@ -49,7 +49,7 @@ Create [Google Sheets API credentials](doc/Authentication.md) either by using Cl
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.0.6
+      gsheet_to_arb: ^0.1.0
     ```
 
 2. Updated dependencies

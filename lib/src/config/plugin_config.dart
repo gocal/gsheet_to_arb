@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -30,13 +30,13 @@ class PluginConfigRoot {
 ///
 @JsonSerializable()
 class PluginConfig {
-  @JsonKey(name: 'output_directory', defaultValue: "lib/src/i18n")
+  @JsonKey(name: 'output_directory', defaultValue: 'lib/src/i18n')
   String outputDirectoryPath;
 
-  @JsonKey(name: 'arb_file_prefix', defaultValue: "intl")
+  @JsonKey(name: 'arb_file_prefix', defaultValue: 'intl')
   String arbFilePrefix;
 
-  @JsonKey(name: 'localization_file_name', defaultValue: "S")
+  @JsonKey(name: 'localization_file_name', defaultValue: 'S')
   String localizationFileName;
 
   @JsonKey(name: 'gsheet', nullable: false)
@@ -61,10 +61,10 @@ class GoogleSheetConfig {
   @JsonKey(name: 'document_id')
   String documentId;
 
-  @JsonKey(name: 'sheet_id', defaultValue: "0")
+  @JsonKey(name: 'sheet_id', defaultValue: '0')
   String sheetId;
 
-  @JsonKey(name: 'category_prefix', defaultValue: "# ")
+  @JsonKey(name: 'category_prefix', defaultValue: '# ')
   String categoryPrefix;
 
   GoogleSheetConfig(
@@ -90,10 +90,11 @@ class Auth {
   @JsonKey(name: 'service_account_key_path', nullable: true)
   String serviceAccountKeyPath;
 
-  Auth({this.oauthClientId,
-    this.oauthClientIdPath,
-    this.serviceAccountKey,
-    this.serviceAccountKeyPath});
+  Auth(
+      {this.oauthClientId,
+      this.oauthClientIdPath,
+      this.serviceAccountKey,
+      this.serviceAccountKeyPath});
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
 
@@ -101,7 +102,7 @@ class Auth {
 }
 
 ///
-/// OAuthClientId 
+/// OAuthClientId
 ///
 @JsonSerializable()
 class OAuthClientId {
@@ -154,16 +155,17 @@ class ServiceAccountKey {
   @JsonKey(name: 'client_x509_cert_url', nullable: false)
   String clientX509CertUrl;
 
-  ServiceAccountKey({this.type,
-    @required this.projectId,
-    @required this.privateKeyId,
-    @required this.privateKey,
-    @required this.clientEmail,
+  ServiceAccountKey(
+      {this.type,
+      @required this.projectId,
+      @required this.privateKeyId,
+      @required this.privateKey,
+      @required this.clientEmail,
       this.clientId,
       this.authUri,
       this.tokenUri,
       this.authProviderX509CertUrl,
-    this.clientX509CertUrl});
+      this.clientX509CertUrl});
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>
       _$ServiceAccountKeyFromJson(json);

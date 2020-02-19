@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -13,19 +13,19 @@ import 'arb_generator.dart';
 
 class ArbSerializer {
   String serialize(ArbDocument document) {
-    var encoder = new JsonEncoder.withIndent('  ');
+    var encoder = JsonEncoder.withIndent('  ');
     var arbContent = encoder.convert(document.toJson());
     return arbContent;
   }
 
   ArbDocument deserialize(String json) {
-    var decoder = new JsonDecoder();
-    ArbDocument arbContent = ArbDocument.fromJson(decoder.convert(json));
+    final decoder = JsonDecoder();
+    final arbContent = ArbDocument.fromJson(decoder.convert(json));
     return arbContent;
   }
 
   void saveArbBundle(ArbBundle bundle, String directory) {
-    Log.i("save arb files in ${directory}");
+    Log.i('save arb files in ${directory}');
     var targetDir = Directory(directory);
     targetDir.createSync(recursive: true);
     bundle.documents
@@ -33,8 +33,8 @@ class ArbSerializer {
   }
 
   void _saveArbDocument(ArbDocument document, Directory directory) {
-    var filePath = "${directory.path}/intl_${document.locale}.arb";
-    Log.i("  => $filePath");
+    var filePath = '${directory.path}/intl_${document.locale}.arb';
+    Log.i('  => $filePath');
     var file = File(filePath);
     file.createSync();
     var arbContent = serialize(document);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Marcin Marek Gocał
+ * Copyright (c) 2020, Marek Gocał
  * All rights reserved. Use of this source code is governed by a
  * BSD-style license that can be found in the LICENSE file.
  */
@@ -16,44 +16,43 @@ import 'package:path/path.dart' as path;
 
 class IntlTranslationHelper {
   void aaa(String outputDirectoryPath, String localizationFileName) {
-    var extraction = new MessageExtraction();
-    var generation = new MessageGeneration();
+    var extraction = MessageExtraction();
+    var generation = MessageGeneration();
 
-    generation.generatedFilePrefix = "_";
+    generation.generatedFilePrefix = '_';
 
     var dartFiles = [
-      "${outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart"
+      '${outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart'
     ];
 
     var jsonFiles = Directory(outputDirectoryPath)
         .listSync()
-        .where((file) => file.path.endsWith(".arb"))
+        .where((file) => file.path.endsWith('.arb'))
         .map<String>((file) => file.path);
 
     var targetDir = outputDirectoryPath;
 
     extraction.suppressWarnings = true;
-    var allMessages =
-        dartFiles.map((each) => extraction.parseFile(new File(each)));
+    var allMessages = dartFiles.map((each) => extraction.parseFile(File(each)));
 
-    messages = new Map();
+    messages = {};
     for (var eachMap in allMessages) {
       eachMap.forEach(
           (key, value) => messages.putIfAbsent(key, () => []).add(value));
     }
     for (var arg in jsonFiles) {
-      var file = new File(arg);
+      var file = File(arg);
       generateLocaleFile(file, targetDir, generation);
     }
 
-    var mainImportFile = new File(path.join(
+    var mainImportFile = File(path.join(
         targetDir, '${generation.generatedFilePrefix}messages_all.dart'));
     mainImportFile.writeAsStringSync(generation.generateMainImportFile());
   }
 
-  final pluralAndGenderParser = new IcuParser().message;
+  final pluralAndGenderParser = IcuParser().message;
 
-  final plainParser = new IcuParser().nonIcuMessage;
+  final plainParser = IcuParser().nonIcuMessage;
 
   /// Keeps track of all the messages we have processed so far, keyed by message
   /// name.
@@ -70,20 +69,20 @@ class IntlTranslationHelper {
       File file, String targetDir, MessageGeneration generation) {
     var src = file.readAsStringSync();
     var data = jsonDecoder.decode(src);
-    var locale = data["@@locale"] ?? data["_locale"];
+    var locale = data['@@locale'] ?? data['_locale'];
     if (locale == null) {
       // Get the locale from the end of the file name. This assumes that the file
       // name doesn't contain any underscores except to begin the language tag
       // and to separate language from country. Otherwise we can't tell if
       // my_file_fr.arb is locale "fr" or "file_fr".
       var name = path.basenameWithoutExtension(file.path);
-      locale = name.split("_").skip(1).join("_");
-      Log.i("No @@locale or _locale field found in $name, "
+      locale = name.split('_').skip(1).join('_');
+      Log.i('No @@locale or _locale field found in $name, '
           "assuming '$locale' based on the file name.");
     }
     generation.allLocales.add(locale);
 
-    List<TranslatedMessage> translations = [];
+    var translations = <TranslatedMessage>[];
     data.forEach((id, messageData) {
       TranslatedMessage message = recreateIntlObjects(id, messageData);
       if (message != null) {
@@ -98,13 +97,13 @@ class IntlTranslationHelper {
   /// [data] to be a String. For metadata we expect [id] to start with "@"
   /// and [data] to be a Map or null. For metadata we return null.
   BasicTranslatedMessage recreateIntlObjects(String id, data) {
-    if (id.startsWith("@")) return null;
+    if (id.startsWith('@')) return null;
     if (data == null) return null;
     var parsed = pluralAndGenderParser.parse(data).value;
     if (parsed is LiteralString && parsed.string.isEmpty) {
       parsed = plainParser.parse(data).value;
     }
-    return new BasicTranslatedMessage(id, parsed, messages);
+    return BasicTranslatedMessage(id, parsed, messages);
   }
 }
 
@@ -117,6 +116,7 @@ class BasicTranslatedMessage extends TranslatedMessage {
   BasicTranslatedMessage(String name, translated, this.messages)
       : super(name, translated);
 
+  @override
   List<MainMessage> get originalMessages => (super.originalMessages == null)
       ? _findOriginals()
       : super.originalMessages;

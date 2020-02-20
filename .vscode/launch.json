@@ -6,9 +6,10 @@
     "configurations": [
         {
             "name": "Import",
-            "program": "bin/import.dart",
+            "program": "../bin/import.dart",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "cwd": "${workspaceFolder}/example"
         }
     ]
 }

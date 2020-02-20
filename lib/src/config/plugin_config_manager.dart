@@ -12,25 +12,26 @@ import 'plugin_config.dart';
 
 final authFileName = 'gsheet_to_arb.yaml';
 final configFileName = 'pubspec.yaml';
+final _gitignore = '.gitignore';
 
 class PluginConfigManager {
-  String createConfig() {
+  void createConfig() {
     final pubspec = YamlUtils.load(configFileName);
     if (PluginConfigRoot.fromJson(pubspec).content != null) {
       Log.i('Config already exists, please check your $configFileName');
     } else {
       final config = GsheetToArbConfig(
-          outputDirectoryPath: '',
-          arbFilePrefix: '',
-          localizationFileName: '',
+          outputDirectoryPath: 'intl',
+          arbFilePrefix: 'lib/src/i18n',
+          localizationFileName: 'S',
           sheetConfig: GoogleSheetConfig(
               categoryPrefix: '# ',
-              documentId: 'TODO',
               sheetId: '0',
-              authFile: configFileName));
+              documentId: 'TODO',
+              authFile: './' + authFileName));
 
       final root = PluginConfigRoot(config).toJson();
-      final yamlString = '\n\n' + YamlUtils.toYamlString(root);
+      final yamlString = '\n' + YamlUtils.toYamlString(root);
 
       FileUtils.append(configFileName, yamlString);
 
@@ -61,20 +62,19 @@ class PluginConfigManager {
       Log.i('Auth config has been added to the $authFileName');
     }
 
-    /*
-    var config = PluginConfig(
-        'lib/src/i18n',
-        'intl',
-        GoogleSheetConfig(
-            auth: Auth(
-                serviceAccountKeyPath:
-                    '~/.ssh/gsheet-to-arb-server-config.json'),
-            documentId: '<DOCUMENT_ID>',
-            sheetId: '0',
-            categoryPrefix: '#_'));
+    _checkAuthIgonre(authFileName);
+  }
 
-    return jsonEncode(PluginConfigRoot(config).toJson());
-    */
-    return "";
+  void _checkAuthIgonre(String fileName) {
+    if (FileUtils.exists(_gitignore)) {
+      final content = FileUtils.getContent(_gitignore);
+
+      if (!content.contains(fileName)) {
+        Log.i(
+            'It looks like your $_gitignore does not contain confidential gsheet config $fileName');
+        FileUtils.append(_gitignore, fileName);
+        Log.i('$fileName has been added to the $_gitignore');
+      }
+    }
   }
 }

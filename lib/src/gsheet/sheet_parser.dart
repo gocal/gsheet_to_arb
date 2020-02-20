@@ -13,7 +13,7 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 class SheetParser {
-  final Auth auth;
+  final AuthConfig auth;
   final String categoryPrefix;
 
   SheetParser({this.auth, this.categoryPrefix});
@@ -28,7 +28,7 @@ class SheetParser {
     return arbBundle;
   }
 
-  Future<AuthClient> _authClient(Auth auth) async {
+  Future<AuthClient> _authClient(AuthConfig auth) async {
     var authClient;
 
     if (auth.serviceAccountKey != null) {

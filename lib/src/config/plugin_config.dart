@@ -14,10 +14,10 @@ part 'plugin_config.g.dart';
 ///
 @JsonSerializable()
 class PluginConfigRoot {
-  @JsonKey(name: 'gsheet_to_arb', nullable: false)
-  PluginConfig config;
+  @JsonKey(name: 'gsheet_to_arb')
+  GsheetToArbConfig content;
 
-  PluginConfigRoot(this.config);
+  PluginConfigRoot(this.content);
 
   factory PluginConfigRoot.fromJson(Map<String, dynamic> json) =>
       _$PluginConfigRootFromJson(json);
@@ -26,28 +26,32 @@ class PluginConfigRoot {
 }
 
 ///
-/// PluginConfig
+/// GsheetToArbConfig
 ///
 @JsonSerializable()
-class PluginConfig {
-  @JsonKey(name: 'output_directory', defaultValue: 'lib/src/i18n')
+class GsheetToArbConfig {
+  @JsonKey(name: 'output_directory')
   String outputDirectoryPath;
 
-  @JsonKey(name: 'arb_file_prefix', defaultValue: 'intl')
+  @JsonKey(name: 'arb_file_prefix')
   String arbFilePrefix;
 
-  @JsonKey(name: 'localization_file_name', defaultValue: 'S')
+  @JsonKey(name: 'localization_file_name')
   String localizationFileName;
 
-  @JsonKey(name: 'gsheet', nullable: false)
+  @JsonKey(name: 'gsheet')
   GoogleSheetConfig sheetConfig;
 
-  PluginConfig(this.outputDirectoryPath, this.arbFilePrefix, this.sheetConfig);
+  GsheetToArbConfig(
+      {this.outputDirectoryPath,
+      this.arbFilePrefix,
+      this.sheetConfig,
+      this.localizationFileName});
 
-  factory PluginConfig.fromJson(Map<String, dynamic> json) =>
-      _$PluginConfigFromJson(json);
+  factory GsheetToArbConfig.fromJson(Map<String, dynamic> json) =>
+      _$GsheetToArbConfigFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PluginConfigToJson(this);
+  Map<String, dynamic> toJson() => _$GsheetToArbConfigToJson(this);
 }
 
 ///
@@ -58,17 +62,17 @@ class GoogleSheetConfig {
   @JsonKey(name: 'document_id')
   String documentId;
 
-  @JsonKey(name: 'sheet_id', defaultValue: '0')
+  @JsonKey(name: 'sheet_id')
   String sheetId;
 
-  @JsonKey(name: 'category_prefix', defaultValue: '# ')
+  @JsonKey(name: 'category_prefix')
   String categoryPrefix;
 
-  @JsonKey(name: 'auth_config')
-  String authConfig;
+  @JsonKey(name: 'auth_file')
+  String authFile;
 
   GoogleSheetConfig(
-      {this.authConfig, this.documentId, this.sheetId, this.categoryPrefix});
+      {this.authFile, this.documentId, this.sheetId, this.categoryPrefix});
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
@@ -80,18 +84,19 @@ class GoogleSheetConfig {
 /// Auth config
 ///
 @JsonSerializable()
-class Auth {
-  @JsonKey(name: 'oauth_client_id', nullable: true)
+class AuthConfig {
+  @JsonKey(name: 'oauth_client_id')
   OAuthClientId oauthClientId;
 
-  @JsonKey(name: 'service_account_key', nullable: true)
+  @JsonKey(name: 'service_account_key')
   ServiceAccountKey serviceAccountKey;
 
-  Auth({this.oauthClientId, this.serviceAccountKey});
+  AuthConfig({this.oauthClientId, this.serviceAccountKey});
 
-  factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
+  factory AuthConfig.fromJson(Map<String, dynamic> json) =>
+      _$AuthConfigFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AuthToJson(this);
+  Map<String, dynamic> toJson() => _$AuthConfigToJson(this);
 }
 
 ///
@@ -99,10 +104,10 @@ class Auth {
 ///
 @JsonSerializable()
 class OAuthClientId {
-  @JsonKey(name: 'client_id', nullable: false)
+  @JsonKey(name: 'client_id')
   String clientId;
 
-  @JsonKey(name: 'client_secret', nullable: false)
+  @JsonKey(name: 'client_secret')
   String clientSecret;
 
   OAuthClientId({@required this.clientId, @required this.clientSecret});

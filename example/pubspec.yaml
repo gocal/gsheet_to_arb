@@ -15,4 +15,4 @@ gsheet_to_arb:
     document_id: '1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU'
     sheet_id: '0'
     auth:
-      service_account_key_path: "gsheet_to_arb_config.json"
+      auth_file: "gsheet_to_arb.yaml"

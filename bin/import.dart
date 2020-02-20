@@ -10,27 +10,35 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
+import 'package:gsheet_to_arb/src/config/plugin_config_manager.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 void main(List<String> args) async {
   var parser = ArgParser();
 
   var configFilePath = './gsheet_to_arb.yaml';
-  var generateCode = false;
-  var createConfig = false;
+  bool generateCode;
+  bool createConfig;
 
   parser.addOption('config',
       defaultsTo: configFilePath,
       callback: (x) => configFilePath = x,
       help: 'config yaml file name');
-
   parser.addFlag('generate-code',
-      callback: (value) => generateCode = value, help: 'config yaml file name');
-
+      callback: (value) => generateCode = value, help: 'generate code');
   parser.addFlag('create-config',
-      callback: (value) => createConfig = value, help: 'config yaml file name');
+      callback: (value) => createConfig = value,
+      help: 'generate configuration files');
 
   parser.parse(args);
+
+  final configManager = PluginConfigManager();
+
+  if (createConfig || true) {
+    configManager.createConfig();
+    return;
+  }
+
   if (args.isEmpty) {
     Log.i('Imports ARB file from exisiting GSheet document');
     Log.i('Usage: gsheet_to_arb [options]');
@@ -38,8 +46,10 @@ void main(List<String> args) async {
     exit(0);
   }
 
-  final config = PluginConfigHelper().fromYamlFile(configFilePath);
-  final sheetConfig = config.sheetConfig;
+  //final config = PluginConfigHelper().fromYamlFile(configFilePath);
+  //final sheetConfig = config.sheetConfig;
+
+  /*
   final sheetParser = SheetParser(
       auth: sheetConfig.auth, categoryPrefix: sheetConfig.categoryPrefix);
   final bundle = await sheetParser.parseSheet(sheetConfig.documentId);
@@ -57,4 +67,5 @@ void main(List<String> args) async {
     final helper = IntlTranslationHelper();
     helper.aaa(config.outputDirectoryPath, config.localizationFileName);
   }
+  */
 }

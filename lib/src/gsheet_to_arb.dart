@@ -1,5 +1,6 @@
 import '../gsheet_to_arb.dart';
 import 'arb/arb_serializer.dart';
+import 'arb/intl_translation_helper.dart';
 import 'gsheet/sheet_parser.dart';
 
 class GSheetToArb {
@@ -27,15 +28,16 @@ class GSheetToArb {
 
     if (generateDartCode) {
       /*
-      final document = arbSerializer
-          .loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
-      final localizationFileName = config.localizationFileName;
-      final generator = TranslationsGenerator();
-      generator.buildTranslations(
-          document, config.outputDirectoryPath, localizationFileName);
+    final document = _arbSerializer
+        .loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
+    final localizationFileName = config.localizationFileName;
+    final generator = TranslationsGenerator();
+    generator.buildTranslations(
+        document, config.outputDirectoryPath, localizationFileName);
 
-      final helper = IntlTranslationHelper();
-      helper.aaa(config.outputDirectoryPath, config.localizationFileName);
+    final helper = IntlTranslationHelper();
+    helper.generateDartClasses(
+        config.outputDirectoryPath, config.localizationFileName);
       */
     }
   }

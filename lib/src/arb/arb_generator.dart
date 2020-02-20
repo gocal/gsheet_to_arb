@@ -20,7 +20,7 @@ class ArbDocumentBuilder {
   ArbDocumentBuilder(this.locale, this.lastModified);
 
   ArbDocument build() {
-    var bundle = ArbDocument(locale, lastModified, entries);
+    final bundle = ArbDocument(locale, lastModified, entries);
     return bundle;
   }
 

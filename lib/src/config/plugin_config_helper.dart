@@ -37,9 +37,9 @@ class PluginConfigHelper {
   }
 
   YamlMap _loadYamlFile(String path) {
-    var configFile = File(path);
-    var configText = configFile.readAsStringSync();
-    var yaml = loadYaml(configText);
+    final yamlFile = File(path);
+    final yamlContent = yamlFile.readAsStringSync();
+    final yaml = loadYaml(yamlContent);
     return yaml;
   }
 

@@ -55,9 +55,6 @@ class PluginConfig {
 ///
 @JsonSerializable()
 class GoogleSheetConfig {
-  @JsonKey(name: 'auth')
-  Auth auth;
-
   @JsonKey(name: 'document_id')
   String documentId;
 
@@ -67,8 +64,11 @@ class GoogleSheetConfig {
   @JsonKey(name: 'category_prefix', defaultValue: '# ')
   String categoryPrefix;
 
+  @JsonKey(name: 'auth_config')
+  String authConfig;
+
   GoogleSheetConfig(
-      {this.auth, this.documentId, this.sheetId, this.categoryPrefix});
+      {this.authConfig, this.documentId, this.sheetId, this.categoryPrefix});
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
@@ -76,25 +76,18 @@ class GoogleSheetConfig {
   Map<String, dynamic> toJson() => _$GoogleSheetConfigToJson(this);
 }
 
+///
+/// Auth config
+///
 @JsonSerializable()
 class Auth {
   @JsonKey(name: 'oauth_client_id', nullable: true)
   OAuthClientId oauthClientId;
 
-  @JsonKey(name: 'oauth_client_id_path', nullable: true)
-  String oauthClientIdPath;
-
   @JsonKey(name: 'service_account_key', nullable: true)
   ServiceAccountKey serviceAccountKey;
 
-  @JsonKey(name: 'service_account_key_path', nullable: true)
-  String serviceAccountKeyPath;
-
-  Auth(
-      {this.oauthClientId,
-      this.oauthClientIdPath,
-      this.serviceAccountKey,
-      this.serviceAccountKeyPath});
+  Auth({this.oauthClientId, this.serviceAccountKey});
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
 

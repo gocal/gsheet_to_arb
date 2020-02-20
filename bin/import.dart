@@ -55,40 +55,39 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  if (config.gsheet.auth == null) {
+  _checkAuthConfig(config.gsheet);
+
+  final gsheetToArb = GSheetToArb(config: config);
+  gsheetToArb.build(generateDartCode: generateCode);
+}
+
+void _checkAuthConfig(GoogleSheetConfig config) {
+  final placeholder = 'TODO';
+
+  if (config.auth == null) {
     Log.i(
-        'Authetnication config not found - please add config to ${config.gsheet.authFile} file');
+        'Authetnication config not found - please add config to ${config.authFile} file');
     exit(1);
   }
 
-  final auth = config.gsheet.auth;
+  final auth = config.auth;
 
   if (auth.oauthClientId == null && auth.serviceAccountKey == null) {
     Log.i(
-        'Authetnication config is invalid - please add config to ${config.gsheet.authFile} file');
+        'Authetnication config is invalid - please add config to ${config.authFile} file');
     exit(1);
   }
 
-  //final config = PluginConfigHelper().fromYamlFile(configFilePath);
-  //final sheetConfig = config.sheetConfig;
-
-  /*
-  final sheetParser = SheetParser(
-      auth: sheetConfig.auth, categoryPrefix: sheetConfig.categoryPrefix);
-  final bundle = await sheetParser.parseSheet(sheetConfig.documentId);
-  final arbSerializer = ArbSerializer();
-  arbSerializer.saveArbBundle(bundle, config.outputDirectoryPath);
-
-  if (generateCode) {
-    final document = arbSerializer
-        .loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
-    final localizationFileName = config.localizationFileName;
-    final generator = TranslationsGenerator();
-    generator.buildTranslations(
-        document, config.outputDirectoryPath, localizationFileName);
-
-    final helper = IntlTranslationHelper();
-    helper.aaa(config.outputDirectoryPath, config.localizationFileName);
+  if (auth.oauthClientId != null) {
+    if (auth.oauthClientId.clientId == placeholder ||
+        auth.oauthClientId.clientSecret == placeholder) {
+      Log.i('Please use valid auth client configuration');
+      exit(1);
+    }
+  } else if (auth.serviceAccountKey != null) {
+    if (auth.serviceAccountKey.privateKey == placeholder) {
+      Log.i('Please use valid auth server configuration');
+      exit(1);
+    }
   }
-  */
 }

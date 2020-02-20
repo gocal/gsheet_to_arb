@@ -1,0 +1,81 @@
+{
+  "_locale": "pl",
+  "@@last_modified": "2020-02-20T17:03:55.487514",
+  "title": "Tytuł",
+  "@@title": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains title"
+  },
+  "message": "Wiadomość",
+  "@@message": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains message"
+  },
+  "app_name": "Aplikacja",
+  "@@app_name": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "common",
+    "description": "contains app name"
+  },
+  "login": "Zaloguj",
+  "@@login": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "login",
+    "description": "contains login"
+  },
+  "register": "Zarejestruj",
+  "@@register": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "signup",
+    "description": "contains registration"
+  },
+  "single_argument": "Single {name} argument",
+  "@@single_argument": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "placeholders",
+    "description": "Single named argument"
+  },
+  "two_arguments": "Argument {first} and {second}",
+  "@@two_arguments": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "placeholders",
+    "description": "Two named arguments"
+  },
+  "number_of_songs_available_#one": "Znaleziono jedną piosenkę.",
+  "@@number_of_songs_available_#one": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "plurals",
+    "description": "one song"
+  },
+  "number_of_songs_available_#few": "Znaleziono {count} piosenki.",
+  "@@number_of_songs_available_#few": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "plurals",
+    "description": "few songs"
+  },
+  "number_of_songs_available_#other": "Znaleziono {count} piosenek.",
+  "@@number_of_songs_available_#other": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "plurals",
+    "description": "other songs"
+  },
+  "imap_#none": null,
+  "@@imap_#none": {
+    "type": "Text",
+    "placeholders": {},
+    "context": "other",
+    "description": "none translatable key"
+  }
+}

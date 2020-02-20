@@ -7,13 +7,13 @@ environment:
 dev_dependencies:
   gsheet_to_arb:
     path: ../
-
+    
 gsheet_to_arb: 
-  arb_file_prefix: "lib/src/i18n"
-  localization_file_name: "S"
-  output_directory: "intl"
+  arb_file_prefix: 'intl'
+  localization_file_name: 'S'
+  output_directory: 'lib/l10n'  
   gsheet: 
-    auth_file: "./gsheet_to_arb.yaml"
+    auth_file: './gsheet_to_arb.yaml'
     category_prefix: "# "
-    document_id: "TODO"
-    sheet_id: "0"
+    document_id: '1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU'
+    sheet_id: '0'

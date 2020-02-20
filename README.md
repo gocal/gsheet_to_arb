@@ -25,7 +25,7 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 
 ### 1. Copy Google Sheet template
 
-1. Open sample Google spreadsheet template available at:
+1. Copy sample Google spreadsheet template available at:
     - https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing
 
 2. Copy sample to your Drive account 

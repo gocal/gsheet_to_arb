@@ -126,47 +126,20 @@ class OAuthClientId {
 ///
 @JsonSerializable()
 class ServiceAccountKey {
-  @JsonKey(name: 'type', nullable: false)
-  String type;
-
-  @JsonKey(name: 'project_id', nullable: false)
-  String projectId;
-
-  @JsonKey(name: 'private_key_id', nullable: false)
-  String privateKeyId;
-
-  @JsonKey(name: 'private_key', nullable: false)
-  String privateKey;
+  @JsonKey(name: 'client_id', nullable: false)
+  String clientId;
 
   @JsonKey(name: 'client_email', nullable: false)
   String clientEmail;
 
-  @JsonKey(name: 'client_id', nullable: false)
-  String clientId;
+  @JsonKey(name: 'private_key', nullable: false)
+  String privateKey;
 
-  @JsonKey(name: 'auth_uri', nullable: false)
-  String authUri;
-
-  @JsonKey(name: 'token_uri', nullable: false)
-  String tokenUri;
-
-  @JsonKey(name: 'auth_provider_x509_cert_url', nullable: false)
-  String authProviderX509CertUrl;
-
-  @JsonKey(name: 'client_x509_cert_url', nullable: false)
-  String clientX509CertUrl;
-
-  ServiceAccountKey(
-      {this.type,
-      @required this.projectId,
-      @required this.privateKeyId,
-      @required this.privateKey,
-      @required this.clientEmail,
-      this.clientId,
-      this.authUri,
-      this.tokenUri,
-      this.authProviderX509CertUrl,
-      this.clientX509CertUrl});
+  ServiceAccountKey({
+    @required this.clientId,
+    @required this.clientEmail,
+    @required this.privateKey,
+  });
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>
       _$ServiceAccountKeyFromJson(json);

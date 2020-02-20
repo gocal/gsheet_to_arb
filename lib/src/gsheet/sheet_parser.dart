@@ -10,7 +10,18 @@ import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
+import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
+
+class SheetColumns {
+  static int key = 0;
+  static int description = 1;
+  static int first_language_key = 2;
+}
+
+class SheetRows {
+  static int first_translation_row = 1;
+}
 
 class SheetParser {
   final AuthConfig auth;
@@ -19,53 +30,49 @@ class SheetParser {
   SheetParser({this.auth, this.categoryPrefix});
 
   final _languages = <ArbDocumentBuilder>[];
-  final _scopes = [SheetsApi.SpreadsheetsReadonlyScope];
 
   Future<ArbBundle> parseSheet(String documentId) async {
-    var authClient = await _authClient(auth);
+    var authClient = await _getAuthClient(auth);
 
-    var arbBundle = await _handleSheetsAuth(authClient, documentId);
+    var arbBundle = await _parseSheetWithAuth(authClient, documentId);
     return arbBundle;
   }
 
-  Future<AuthClient> _authClient(AuthConfig auth) async {
+  Future<AuthClient> _getAuthClient(AuthConfig auth) async {
+    final scopes = [SheetsApi.SpreadsheetsReadonlyScope];
     var authClient;
+    if (auth.oauthClientId != null) {
+      void clientAuthPrompt(String url) {
+        Log.i(
+            'Please go to the following URL and grant Google Spreadsheet access:\n\t=> $url\n');
+      }
 
-    if (auth.serviceAccountKey != null) {
-      var accountCredentials = ServiceAccountCredentials(
-          auth.serviceAccountKey.clientEmail,
-          ClientId(auth.serviceAccountKey.clientId, null),
-          auth.serviceAccountKey.privateKey);
-      authClient = await clientViaServiceAccount(accountCredentials, _scopes);
-    } else if (auth.oauthClientId != null) {
-      var id = ClientId(
-          auth.oauthClientId.clientId, auth.oauthClientId.clientSecret);
-      authClient = await clientViaUserConsent(id, _scopes, _prompt);
+      final client = auth.oauthClientId;
+      var id = ClientId(client.clientId, client.clientSecret);
+      authClient = await clientViaUserConsent(id, scopes, clientAuthPrompt);
+    } else if (auth.serviceAccountKey != null) {
+      final service = auth.serviceAccountKey;
+      var credentials = ServiceAccountCredentials(service.clientEmail,
+          ClientId(service.clientId, null), service.privateKey);
+      authClient = await clientViaServiceAccount(credentials, scopes);
     }
     return authClient;
   }
 
-  void _prompt(String url) {
-    Log.i(
-        'Please go to the following URL and grant Google Spreadsheet access:');
-    Log.i('  => $url');
-    Log.i('');
-  }
-
-  Future<ArbBundle> _handleSheetsAuth(
+  Future<ArbBundle> _parseSheetWithAuth(
       AuthClient client, String documentId) async {
     var sheetsApi = SheetsApi(client);
     var spreadsheet =
         await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
 
-    var bundle = _handleSpreadsheet(spreadsheet);
+    var bundle = _parseSpreadsheet(spreadsheet);
 
     client.close();
 
     return bundle;
   }
 
-  ArbBundle _handleSpreadsheet(Spreadsheet spreadsheet) {
+  ArbBundle _parseSpreadsheet(Spreadsheet spreadsheet) {
     Log.i('Opening ${spreadsheet.spreadsheetUrl}');
 
     var sheet = spreadsheet.sheets[0];
@@ -76,7 +83,8 @@ class SheetParser {
 
     var lastModified = DateTime.now();
 
-    var firstLanguageColumn = 2; // key, description
+    var firstLanguageColumn =
+        SheetColumns.first_language_key; // key, description
 
     // Store languages
     for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
@@ -88,36 +96,30 @@ class SheetParser {
     }
 
     // Skip header row
-    var firstTranslationsRow = 1;
-
+    var firstTranslationsRow = SheetRows.first_translation_row;
     var currentCategory = '';
-
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var values = row.values;
-
-      //Stop if empty row is found
-      if (values[0].formattedValue == null) {
-        break;
+      var key = values[0].formattedValue;
+      //Skip if empty row is found
+      if (key == null) {
+        continue;
       }
-
-      if (values[0].formattedValue.startsWith(categoryPrefix)) {
-        currentCategory =
-            values[0].formattedValue.substring(categoryPrefix.length);
+      if (key.startsWith(categoryPrefix)) {
+        currentCategory = key.substring(categoryPrefix.length);
         continue;
       }
 
-      var key = values[0].formattedValue;
-      var description = values[1].formattedValue;
-      description ??= '';
+      final description = values[1].formattedValue ?? '';
 
       for (var langValue = 0; langValue < _languages.length; langValue++) {
         var value = values[langValue + firstLanguageColumn].formattedValue;
         var builder = _languages[langValue];
-        var entry = ArbResource(key, value);
-        entry.attributes['context'] = currentCategory;
-        entry.attributes['description'] = description;
-        builder.add(entry);
+        var arbEntry = ArbResource(key, value)
+          ..attributes['context'] = currentCategory
+          ..attributes['description'] = description;
+        builder.add(arbEntry);
       }
     }
     var documents = <ArbDocument>[];

@@ -20,6 +20,10 @@ class PluginConfigManager {
     final config = PluginConfigRoot.fromJson(pubspec).content;
 
     if (config?.gsheet?.authFile != null) {
+      if (!FileUtils.exists(config.gsheet.authFile)) {
+        return null;
+      }
+
       final authConfig = YamlUtils.load(config.gsheet.authFile);
       config.gsheet.auth = AuthConfig.fromJson(authConfig);
     }
@@ -56,24 +60,19 @@ class PluginConfigManager {
       final authConfig = AuthConfig(
         oauthClientId: OAuthClientId(clientId: 'TODO', clientSecret: 'TODO'),
         serviceAccountKey: ServiceAccountKey(
+          clientId: 'TODO',
           clientEmail: 'TODO',
           privateKey: 'TODO',
-          privateKeyId: 'TODO',
-          projectId: 'TODO',
-          authProviderX509CertUrl: 'TODO',
-          authUri: 'TODO',
-          clientId: 'TODO',
-          clientX509CertUrl: 'TODO',
-          tokenUri: 'TODO',
-          type: 'TODO',
         ),
       );
 
       final authYaml = YamlUtils.toYamlString(authConfig.toJson());
       FileUtils.storeContent(authFileName, authYaml);
       Log.i('Auth config has been added to the $authFileName');
+      Log.i('More info:');
+      Log.i(
+          'https://github.com/gocal/gsheet_to_arb/blob/develop/doc/Authentication.md');
     }
-
     _checkAuthIgonre(authFileName);
   }
 

@@ -15,6 +15,18 @@ final configFileName = 'pubspec.yaml';
 final _gitignore = '.gitignore';
 
 class PluginConfigManager {
+  Future<GsheetToArbConfig> getConfig() async {
+    final pubspec = YamlUtils.load(configFileName);
+    final config = PluginConfigRoot.fromJson(pubspec).content;
+
+    if (config?.gsheet?.authFile != null) {
+      final authConfig = YamlUtils.load(config.gsheet.authFile);
+      config.gsheet.auth = AuthConfig.fromJson(authConfig);
+    }
+
+    return config;
+  }
+
   void createConfig() {
     final pubspec = YamlUtils.load(configFileName);
     if (PluginConfigRoot.fromJson(pubspec).content != null) {
@@ -24,7 +36,7 @@ class PluginConfigManager {
           outputDirectoryPath: 'intl',
           arbFilePrefix: 'lib/src/i18n',
           localizationFileName: 'S',
-          sheetConfig: GoogleSheetConfig(
+          gsheet: GoogleSheetConfig(
               categoryPrefix: '# ',
               sheetId: '0',
               documentId: 'TODO',

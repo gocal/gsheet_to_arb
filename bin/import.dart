@@ -16,17 +16,20 @@ import 'package:gsheet_to_arb/src/utils/log.dart';
 void main(List<String> args) async {
   var parser = ArgParser();
 
-  var configFilePath = './gsheet_to_arb.yaml';
+  bool showHelp;
   bool generateCode;
   bool createConfig;
 
-  parser.addOption('config',
-      defaultsTo: configFilePath,
-      callback: (x) => configFilePath = x,
-      help: 'config yaml file name');
+  parser.addFlag('help',
+      negatable: false,
+      callback: (value) => showHelp = value,
+      help: 'show help');
   parser.addFlag('generate-code',
-      callback: (value) => generateCode = value, help: 'generate code');
+      negatable: false,
+      callback: (value) => generateCode = value,
+      help: 'generate dart code');
   parser.addFlag('create-config',
+      negatable: false,
       callback: (value) => createConfig = value,
       help: 'generate configuration files');
 
@@ -34,16 +37,36 @@ void main(List<String> args) async {
 
   final configManager = PluginConfigManager();
 
-  if (createConfig || true) {
+  if (createConfig) {
     configManager.createConfig();
     return;
   }
 
-  if (args.isEmpty) {
+  if (showHelp) {
     Log.i('Imports ARB file from exisiting GSheet document');
     Log.i('Usage: gsheet_to_arb [options]');
     Log.i(parser.usage);
     exit(0);
+  }
+
+  final config = await configManager.getConfig();
+  if (config == null) {
+    Log.i('Config not found - please create config first');
+    exit(1);
+  }
+
+  if (config.gsheet.auth == null) {
+    Log.i(
+        'Authetnication config not found - please add config to ${config.gsheet.authFile} file');
+    exit(1);
+  }
+
+  final auth = config.gsheet.auth;
+
+  if (auth.oauthClientId == null && auth.serviceAccountKey == null) {
+    Log.i(
+        'Authetnication config is invalid - please add config to ${config.gsheet.authFile} file');
+    exit(1);
   }
 
   //final config = PluginConfigHelper().fromYamlFile(configFilePath);

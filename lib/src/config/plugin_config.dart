@@ -40,12 +40,12 @@ class GsheetToArbConfig {
   String localizationFileName;
 
   @JsonKey(name: 'gsheet')
-  GoogleSheetConfig sheetConfig;
+  GoogleSheetConfig gsheet;
 
   GsheetToArbConfig(
       {this.outputDirectoryPath,
       this.arbFilePrefix,
-      this.sheetConfig,
+      this.gsheet,
       this.localizationFileName});
 
   factory GsheetToArbConfig.fromJson(Map<String, dynamic> json) =>
@@ -70,6 +70,9 @@ class GoogleSheetConfig {
 
   @JsonKey(name: 'auth_file')
   String authFile;
+
+  @JsonKey(ignore: true)
+  AuthConfig auth;
 
   GoogleSheetConfig(
       {this.authFile, this.documentId, this.sheetId, this.categoryPrefix});

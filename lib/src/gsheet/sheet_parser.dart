@@ -78,13 +78,13 @@ class SheetParser {
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
     var header = rows[0];
+    var langToPlural = <int, PluralsParser>{};
 
     var headerValues = header.values;
 
     var lastModified = DateTime.now();
 
-    var firstLanguageColumn =
-        SheetColumns.first_language_key; // key, description
+    var firstLanguageColumn = SheetColumns.first_language_key;
 
     // Store languages
     for (var lang = firstLanguageColumn; lang < headerValues.length; lang++) {
@@ -102,6 +102,7 @@ class SheetParser {
       var row = rows[i];
       var values = row.values;
       var key = values[0].formattedValue;
+
       //Skip if empty row is found
       if (key == null) {
         continue;
@@ -111,19 +112,105 @@ class SheetParser {
         continue;
       }
 
-      final description = values[1].formattedValue ?? '';
+      //Stop if empty row is found
+      if (values[0].formattedValue == null) {
+        break;
+      }
 
-      for (var langValue = 0; langValue < _languages.length; langValue++) {
-        var value = values[langValue + firstLanguageColumn].formattedValue;
-        var builder = _languages[langValue];
-        var arbEntry = ArbResource(key, value)
-          ..attributes['context'] = currentCategory
-          ..attributes['description'] = description;
-        builder.add(arbEntry);
+      var description = values[1].formattedValue ?? '';
+
+      for (var language = firstLanguageColumn;
+          language < values.length;
+          language++) {
+        var value = values[language].formattedValue;
+        var pluralParser = langToPlural[language];
+        var pluralStatus = pluralParser.parse(key, value);
+        if (pluralStatus == PluralsParserStatus.consumed) {
+          continue;
+        } else if (pluralStatus == PluralsParserStatus.completed) {
+          var entry = ArbResource(pluralParser.key, pluralParser.value);
+          entry.attributes['context'] = '';
+          entry.attributes['description'] = '';
+          _languages[language - firstLanguageColumn].add(entry);
+        }
+
+        var entry = ArbResource(key, value);
+        entry.attributes['context'] = currentCategory;
+        entry.attributes['description'] = description;
+        _languages[language - firstLanguageColumn].add(entry);
       }
     }
+
+    // build all documents
     var documents = <ArbDocument>[];
     _languages.forEach((builder) => documents.add(builder.build()));
     return ArbBundle(documents);
   }
+}
+
+class PluralsParser {
+  static final _regex = RegExp('\\{(.+?), plural\\}'); // {(.+?), plural\s?}
+
+  final pluralKeywords = ['zero', 'one', 'two', 'few', 'many', 'other'];
+
+  bool _parsing = false;
+
+  String _key;
+  String _keyValue;
+  String _value;
+
+  final _plurals = <String, String>{};
+
+  String get key => _key;
+
+  String get value => _value;
+
+  PluralsParserStatus parse(String key, String value) {
+    // Already parsing
+    if (_parsing) {
+      if (key.startsWith(_key)) {
+        var pluralPrefix = key.substring(_key.length + 1);
+        _plurals[pluralPrefix] = value;
+        return PluralsParserStatus.consumed;
+      } else {
+        if (_plurals.isEmpty) {
+          throw Exception('Expected at least one plural element');
+        }
+
+        var builder = StringBuffer();
+        _plurals.forEach((String prefix, String value) {
+          builder.write(' $prefix: {$value}');
+        });
+        _value =
+            _keyValue.replaceAll('plural}', 'plural,${builder.toString()}}');
+
+        return PluralsParserStatus.completed;
+      }
+    }
+
+    var matches = _regex.allMatches(value);
+
+    if (matches.isEmpty) {
+      _key = null;
+      _plurals.clear();
+      _parsing = false;
+      return PluralsParserStatus.notFound;
+    }
+
+    if (matches.length > 1) {
+      throw Exception('Only single plural parameter allowed');
+    }
+
+    // Start parsing
+    _key = key;
+    _keyValue = value;
+    _parsing = true;
+    return PluralsParserStatus.consumed;
+  }
+}
+
+enum PluralsParserStatus {
+  notFound,
+  consumed,
+  completed,
 }

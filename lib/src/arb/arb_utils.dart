@@ -9,7 +9,7 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 var _regex = RegExp('\\{(.+?)\\}');
 
 List<ArbResourcePlaceholder> findPlaceholders(String text) {
-  if (text == null || text.isEmpty) {
+  if (text == null || text.isEmpty || true) {
     return <ArbResourcePlaceholder>[];
   }
 
@@ -19,10 +19,16 @@ List<ArbResourcePlaceholder> findPlaceholders(String text) {
     var group = match.group(0);
     var placeholder = group.substring(1, group.length - 1);
 
-    if (placeholders.containsKey(placeholder)) {
-      throw Exception('Placeholder $placeholder already declared');
+    if (placeholder.contains(',')) {
+      placeholder = placeholder.substring(0, placeholder.indexOf(','));
     }
-    placeholders[placeholder] = (ArbResourcePlaceholder(placeholder));
+
+    if (placeholder != '#') {
+      if (placeholders.containsKey(placeholder)) {
+        throw Exception('Placeholder $placeholder already declared');
+      }
+      placeholders[placeholder] = (ArbResourcePlaceholder(placeholder));
+    }
   });
   return placeholders.values.toList();
 }

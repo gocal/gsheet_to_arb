@@ -100,9 +100,6 @@ class SheetParser {
       var row = rows[i];
       var languages = row.values;
       var key = languages[SheetColumns.key].formattedValue;
-      var attributes = ArbResourceAttributes(
-          category: currentCategory,
-          description: languages[SheetColumns.description].formattedValue);
 
       //Skip if empty row is found
       if (key == null) {
@@ -117,6 +114,9 @@ class SheetParser {
 
       final description =
           languages[SheetColumns.description].formattedValue ?? '';
+
+      var attributes = ArbResourceAttributes(
+          category: currentCategory, description: description);
 
       // for each language
       for (var lang = firstLanguageColumn; lang < languages.length; lang++) {
@@ -170,6 +170,8 @@ class SheetParser {
 
   void _addEntry(ArbDocumentBuilder builder,
       {String key, ArbResourceAttributes attributes, String value}) {
+    Log.i('Add entry $key -> $value');
+
     final entry = ArbResource(key, value)
       ..attributes['context'] = attributes.category
       ..attributes['description'] = attributes.description;
@@ -238,10 +240,12 @@ class PluralsParser {
             key: _key,
             values: Map.from(_values));
         _key = null;
+        _attributes = null;
         _values.clear();
         return status;
       } else {
         _key = null;
+        _attributes = null;
         return Skip();
       }
     }
@@ -256,6 +260,7 @@ class PluralsParser {
     } else if (_key == null) {
       // first plural
       _key = caseKey;
+      _attributes = attributes;
       _values[pluralCase] = value;
       return Consumed();
     } else {
@@ -263,7 +268,7 @@ class PluralsParser {
       PluralsStatus status;
       if (_values.isNotEmpty) {
         status = Completed(
-            attributes: attributes,
+            attributes: _attributes,
             consumed: true,
             key: _key,
             values: Map.from(_values));
@@ -271,6 +276,7 @@ class PluralsParser {
         status = Consumed();
       }
       _key = caseKey;
+      _attributes = attributes;
       _values.clear();
       _values[pluralCase] = value;
       return status;
@@ -302,18 +308,27 @@ class PluralsParser {
 }
 
 class PluralsFormatter {
-  final _pluralSeparator = '=';
+  static final String _countConst = 'count';
 
-  final _pluralFormats = {
-    PluralCase.zero: 'zero',
-    PluralCase.one: 'one',
-    PluralCase.two: 'two',
+  static final _icuPluralFormats = {
+    PluralCase.zero: '=zero',
+    PluralCase.one: '=one',
+    PluralCase.two: '=two',
     PluralCase.few: 'few',
     PluralCase.many: 'many',
     PluralCase.other: 'other'
   };
 
   static String format(Map<PluralCase, String> plural) {
-    return '';
+    final builder = StringBuffer();
+    builder.write('{$_countConst, plural,');
+    plural.forEach((key, value) {
+      if (value != null) {
+        builder.write(
+            ' ${_icuPluralFormats[key]} {${value.replaceAll("\{#\}", "\{$_countConst\}")}}');
+      }
+    });
+    builder.write('}');
+    return builder.toString();
   }
 }

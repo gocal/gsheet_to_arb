@@ -15,5 +15,4 @@ doc/api/
 .iml
 
 # GSheet to ARB Configuration
-.gsheet_to_arb.yaml
-gsheet_to_arb.yaml
+gsheet_to_arb_config.json

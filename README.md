@@ -21,12 +21,6 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
     pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-3. Optionally generate Dart classes from the ARB files using `gsheet_to_arb:arb_to_dart` program.
-
-    ```
-    pub run gsheet_to_arb:arb_to_dart --config gsheet_to_arb.yaml
-    ```
-
 ## Setup
 
 ### 1. Copy Google Sheet template

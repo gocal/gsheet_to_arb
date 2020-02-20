@@ -71,6 +71,7 @@ class SheetParser {
     var sheet = spreadsheet.sheets[0];
     var rows = sheet.data[0].rowData;
     var header = rows[0];
+    var langToPlural = <int, PluralsParser>{};
 
     var headerValues = header.values;
 
@@ -94,34 +95,114 @@ class SheetParser {
 
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
-      var values = row.values;
+      var columns = row.values;
 
-      //Stop if empty row is found
-      if (values[0].formattedValue == null) {
-        break;
-      }
+      var key = columns[0].formattedValue;
 
-      if (values[0].formattedValue.startsWith(categoryPrefix)) {
-        currentCategory =
-            values[0].formattedValue.substring(categoryPrefix.length);
+      if (key.startsWith(categoryPrefix)) {
+        currentCategory = key.substring(categoryPrefix.length);
         continue;
       }
 
-      var key = values[0].formattedValue;
-      var description = values[1].formattedValue;
-      description ??= '';
+      //Stop if empty row is found
+      if (columns[0].formattedValue == null) {
+        break;
+      }
 
-      for (var langValue = 0; langValue < _languages.length; langValue++) {
-        var value = values[langValue + firstLanguageColumn].formattedValue;
-        var builder = _languages[langValue];
+      var description = columns[1].formattedValue ?? '';
+
+      for (var language = firstLanguageColumn;
+          language < columns.length;
+          language++) {
+        var value = columns[language].formattedValue;
+        var pluralParser = langToPlural[language];
+        var pluralStatus = pluralParser.parse(key, value);
+        if (pluralStatus == PluralsParserStatus.consumed) {
+          continue;
+        } else if (pluralStatus == PluralsParserStatus.completed) {
+          var entry = ArbResource(pluralParser.key, pluralParser.value);
+          entry.attributes['context'] = ''; // TODO
+          entry.attributes['description'] = ''; // TODO
+          _languages[language - firstLanguageColumn].add(entry);
+        }
+
         var entry = ArbResource(key, value);
         entry.attributes['context'] = currentCategory;
         entry.attributes['description'] = description;
-        builder.add(entry);
+        _languages[language - firstLanguageColumn].add(entry);
       }
     }
+
+    // build all documents
     var documents = <ArbDocument>[];
     _languages.forEach((builder) => documents.add(builder.build()));
     return ArbBundle(documents);
   }
+}
+
+class PluralsParser {
+  static final _regex = RegExp('\\{(.+?), plural\\}'); // {(.+?), plural\s?}
+
+  final pluralKeywords = ['zero', 'one', 'two', 'few', 'many', 'other'];
+
+  bool _parsing = false;
+
+  String _key;
+  String _keyValue;
+  String _value;
+
+  final _plurals = <String, String>{};
+
+  String get key => _key;
+
+  String get value => _value;
+
+  PluralsParserStatus parse(String key, String value) {
+    // Already parsing
+    if (_parsing) {
+      if (key.startsWith(_key)) {
+        var pluralPrefix = key.substring(_key.length + 1);
+        _plurals[pluralPrefix] = value;
+        return PluralsParserStatus.consumed;
+      } else {
+        if (_plurals.isEmpty) {
+          throw Exception('Expected at least one plural element');
+        }
+
+        var builder = StringBuffer();
+        _plurals.forEach((String prefix, String value) {
+          builder.write(' $prefix: {$value}');
+        });
+        _value =
+            _keyValue.replaceAll('plural}', 'plural,${builder.toString()}}');
+
+        return PluralsParserStatus.completed;
+      }
+    }
+
+    var matches = _regex.allMatches(value);
+
+    if (matches.isEmpty) {
+      _key = null;
+      _plurals.clear();
+      _parsing = false;
+      return PluralsParserStatus.notFound;
+    }
+
+    if (matches.length > 1) {
+      throw Exception('Only single plural parameter allowed');
+    }
+
+    // Start parsing
+    _key = key;
+    _keyValue = value;
+    _parsing = true;
+    return PluralsParserStatus.consumed;
+  }
+}
+
+enum PluralsParserStatus {
+  notFound,
+  consumed,
+  completed,
 }

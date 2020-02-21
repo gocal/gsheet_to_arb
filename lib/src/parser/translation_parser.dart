@@ -6,67 +6,18 @@
 
 import 'dart:async';
 
-import 'package:googleapis/sheets/v4.dart';
-import 'package:googleapis_auth/auth_io.dart';
 import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
+import 'package:gsheet_to_arb/src/translation_document.dart';
+
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
-class SheetColumns {
-  static int key = 0;
-  static int description = 1;
-  static int first_language_key = 2;
-}
-
-class SheetRows {
-  static int first_translation_row = 1;
-}
-
 class SheetParser {
-  final AuthConfig auth;
-  final String categoryPrefix;
+  Future<ArbBundle> parseDocument(TranslationsDocument document) async {
+    return null;
 
-  SheetParser({this.auth, this.categoryPrefix});
-
-  Future<ArbBundle> parseSheet(String documentId) async {
-    var authClient = await _getAuthClient(auth);
-    var arbBundle = await _parseSheetWithAuth(authClient, documentId);
-    return arbBundle;
-  }
-
-  Future<AuthClient> _getAuthClient(AuthConfig auth) async {
-    final scopes = [SheetsApi.SpreadsheetsReadonlyScope];
-    var authClient;
-    if (auth.oauthClientId != null) {
-      void clientAuthPrompt(String url) {
-        Log.i(
-            'Please go to the following URL and grant Google Spreadsheet access:\n\t=> $url\n');
-      }
-
-      final client = auth.oauthClientId;
-      var id = ClientId(client.clientId, client.clientSecret);
-      authClient = await clientViaUserConsent(id, scopes, clientAuthPrompt);
-    } else if (auth.serviceAccountKey != null) {
-      final service = auth.serviceAccountKey;
-      var credentials = ServiceAccountCredentials(service.clientEmail,
-          ClientId(service.clientId, null), service.privateKey);
-      authClient = await clientViaServiceAccount(credentials, scopes);
-    }
-    return authClient;
-  }
-
-  Future<ArbBundle> _parseSheetWithAuth(
-      AuthClient client, String documentId) async {
-    var sheetsApi = SheetsApi(client);
-    var spreadsheet =
-        await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
-    var bundle = _parseSpreadsheet(spreadsheet);
-    client.close();
-    return bundle;
-  }
-
-  ArbBundle _parseSpreadsheet(Spreadsheet spreadsheet) {
+    /*
     Log.i('Opening ${spreadsheet.spreadsheetUrl}');
 
     var sheet = spreadsheet.sheets[0];
@@ -149,6 +100,7 @@ class SheetParser {
 
         _addEntry(builder, key: key, attributes: attributes, value: value);
       }
+      
     }
 
     // complete plural parser
@@ -166,6 +118,7 @@ class SheetParser {
     var documents = <ArbDocument>[];
     builders.forEach((_, builder) => documents.add(builder.build()));
     return ArbBundle(documents);
+    */
   }
 
   void _addEntry(ArbDocumentBuilder builder,

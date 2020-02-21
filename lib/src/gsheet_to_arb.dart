@@ -1,7 +1,9 @@
-import '../gsheet_to_arb.dart';
+import 'package:gsheet_to_arb/src/parser/translation_parser.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
+
 import 'arb/arb_serializer.dart';
-import 'arb/intl_translation_helper.dart';
-import 'gsheet/sheet_parser.dart';
+import 'config/plugin_config.dart';
+import 'gsheet/ghseet_importer.dart';
 
 class GSheetToArb {
   final GsheetToArbConfig config;
@@ -17,11 +19,14 @@ class GSheetToArb {
     final auth = gsheet.auth;
     final documentId = gsheet.documentId;
 
-    final sheetParser =
-        SheetParser(auth: auth, categoryPrefix: gsheet.categoryPrefix);
+    //
+    final importer =
+        GSheetImporter(auth: auth, categoryPrefix: gsheet.categoryPrefix);
+    final document = await importer.import(documentId);
 
     // Parse ARB
-    final arbBundle = await sheetParser.parseSheet(documentId);
+    final sheetParser = SheetParser();
+    final arbBundle = await sheetParser.parseDocument(document);
 
     // Save ARB
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);

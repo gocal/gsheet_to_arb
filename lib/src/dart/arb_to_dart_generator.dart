@@ -11,7 +11,7 @@ import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:recase/recase.dart';
 
-class TranslationsGenerator {
+class ArbToDartGenerator {
   void buildTranslations(
       ArbDocument document, String directory, String className) {
     var translationClass = Class((ClassBuilder builder) {

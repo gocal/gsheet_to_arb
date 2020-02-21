@@ -9,5 +9,4 @@ library gsheet_to_arb;
 export 'src/gsheet_to_arb.dart';
 export 'src/config/plugin_config.dart';
 export 'src/config/plugin_config_manager.dart';
-export 'src/output/arb_to_class_generator.dart';
 export 'src/utils/log.dart';

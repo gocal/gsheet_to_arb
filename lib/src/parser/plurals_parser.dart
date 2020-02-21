@@ -73,7 +73,7 @@ class PluralsParser {
       // first plural
       _key = caseKey;
       _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
-          name: _countPlaceholder, description: 'plural count');
+          name: _countPlaceholder, description: 'plural count', type: 'num');
       addPlaceholders(placeholders);
       _values[pluralCase] = value;
       return Consumed();

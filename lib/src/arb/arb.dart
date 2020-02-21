@@ -4,8 +4,6 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-import 'package:gsheet_to_arb/src/arb/arb_utils.dart';
-
 class ArbDocument {
   String locale;
   DateTime lastModified;
@@ -16,13 +14,13 @@ class ArbDocument {
   Map<String, Object> toJson() {
     final _json = <String, Object>{};
 
-    _json['_locale'] = locale;
+    _json['@@locale'] = locale;
     _json['@@last_modified'] = lastModified.toIso8601String();
 
     entries.forEach((ArbResource resource) {
-      _json[resource.id.text] = resource.value.text;
-      if (resource.hasAttributes) {
-        _json['@@${resource.id.text}'] = resource.attributes;
+      _json[resource.key] = resource.value;
+      if (resource.attributes.isNotEmpty) {
+        _json['@${resource.key}'] = resource.attributes;
       }
     });
 
@@ -51,44 +49,43 @@ class ArbDocument {
 }
 
 class ArbResource {
-  final ArbResourceId id;
-  final ArbResourceValue value;
+  final String key;
+  final String value;
   final Map<String, Object> attributes = {};
+  final List<ArbResourcePlaceholder> placeholders;
+  final String description;
+  final String context;
 
-  final bool hasAttributes;
+  ArbResource(String key, String value,
+      {this.description = '', this.context = '', this.placeholders = const []})
+      : key = key,
+        value = value {
+    attributes['type'] = 'Text'; // Possible values are "text", "image", "css"
+    if (placeholders != null) {
+      attributes['placeholders'] = _formatPlaceholders(placeholders);
+    }
 
-  ArbResource(String id, String value, [this.hasAttributes = true])
-      : id = ArbResourceId(id),
-        value = ArbResourceValue(value) {
-    if (hasAttributes) {
-      attributes['type'] = 'Text';
-      attributes['placeholders'] = <String, Object>{};
+    if (description != null && description.isNotEmpty) {
+      attributes['description'] = description;
+    }
+
+    if (context != null && context.isNotEmpty) {
+      attributes['context'] = context;
     }
   }
-}
 
-class ArbResourceId {
-  final String text;
-
-  ArbResourceId(this.text);
-}
-
-class ArbResourceValue {
-  final String text;
-  final placeholders = <ArbResourcePlaceholder>[];
-
-  bool get hasPlaceholders => placeholders.isNotEmpty;
-
-  ArbResourceValue(this.text) {
-    var placeholders = findPlaceholders(text);
-    if (placeholders.isNotEmpty) {
-      this.placeholders.addAll(placeholders);
-    }
+  Map<String, Object> _formatPlaceholders(
+      List<ArbResourcePlaceholder> placeholders) {
+    final map = <String, Object>{};
+    placeholders.forEach((placeholder) => {map[placeholder.name] = {}});
+    return map;
   }
 }
 
 class ArbResourcePlaceholder {
   final String name;
+  final String description;
+  final String example;
 
-  ArbResourcePlaceholder(this.name);
+  ArbResourcePlaceholder({this.name, this.description, this.example});
 }

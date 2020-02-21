@@ -54,25 +54,68 @@ class GSheetImporter {
   }
 
   Future<TranslationsDocument> _importFrom(Spreadsheet spreadsheet) async {
-    Log.i('Opening ${spreadsheet.spreadsheetUrl}');
+    Log.i('Importing from: ${spreadsheet.spreadsheetUrl}');
 
-    var sheet = spreadsheet.sheets[0];
-    var rows = sheet.data[0].rowData;
-    var header = rows[0];
-    var headerValues = header.values;
+    final sheet = spreadsheet.sheets[0];
+    final rows = sheet.data[0].rowData;
+    final header = rows[0];
+    final headerValues = header.values;
 
-    final languages = List<String>();
+    final languages = <String>[];
+    final items = <TranslationRow>[];
 
-    for (var column = _SheetRows.first_translation_row;
+    var firstLanguageColumn = _SheetColumns.first_language_key;
+    var firstTranslationsRow = _SheetRows.first_translation_row;
+
+    var currentCategory = '';
+
+    for (var column = firstLanguageColumn;
         column < headerValues.length;
         column++) {
       final language = headerValues[column].formattedValue;
       languages.add(language);
     }
 
-    return TranslationsDocument(
+    // rows
+    for (var i = firstTranslationsRow; i < rows.length; i++) {
+      var row = rows[i];
+      var languages = row.values;
+      var key = languages[_SheetColumns.key].formattedValue;
+
+      //Skip if empty row is found
+      if (key == null) {
+        continue;
+      }
+
+      if (key.startsWith(categoryPrefix)) {
+        currentCategory = key.substring(categoryPrefix.length);
+        continue;
+      }
+
+      final description =
+          languages[_SheetColumns.description].formattedValue ?? '';
+
+      final values = row.values
+          .sublist(firstLanguageColumn, row.values.length)
+          .map((data) => data.formattedValue)
+          .toList();
+
+      final item = TranslationRow(
+          key: key,
+          category: currentCategory,
+          description: description,
+          values: values);
+
+      items.add(item);
+    }
+
+    final document = TranslationsDocument(
+        lastModified: DateTime.now(),
         languages: languages, //
-        items: null // TODO
-        );
+        items: items);
+
+    Log.i('Imported document: ${document.describe()}');
+
+    return document;
   }
 }

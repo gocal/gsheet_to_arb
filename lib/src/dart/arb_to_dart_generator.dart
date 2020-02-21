@@ -39,19 +39,18 @@ class ArbToDartGenerator {
   }
 
   Method _getResourceMethod(ArbResource resource) {
-    if (resource.value.hasPlaceholders) {
+    if (resource.placeholders.isEmpty) {
       var method = Method((MethodBuilder builder) {
         var description = resource.attributes['description'];
-        description ??= resource.id.text;
+        description ??= resource.key;
 
-        var key = resource.id.text;
-        var value = resource.value.text;
+        var key = resource.key;
+        var value = resource.value;
 
         builder.name = _getMethodName(key);
 
         var args = <String>[];
-        resource.value.placeholders
-            .forEach((ArbResourcePlaceholder placeholder) {
+        resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
           builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
             args.add(placeholder.name);
             builder.name = placeholder.name;
@@ -74,10 +73,10 @@ class ArbToDartGenerator {
   Method _getResourceGetter(ArbResource resource) {
     final method = Method((MethodBuilder builder) {
       var description = resource.attributes['description'];
-      description ??= resource.id.text;
+      description ??= resource.key;
 
-      var key = resource.id.text;
-      var value = resource.value.text;
+      var key = resource.key;
+      var value = resource.value;
 
       builder
         ..name = _getMethodName(key)

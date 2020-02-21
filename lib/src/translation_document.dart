@@ -1,8 +1,12 @@
 class TranslationsDocument {
+  final DateTime lastModified;
   final List<String> languages;
   final List<TranslationRow> items;
 
-  TranslationsDocument({this.languages, this.items});
+  TranslationsDocument({this.lastModified, this.languages, this.items});
+
+  String describe() =>
+      'TranslationsDocument [ lastModified:$lastModified languages: ${languages.join(', ')}} items:${items.length} ]';
 }
 
 class TranslationRow {

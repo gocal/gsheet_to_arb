@@ -38,12 +38,15 @@ class ArbSerializer {
     var file = File(filePath);
     file.createSync();
     var arbContent = serialize(document);
-    file.writeAsString(arbContent);
+    file.writeAsStringSync(arbContent);
   }
 
   ArbDocument loadArbDocument(String filePath) {
     var file = File(filePath);
     var content = file.readAsStringSync();
+    Log.i('  => loadArbDocument $filePath');
+    Log.i('  => content $content ${content.length}');
+    Log.i('  => ok');
     return deserialize(content);
   }
 }

@@ -32,11 +32,11 @@ class ArbDocument {
     entries = <ArbResource>[];
 
     _json.forEach((key, value) {
-      if ('_locale' == key) {
+      if ('@@locale' == key) {
         locale = value;
       } else if ('@@last_modified' == key) {
         lastModified = DateTime.parse(value);
-      } else if (key.startsWith('@@')) {
+      } else if (key.startsWith('@')) {
         var entry = entriesMap[key.substring(2)];
         entry.attributes.addAll(value);
       } else {

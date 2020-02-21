@@ -44,7 +44,6 @@ class SheetParser {
         }
 
         if (status is Completed) {
-          Log.i('Completed plural ${status.key} ${status.placeholders}');
           builder.add(ArbResource(
               status.key, PluralsFormatter.format(status.values),
               context: item.category,

@@ -97,7 +97,7 @@ class GSheetImporter {
 
       final values = row.values
           .sublist(firstLanguageColumn, row.values.length)
-          .map((data) => data.formattedValue)
+          .map((data) => data.formattedValue ?? '')
           .toList();
 
       final item = TranslationRow(

@@ -84,8 +84,14 @@ class ArbResource {
 
 class ArbResourcePlaceholder {
   final String name;
+  final String type;
   final String description;
   final String example;
 
-  ArbResourcePlaceholder({this.name, this.description, this.example});
+  ArbResourcePlaceholder({
+    this.name,
+    this.type,
+    this.description,
+    this.example,
+  });
 }

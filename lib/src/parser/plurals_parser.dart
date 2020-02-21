@@ -1,4 +1,5 @@
 import 'package:gsheet_to_arb/src/arb/arb.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 ///
 /// Plurals
@@ -13,11 +14,11 @@ class Consumed extends PluralsStatus {}
 
 class Completed extends PluralsStatus {
   final String key;
-  final ArbResource attributes;
+  final List<ArbResourcePlaceholder> placeholders;
   final Map<PluralCase, String> values;
   final bool consumed;
 
-  Completed({this.key, this.attributes, this.values, this.consumed = false});
+  Completed({this.key, this.placeholders, this.values, this.consumed = false});
 }
 
 class PluralsParser {
@@ -33,27 +34,30 @@ class PluralsParser {
   };
 
   String _key;
-  ArbResource _attributes;
+  final _placeholders = <String, ArbResourcePlaceholder>{};
   final _values = <PluralCase, String>{};
 
-  PluralsStatus consume({String key, ArbResource attributes, String value}) {
+  PluralsStatus consume(
+      {String key,
+      String value,
+      List<ArbResourcePlaceholder> placeholders = const []}) {
     final pluralCase = _getCase(key);
 
     // normal item
     if (pluralCase == null) {
       if (_values.isNotEmpty) {
         final status = Completed(
-            attributes: attributes,
+            placeholders: _placeholders.values.toList(),
             consumed: false,
             key: _key,
             values: Map.from(_values));
         _key = null;
-        _attributes = null;
+        _placeholders.clear();
         _values.clear();
         return status;
       } else {
         _key = null;
-        _attributes = null;
+        _placeholders.clear();
         return Skip();
       }
     }
@@ -62,13 +66,15 @@ class PluralsParser {
     final caseKey = _getCaseKey(key);
 
     if (_key == caseKey) {
-      // same plural
+      // same plural - another entry
       _values[pluralCase] = value;
       return Consumed();
     } else if (_key == null) {
       // first plural
       _key = caseKey;
-      _attributes = attributes;
+      _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
+          name: _countPlaceholder, description: 'plural count');
+      addPlaceholders(placeholders);
       _values[pluralCase] = value;
       return Consumed();
     } else {
@@ -76,24 +82,29 @@ class PluralsParser {
       PluralsStatus status;
       if (_values.isNotEmpty) {
         status = Completed(
-            attributes: _attributes,
             consumed: true,
             key: _key,
-            values: Map.from(_values));
+            values: Map.from(_values),
+            placeholders: _placeholders.values.toList());
       } else {
         status = Consumed();
       }
+
       _key = caseKey;
-      _attributes = attributes;
+      _placeholders.clear();
       _values.clear();
       _values[pluralCase] = value;
+
       return status;
     }
   }
 
   PluralsStatus complete() {
     if (_values.isNotEmpty) {
-      return Completed(key: _key, attributes: _attributes, values: _values);
+      return Completed(
+          key: _key,
+          placeholders: _placeholders.values.toList(),
+          values: _values);
     }
 
     return Skip();
@@ -113,15 +124,23 @@ class PluralsParser {
   String _getCaseKey(String key) {
     return key.substring(0, key.lastIndexOf(_pluralSeparator));
   }
+
+  void addPlaceholders(List<ArbResourcePlaceholder> placeholders) {
+    for (var placeholder in placeholders) {
+      if (!_placeholders.containsKey(placeholder.name)) {
+        _placeholders[placeholder.name] = placeholder;
+      }
+    }
+  }
 }
 
-class PluralsFormatter {
-  static final String _countConst = 'count';
+final String _countPlaceholder = 'count';
 
+class PluralsFormatter {
   static final _icuPluralFormats = {
-    PluralCase.zero: '=zero',
-    PluralCase.one: '=one',
-    PluralCase.two: '=two',
+    PluralCase.zero: '=0',
+    PluralCase.one: '=1',
+    PluralCase.two: '=2',
     PluralCase.few: 'few',
     PluralCase.many: 'many',
     PluralCase.other: 'other'
@@ -129,11 +148,10 @@ class PluralsFormatter {
 
   static String format(Map<PluralCase, String> plural) {
     final builder = StringBuffer();
-    builder.write('{$_countConst, plural,');
+    builder.write('{$_countPlaceholder, plural,');
     plural.forEach((key, value) {
-      if (value != null) {
-        builder.write(
-            ' ${_icuPluralFormats[key]} {${value.replaceAll("\{#\}", "\{$_countConst\}")}}');
+      if (value != null && value.isNotEmpty) {
+        builder.write(' ${_icuPluralFormats[key]} {$value}');
       }
     });
     builder.write('}');

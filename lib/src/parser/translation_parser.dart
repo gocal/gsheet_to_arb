@@ -5,105 +5,51 @@
  */
 
 import 'dart:async';
-
-import 'package:gsheet_to_arb/gsheet_to_arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
-
 import 'package:gsheet_to_arb/src/utils/log.dart';
 import 'package:quiver/iterables.dart';
 
+import 'plurals_parser.dart';
+
 class SheetParser {
-  var _placeholderRegex = RegExp('\\{(.+?)\\}');
-
-  List<String> _findPlaceholders(String text) {
-    if (text == null || text.isEmpty || true) {
-      return <String>[];
-    }
-    var matches = _placeholderRegex.allMatches(text);
-    var placeholders = <String>[];
-    matches.forEach((Match match) {
-      var group = match.group(0);
-      var placeholder = group.substring(1, group.length - 1);
-
-      if (placeholders.contains(placeholder)) {
-        throw Exception('Placeholder $placeholder already declared');
-      }
-      placeholders.add(placeholder);
-    });
-    return placeholders;
-  }
-
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
+    final parsers = <PluralsParser>[];
 
     for (var langauge in document.languages) {
-      builders.add(ArbDocumentBuilder(langauge, document.lastModified));
+      final builder = ArbDocumentBuilder(langauge, document.lastModified);
+      final parser = PluralsParser();
+      builders.add(builder);
+      parsers.add(parser);
     }
 
+    // for each row
     for (var item in document.items) {
-      for (var index in range(0, document.languages.length - 1)) {
-        final value = item.values[index];
-        final builder = builders[index];
-
-        builder.add(ArbResource(item.key, value,
-            context: item.category, description: item.description));
-      }
-    }
-
-    // build all documents
-    var documents = <ArbDocument>[];
-    builders.forEach((builder) => documents.add(builder.build()));
-    return ArbBundle(documents);
-
-    /*
-
-    // rows
-    for (var i = firstTranslationsRow; i < rows.length; i++) {
-      var row = rows[i];
-      var languages = row.values;
-      var key = languages[SheetColumns.key].formattedValue;
-
-      //Skip if empty row is found
-      if (key == null) {
-        continue;
-      }
-
-      // new category
-      if (key.startsWith(categoryPrefix)) {
-        currentCategory = key.substring(categoryPrefix.length);
-        continue;
-      }
-
-      final description =
-          languages[SheetColumns.description].formattedValue ?? '';
-
-      var attributes = ArbResourceAttributes(
-          category: currentCategory, description: description);
-
       // for each language
-      for (var lang = firstLanguageColumn; lang < languages.length; lang++) {
-        final builder = builders[lang];
-        final parser = parsers[lang];
-        final language = languages[lang];
+      for (var index in range(0, document.languages.length - 1)) {
+        final itemValue = item.values[index];
+        final itemPlaceholders = _findPlaceholders(itemValue);
 
-        // value
-        var value = language.formattedValue;
+        final builder = builders[index];
+        final parser = parsers[index];
 
         // plural consume
-        final status =
-            parser.consume(key: key, attributes: attributes, value: value);
+        final status = parser.consume(
+            key: item.key, value: itemValue, placeholders: itemPlaceholders);
 
         if (status is Consumed) {
           continue;
         }
 
         if (status is Completed) {
-          _addEntry(builder,
-              key: status.key,
-              attributes: status.attributes,
-              value: PluralsFormatter.format(status.values));
+          Log.i('Completed plural ${status.key} ${status.placeholders}');
+          builder.add(ArbResource(
+              status.key, PluralsFormatter.format(status.values),
+              context: item.category,
+              description: item.description,
+              placeholders: status.placeholders));
 
           // next plural
           if (status.consumed) {
@@ -111,23 +57,54 @@ class SheetParser {
           }
         }
 
-        _addEntry(builder, key: key, attributes: attributes, value: value);
+        builder.add(ArbResource(item.key, itemValue,
+            context: item.category,
+            description: item.description,
+            placeholders: itemPlaceholders));
       }
-      
     }
 
-    // complete plural parser
-    parsers.forEach((lang, parser) {
+    // finalizer
+    /*
+    for (var index in range(0, document.languages.length - 1)) {
+      final parser = parsers[index];
       final status = parser.complete();
       if (status is Completed) {
-        _addEntry(builders[lang],
-            key: status.key,
-            attributes: status.attributes,
-            value: PluralsFormatter.format(status.values));
+        /*
+        builder.add(ArbResource(
+            status.key, PluralsFormatter.format(status.values),
+            context: status.category,
+            description: status.description,
+            placeholders: status.placeholders));
+            */
       }
+    }*/
+
+    // build all documents
+    var documents = <ArbDocument>[];
+    builders.forEach((builder) => documents.add(builder.build()));
+    return ArbBundle(documents);
+  }
+
+  final _placeholderRegex = RegExp('\\{(.+?)\\}');
+
+  // TODO add type parsing
+  List<ArbResourcePlaceholder> _findPlaceholders(String text) {
+    if (text == null || text.isEmpty) {
+      return <ArbResourcePlaceholder>[];
+    }
+
+    var matches = _placeholderRegex.allMatches(text);
+    var placeholders = <String, ArbResourcePlaceholder>{};
+    matches.forEach((Match match) {
+      var group = match.group(0);
+      var placeholder = group.substring(1, group.length - 1);
+
+      if (placeholders.containsKey(placeholder)) {
+        throw Exception('Placeholder $placeholder already declared');
+      }
+      placeholders[placeholder] = (ArbResourcePlaceholder(name: placeholder));
     });
-
-
-    */
+    return placeholders.values.toList();
   }
 }

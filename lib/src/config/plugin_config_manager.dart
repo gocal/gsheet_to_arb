@@ -42,13 +42,15 @@ class PluginConfigManager {
       Log.i('Config already exists, please check your $configFileName');
     } else {
       final config = GsheetToArbConfig(
+          addContextPrefix: false,
+          generateCode: true,
           outputDirectoryPath: 'intl',
-          arbFilePrefix: 'lib/src/l10n',
+          arbFilePrefix: 'lib/l10n',
           localizationFileName: 'l10n',
           gsheet: GoogleSheetConfig(
               categoryPrefix: '# ',
               sheetId: '0',
-              documentId: 'TODO',
+              documentId: '<ADD_DOCUMENT_ID_HERE>',
               authFile: './' + authFileName));
 
       final root = PluginConfigRoot(config).toJson();

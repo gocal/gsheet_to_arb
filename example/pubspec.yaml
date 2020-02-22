@@ -4,6 +4,8 @@ description: Example of how to use ghseet_to_arb plugin
 environment:
   sdk: '>=2.0.0 <3.0.0'
 
+dependencies:
+
 dev_dependencies:
   gsheet_to_arb:
     path: ../

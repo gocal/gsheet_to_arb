@@ -7,7 +7,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../utils/log.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
+
 import 'arb.dart';
 import 'arb_generator.dart';
 
@@ -32,6 +33,12 @@ class ArbSerializer {
         .forEach((document) => _saveArbDocument(document, targetDir));
   }
 
+  ArbDocument loadArbDocument(String filePath) {
+    var file = File(filePath);
+    var content = file.readAsStringSync();
+    return deserialize(content);
+  }
+
   void _saveArbDocument(ArbDocument document, Directory directory) {
     var filePath = '${directory.path}/intl_${document.locale}.arb';
     Log.i('  => $filePath');
@@ -39,14 +46,5 @@ class ArbSerializer {
     file.createSync();
     var arbContent = serialize(document);
     file.writeAsStringSync(arbContent);
-  }
-
-  ArbDocument loadArbDocument(String filePath) {
-    var file = File(filePath);
-    var content = file.readAsStringSync();
-    Log.i('  => loadArbDocument $filePath');
-    Log.i('  => content $content ${content.length}');
-    Log.i('  => ok');
-    return deserialize(content);
   }
 }

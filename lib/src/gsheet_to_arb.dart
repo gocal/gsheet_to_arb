@@ -15,7 +15,7 @@ class GSheetToArb {
   GSheetToArb({this.config});
 
   void build({bool generateDartCode = false}) async {
-    Log.i('build');
+    Log.i('importing gsheet from arb');
 
     final gsheet = config.gsheet;
     final auth = gsheet.auth;
@@ -34,13 +34,14 @@ class GSheetToArb {
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);
 
     if (generateDartCode || true) {
-      final document = _arbSerializer
-          .loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
-
+      /*
+      final document = _arbSerializer.loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
       final localizationFileName = config.localizationFileName;
+ 
       final generator = ArbToDartGenerator();
       generator.buildTranslations(
           document, config.outputDirectoryPath, localizationFileName);
+          */
 
       final helper = IntlTranslationHelper();
       helper.generateDartClasses(

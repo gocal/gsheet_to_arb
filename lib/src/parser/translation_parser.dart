@@ -8,7 +8,6 @@ import 'dart:async';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
-import 'package:gsheet_to_arb/src/utils/log.dart';
 import 'package:quiver/iterables.dart';
 
 import 'plurals_parser.dart';
@@ -28,7 +27,7 @@ class SheetParser {
     // for each row
     for (var item in document.items) {
       // for each language
-      for (var index in range(0, document.languages.length - 1)) {
+      for (var index in range(0, document.languages.length)) {
         final itemValue = item.values[index];
         final itemPlaceholders = _findPlaceholders(itemValue);
 

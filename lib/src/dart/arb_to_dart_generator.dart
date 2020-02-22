@@ -62,7 +62,8 @@ class ArbToDartGenerator {
     return Method((MethodBuilder builder) {
       final key = resource.key;
       final value = _fixSpecialCharacters(resource.value);
-      final description = resource.attributes['description'] ??= key;
+      final description =
+          _fixSpecialCharacters(resource.attributes['description'] ??= key);
 
       var args = <String>[];
       resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
@@ -94,7 +95,8 @@ class ArbToDartGenerator {
     return Method((MethodBuilder builder) {
       final key = resource.key;
       final value = _fixSpecialCharacters(resource.value);
-      final description = resource.attributes['description'] ??= key;
+      final description =
+          _fixSpecialCharacters(resource.attributes['description'] ??= key);
 
       builder
         ..name = _getMethodName(key)
@@ -183,6 +185,9 @@ class ArbToDartGenerator {
   }
 
   String _fixSpecialCharacters(String value) {
+    if (value == null) {
+      return value;
+    }
     // fix breaking line chars
     return value.replaceAll('\n', '\\n');
   }

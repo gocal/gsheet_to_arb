@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:recase/recase.dart';
 import '_icu_parser.dart';
@@ -43,11 +44,11 @@ class ArbToDartGenerator {
 
     final emitter = DartEmitter(Allocator.simplePrefixing());
     final emitted = library.accept(emitter);
-    //final formatted = DartFormatter().format('${emitted}');
+    final formatted = DartFormatter().format('${emitted}');
 
     final file = File('${directory}/${className.toLowerCase()}.dart');
     file.createSync();
-    file.writeAsStringSync(emitted.toString());
+    file.writeAsStringSync(formatted);
   }
 
   Method _getResourceMethod(ArbResource resource) {
@@ -105,7 +106,7 @@ class ArbToDartGenerator {
         ..lambda = true
         ..body = Code(
             '''Intl.message('${value}', name: '${key}', desc: '${description}')''')
-        ..docs.add('\t/// ${description}');
+        ..docs.add('/// ${description.replaceAll("\\n", "\n/// ")}');
     });
   }
 

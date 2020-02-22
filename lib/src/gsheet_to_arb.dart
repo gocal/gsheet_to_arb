@@ -33,7 +33,7 @@ class GSheetToArb {
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);
 
     // Generate Code
-    if (generateDartCode || true) {
+    if (generateDartCode) {
       final generator = ArbToDartGenerator();
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);

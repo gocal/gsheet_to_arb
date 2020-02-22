@@ -59,8 +59,9 @@ class ArbToDartGenerator {
   Method _getResourceMethod(ArbResource resource) {
     return Method((MethodBuilder builder) {
       final key = resource.key;
-      final description =
-          _fixSpecialCharacters(resource.attributes['description'] ??= key);
+      final docs =
+          _fixSpecialCharacters(resource.attributes['description'] ??= '')
+              .replaceAll('\\n', '\n/// ');
 
       final methodName =
           (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') +
@@ -70,7 +71,7 @@ class ArbToDartGenerator {
         ..name = methodName
         ..returns = const Reference('String')
         ..lambda = true
-        ..docs.add('/// ${description.replaceAll("\\n", "\n/// ")}');
+        ..docs.add('/// ${docs}');
 
       if (resource.placeholders.isNotEmpty) {
         return _getResourceFullMethod(resource, builder);
@@ -82,9 +83,9 @@ class ArbToDartGenerator {
 
   void _getResourceFullMethod(ArbResource resource, MethodBuilder builder) {
     final key = resource.key;
-    final value = _fixSpecialCharacters(resource.value);
+    final value = _escapeString(resource.value);
     final description =
-        _fixSpecialCharacters(resource.attributes['description'] ??= key);
+        _escapeString(resource.attributes['description'] ??= '');
 
     var args = <String>[];
     resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
@@ -106,9 +107,9 @@ class ArbToDartGenerator {
 
   void _getResourceGetter(ArbResource resource, MethodBuilder builder) {
     final key = resource.key;
-    final value = _fixSpecialCharacters(resource.value);
+    final value = _escapeString(resource.value);
     final description =
-        _fixSpecialCharacters(resource.attributes['description'] ??= key);
+        _escapeString(resource.attributes['description'] ??= key);
 
     builder
       ..type = MethodType.getter
@@ -193,7 +194,86 @@ class ArbToDartGenerator {
     if (value == null) {
       return value;
     }
-    // fix breaking line chars
     return value.replaceAll('\n', '\\n');
   }
+}
+
+const int _ASCII_END = 0x7f;
+const int _ASCII_START = 0x0;
+const int _UNICODE_END = 0x10ffff;
+const int _C0_START = 0x00;
+const int _C0_END = 0x1f;
+
+String _escapeString(String string) {
+  if (string == null) {
+    return null;
+  }
+
+  if (string.isEmpty) {
+    return string;
+  }
+
+  var sb = StringBuffer();
+  var i = 0;
+  for (var c in string.runes) {
+    if (c >= _C0_START && c <= _C0_END) {
+      switch (c) {
+        case 9:
+          sb.write('\\t');
+          break;
+        case 10:
+          sb.write('\\n');
+          break;
+        case 13:
+          sb.write('\\r');
+          break;
+        default:
+          sb.write(toUnicode(c));
+      }
+    } else if (c >= _ASCII_START && c <= _ASCII_END) {
+      switch (c) {
+        case 34:
+          sb.write('\\\"');
+          break;
+        case 36:
+          sb.write('\\\$');
+          break;
+        case 39:
+          sb.write("\\\'");
+          break;
+        case 92:
+          sb.write('\\\\');
+          break;
+        default:
+          sb.write(string[i]);
+      }
+    } else if (_isPrintable(c)) {
+      sb.write(string[i]);
+    } else {
+      sb.write(toUnicode(c));
+    }
+
+    i++;
+  }
+
+  return sb.toString();
+}
+
+String toUnicode(int charCode) {
+  if (charCode == null || charCode < 0 || charCode > _UNICODE_END) {
+    throw ArgumentError('charCode: $charCode');
+  }
+
+  var hex = charCode.toRadixString(16);
+  var length = hex.length;
+  if (length < 4) {
+    hex = hex.padLeft(4, '0');
+  }
+
+  return '\\u$hex';
+}
+
+bool _isPrintable(int character) {
+  // TODO
+  return true;
 }

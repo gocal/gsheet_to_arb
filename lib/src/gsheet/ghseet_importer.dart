@@ -38,10 +38,15 @@ class GSheetImporter {
     if (auth.oauthClientId != null) {
       void clientAuthPrompt(String url) {
         Log.i(
-            'Please go to the following URL and grant Google Spreadsheet access:\n\t=> $url\n');
+            'Please go to the following URL and grant Google Spreadsheet access:\n$url\n');
       }
 
       final client = auth.oauthClientId;
+
+      if (client.clientId == null || client.clientSecret == null) {
+        throw Exception('Auth client config is invalid');
+      }
+
       var id = ClientId(client.clientId, client.clientSecret);
       authClient = await clientViaUserConsent(id, scopes, clientAuthPrompt);
     } else if (auth.serviceAccountKey != null) {

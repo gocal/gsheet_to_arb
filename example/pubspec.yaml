@@ -14,7 +14,7 @@ dev_dependencies:
     
 gsheet_to_arb: 
   arb_file_prefix: 'intl'
-  localization_file_name: 'S'
+  localization_file_name: 'l10n'
   output_directory: 'lib/l10n'  
   gsheet: 
     auth_file: './gsheet_to_arb.yaml'

@@ -28,6 +28,11 @@ class PluginConfigManager {
       config.gsheet.auth = AuthConfig.fromJson(authConfig);
     }
 
+    if (config != null) {
+      config.generateCode = config.generateCode ?? true;
+      config.addContextPrefix = config.addContextPrefix ?? false;
+    }
+
     return config;
   }
 

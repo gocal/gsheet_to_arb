@@ -5,11 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Import",
+            "name": "Example: Run",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "cwd": "${workspaceFolder}/example",
+        },
+        {
+            "name": "Example: Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/",
+            "cwd": "${workspaceFolder}/example",
+        },
+        {
+            "name": "Example: Import",
             "program": "../bin/import.dart",
             "request": "launch",
             "type": "dart",
             "cwd": "${workspaceFolder}/example"
-        }
+        },
     ]
 }

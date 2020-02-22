@@ -17,17 +17,12 @@ void main(List<String> args) async {
   var parser = ArgParser();
 
   bool showHelp;
-  bool generateCode;
   bool createConfig;
 
   parser.addFlag('help',
       negatable: false,
       callback: (value) => showHelp = value,
       help: 'show help');
-  parser.addFlag('generate-code',
-      negatable: false,
-      callback: (value) => generateCode = value,
-      help: 'generate dart code');
   parser.addFlag('create-config',
       negatable: false,
       callback: (value) => createConfig = value,
@@ -51,14 +46,15 @@ void main(List<String> args) async {
 
   final config = await configManager.getConfig();
   if (config == null) {
-    Log.i('Config not found - please create config first');
+    Log.i(
+        'Config not found - please create config first with the --create-config flag');
     exit(1);
   }
 
   _checkAuthConfig(config.gsheet);
 
   final gsheetToArb = GSheetToArb(config: config);
-  gsheetToArb.build(generateDartCode: generateCode);
+  gsheetToArb.build();
 }
 
 void _checkAuthConfig(GoogleSheetConfig config) {

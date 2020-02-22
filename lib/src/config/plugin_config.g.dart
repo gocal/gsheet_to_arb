@@ -28,6 +28,8 @@ GsheetToArbConfig _$GsheetToArbConfigFromJson(Map<String, dynamic> json) {
         ? null
         : GoogleSheetConfig.fromJson(json['gsheet'] as Map<String, dynamic>),
     localizationFileName: json['localization_file_name'] as String,
+    generateCode: json['generate_code'] as bool,
+    addContextPrefix: json['add_context_prefix'] as bool,
   );
 }
 
@@ -36,6 +38,8 @@ Map<String, dynamic> _$GsheetToArbConfigToJson(GsheetToArbConfig instance) =>
       'output_directory': instance.outputDirectoryPath,
       'arb_file_prefix': instance.arbFilePrefix,
       'localization_file_name': instance.localizationFileName,
+      'generate_code': instance.generateCode,
+      'add_context_prefix': instance.addContextPrefix,
       'gsheet': instance.gsheet,
     };
 

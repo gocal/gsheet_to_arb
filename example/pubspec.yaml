@@ -11,11 +11,14 @@ dependencies:
 dev_dependencies:
   gsheet_to_arb:
     path: ../
-    
+  test: ^1.5.3
+  mockito: ^4.0.0  
+
 gsheet_to_arb: 
   arb_file_prefix: 'intl'
   localization_file_name: 'l10n'
-  output_directory: 'lib/l10n'  
+  output_directory: 'lib/l10n'
+  add_context_prefix: false
   gsheet: 
     auth_file: './gsheet_to_arb.yaml'
     category_prefix: "# "

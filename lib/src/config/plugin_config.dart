@@ -39,6 +39,12 @@ class GsheetToArbConfig {
   @JsonKey(name: 'localization_file_name')
   String localizationFileName;
 
+  @JsonKey(name: 'generate_code')
+  bool generateCode;
+
+  @JsonKey(name: 'add_context_prefix')
+  bool addContextPrefix;
+
   @JsonKey(name: 'gsheet')
   GoogleSheetConfig gsheet;
 
@@ -46,7 +52,9 @@ class GsheetToArbConfig {
       {this.outputDirectoryPath,
       this.arbFilePrefix,
       this.gsheet,
-      this.localizationFileName});
+      this.localizationFileName,
+      this.generateCode,
+      this.addContextPrefix});
 
   factory GsheetToArbConfig.fromJson(Map<String, dynamic> json) =>
       _$GsheetToArbConfigFromJson(json);

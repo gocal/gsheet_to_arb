@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-22T12:08:48.703833",
+  "@@last_modified": "2020-02-22T13:16:34.663864",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -56,13 +56,7 @@
     "placeholders": {
       "count": {}
     },
-    "description": "no songs",
+    "description": "number of songs plural",
     "context": "plurals"
-  },
-  "final": "final",
-  "@final": {
-    "type": "Text",
-    "description": "final",
-    "context": "other"
   }
 }

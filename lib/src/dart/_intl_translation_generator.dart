@@ -8,33 +8,57 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:gsheet_to_arb/src/utils/log.dart';
+import 'package:intl_translation/extract_messages.dart';
 import 'package:intl_translation/generate_localized.dart';
 import 'package:intl_translation/src/icu_parser.dart';
 import 'package:intl_translation/src/intl_message.dart';
 import 'package:path/path.dart' as path;
 
 class IntlTranslationGenerator {
-  void generateDartClasses(String outputDirectoryPath) {
-    var generation = MessageGeneration()..generatedFilePrefix = '_';
+  void generateLookupTables(String outputDirectoryPath, String localizationFileName) {
+    var extraction = MessageExtraction();
+    var generation = MessageGeneration();
+
+    generation.generatedFilePrefix = '_';
+
+    var dartFiles = [
+      '${outputDirectoryPath}/${localizationFileName.toLowerCase()}.dart'
+    ];
 
     var jsonFiles = Directory(outputDirectoryPath)
         .listSync()
-        .where((file) => file.path.endsWith('all.arb'))
+        .where((file) => file.path.endsWith('.arb'))
         .map<String>((file) => file.path);
 
     var targetDir = outputDirectoryPath;
 
+    extraction.suppressWarnings = true;
+    var allMessages = dartFiles.map((each) => extraction.parseFile(File(each)));
+
+    messages = {};
+    for (var eachMap in allMessages) {
+      eachMap.forEach(
+          (key, value) => messages.putIfAbsent(key, () => []).add(value));
+    }
     for (var arg in jsonFiles) {
       var file = File(arg);
       generateLocaleFile(file, targetDir, generation);
     }
+
+    var mainImportFile = File(path.join(
+        targetDir, '${generation.generatedFilePrefix}messages_all.dart'));
+    mainImportFile.writeAsStringSync(generation.generateMainImportFile());
   }
+
+  final pluralAndGenderParser = IcuParser().message;
+
+  final plainParser = IcuParser().nonIcuMessage;
 
   /// Keeps track of all the messages we have processed so far, keyed by message
   /// name.
   Map<String, List<MainMessage>> messages;
 
-  final jsonDecoder = const JsonCodec();
+  JsonCodec jsonDecoder = const JsonCodec();
 
   /// Create the file of generated code for a particular locale. We read the ARB
   /// data and create [BasicTranslatedMessage] instances from everything,
@@ -101,6 +125,3 @@ class BasicTranslatedMessage extends TranslatedMessage {
   //key in [messages].
   List<MainMessage> _findOriginals() => originalMessages = messages[id];
 }
-
-final pluralAndGenderParser = IcuParser().message;
-final plainParser = IcuParser().nonIcuMessage;

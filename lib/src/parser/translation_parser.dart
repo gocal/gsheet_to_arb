@@ -7,15 +7,12 @@
 import 'dart:async';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
-import 'package:quiver/iterables.dart';
 
-import 'plurals_parser.dart';
+import 'package:quiver/iterables.dart' as iterables;
 
-import 'package:intl_translation/src/icu_parser.dart';
+import '_plurals_parser.dart';
 
 class TranslationParser {
-  final pluralAndGenderParser = IcuParser().message;
-
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
     final parsers = <PluralsParser>[];
@@ -30,7 +27,7 @@ class TranslationParser {
     // for each row
     for (var item in document.items) {
       // for each language
-      for (var index in range(0, document.languages.length)) {
+      for (var index in iterables.range(0, document.languages.length)) {
         final itemValue = item.values[index];
         final itemPlaceholders = _findPlaceholders(itemValue);
 
@@ -48,9 +45,7 @@ class TranslationParser {
         }
 
         if (status is Completed) {
-          //final val = status.resource.value;
-          //var parsed = pluralAndGenderParser.parse(val);
-          //builder.add(status.resource);
+          builder.add(status.resource);
 
           // next plural
           if (status.consumed) {
@@ -66,7 +61,7 @@ class TranslationParser {
     }
 
     // finalizer
-    for (var index in range(0, document.languages.length - 1)) {
+    for (var index in iterables.range(0, document.languages.length - 1)) {
       final builder = builders[index];
       final parser = parsers[index];
       final status = parser.complete();

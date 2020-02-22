@@ -1,6 +1,13 @@
 import 'package:intl/intl.dart';
 
-void main() {}
+import 'l10n/l10n.dart';
+
+void main() {
+
+final l = L10n();
+l.appName();
+
+}
 
 // Used to verify intl_translation behaviour
 class IntlTranslations {

@@ -1,5 +1,4 @@
 import 'package:gsheet_to_arb/src/arb/arb.dart';
-import 'package:gsheet_to_arb/src/utils/log.dart';
 
 ///
 /// Plurals

@@ -2,9 +2,8 @@ import 'package:gsheet_to_arb/src/parser/translation_parser.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'arb/arb_serializer.dart';
-import 'arb/intl_translation_helper.dart';
 import 'config/plugin_config.dart';
-import 'dart/arb_to_dart_generator.dart';
+import 'dart/intl_translation_generator.dart';
 import 'gsheet/ghseet_importer.dart';
 
 class GSheetToArb {
@@ -43,9 +42,8 @@ class GSheetToArb {
           document, config.outputDirectoryPath, localizationFileName);
           */
 
-      final helper = IntlTranslationHelper();
-      helper.generateDartClasses(
-          config.outputDirectoryPath, config.localizationFileName);
+      final helper = IntlTranslationGenerator();
+      helper.generateDartClasses(config.outputDirectoryPath);
     }
   }
 }

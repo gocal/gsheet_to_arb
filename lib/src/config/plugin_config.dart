@@ -5,7 +5,6 @@
  */
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'plugin_config.g.dart';
 
@@ -121,7 +120,7 @@ class OAuthClientId {
   @JsonKey(name: 'client_secret')
   String clientSecret;
 
-  OAuthClientId({@required this.clientId, @required this.clientSecret});
+  OAuthClientId({this.clientId, this.clientSecret});
 
   factory OAuthClientId.fromJson(Map<String, dynamic> json) =>
       _$OAuthClientIdFromJson(json);
@@ -144,9 +143,9 @@ class ServiceAccountKey {
   String privateKey;
 
   ServiceAccountKey({
-    @required this.clientId,
-    @required this.clientEmail,
-    @required this.privateKey,
+    this.clientId,
+    this.clientEmail,
+    this.privateKey,
   });
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>

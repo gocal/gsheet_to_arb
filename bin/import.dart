@@ -51,7 +51,7 @@ void main(List<String> args) async {
 
   final config = await configManager.getConfig();
   if (config == null) {
-    Log.i('Config not found - please create config first');
+    Log.i('Config not found - please create config first with the --create-config flag');
     exit(1);
   }
 

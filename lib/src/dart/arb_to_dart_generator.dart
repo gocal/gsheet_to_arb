@@ -14,7 +14,6 @@ import '_intl_translation_generator.dart';
 import 'package:intl_translation/src/intl_message.dart';
 import 'package:petitparser/petitparser.dart';
 
-
 class ArbToDartGenerator {
   final intlTranslation = IntlTranslationGenerator();
 
@@ -42,13 +41,13 @@ class ArbToDartGenerator {
       builder.body.add(translationClass);
     });
 
-    var emitter = DartEmitter(Allocator.simplePrefixing());
-    var emitted = library.accept(emitter);
-    var formatted = DartFormatter().format('${emitted}');
+    final emitter = DartEmitter(Allocator.simplePrefixing());
+    final emitted = library.accept(emitter);
+    //final formatted = DartFormatter().format('${emitted}');
 
-    var file = File('${directory}/${className.toLowerCase()}.dart');
+    final file = File('${directory}/${className.toLowerCase()}.dart');
     file.createSync();
-    file.writeAsStringSync(formatted);
+    file.writeAsStringSync(emitted.toString());
   }
 
   Method _getResourceMethod(ArbResource resource) {
@@ -62,7 +61,7 @@ class ArbToDartGenerator {
   Method _getResourceFullMethod(ArbResource resource) {
     return Method((MethodBuilder builder) {
       final key = resource.key;
-      final value = resource.value;
+      final value = _fixSpecialCharacters(resource.value);
       final description = resource.attributes['description'] ??= key;
 
       var args = <String>[];
@@ -94,7 +93,7 @@ class ArbToDartGenerator {
   Method _getResourceGetter(ArbResource resource) {
     return Method((MethodBuilder builder) {
       final key = resource.key;
-      final value = resource.value;
+      final value = _fixSpecialCharacters(resource.value);
       final description = resource.attributes['description'] ??= key;
 
       builder
@@ -181,6 +180,11 @@ class ArbToDartGenerator {
       builder.write(_getMessageCode(message));
     }
     return builder.toString();
+  }
+
+  String _fixSpecialCharacters(String value) {
+    // fix breaking line chars
+    return value.replaceAll('\n', '\\n');
   }
 }
 

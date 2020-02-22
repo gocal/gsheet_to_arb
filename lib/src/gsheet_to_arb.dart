@@ -25,7 +25,7 @@ class GSheetToArb {
     final document = await importer.import(documentId);
 
     // Parse ARB
-    final sheetParser = SheetParser();
+    final sheetParser = TranslationParser();
     final arbBundle = await sheetParser.parseDocument(document);
 
     // Save ARB

@@ -11,7 +11,11 @@ import 'package:quiver/iterables.dart';
 
 import 'plurals_parser.dart';
 
-class SheetParser {
+import 'package:intl_translation/src/icu_parser.dart';
+
+class TranslationParser {
+  final pluralAndGenderParser = IcuParser().message;
+
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
     final parsers = <PluralsParser>[];
@@ -44,7 +48,9 @@ class SheetParser {
         }
 
         if (status is Completed) {
-          builder.add(status.resource);
+          //final val = status.resource.value;
+          //var parsed = pluralAndGenderParser.parse(val);
+          //builder.add(status.resource);
 
           // next plural
           if (status.consumed) {

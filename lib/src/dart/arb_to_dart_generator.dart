@@ -10,12 +10,10 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:recase/recase.dart';
-
-// TODO internal/transitive dependency
+import '_intl_translation_generator.dart';
 import 'package:intl_translation/src/intl_message.dart';
 import 'package:petitparser/petitparser.dart';
 
-import '_intl_translation_generator.dart';
 
 class ArbToDartGenerator {
   final intlTranslation = IntlTranslationGenerator();
@@ -74,7 +72,7 @@ class ArbToDartGenerator {
           final argumentType =
               placeholder.type == ArbResourcePlaceholder.typeNum
                   ? 'int'
-                  : 'String'; // TODO
+                  : 'String';
           builder
             ..name = placeholder.name
             ..type = Reference(argumentType);

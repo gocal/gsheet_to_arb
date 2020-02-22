@@ -78,7 +78,6 @@ class TranslationParser {
 
   final _placeholderRegex = RegExp('\\{(.+?)\\}');
 
-  // TODO add type parsing
   List<ArbResourcePlaceholder> _findPlaceholders(String text) {
     if (text == null || text.isEmpty) {
       return <ArbResourcePlaceholder>[];
@@ -93,8 +92,8 @@ class TranslationParser {
       if (placeholders.containsKey(placeholderName)) {
         throw Exception('Placeholder $placeholderName already declared');
       }
-      placeholders[placeholderName] = (ArbResourcePlaceholder(
-          name: placeholderName, type: 'text')); // TODO extract text
+      placeholders[placeholderName] =
+          (ArbResourcePlaceholder(name: placeholderName, type: 'text'));
     });
     return placeholders.values.toList();
   }

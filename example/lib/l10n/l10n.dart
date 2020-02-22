@@ -22,21 +22,22 @@ class L10n {
   String get register =>
       Intl.message('Register', name: 'register', desc: 'contains registration');
 
+  /// number of songs plural
+  String numberOfSongsAvailable(String count) => Intl.plural(count,
+      zero: 'No songs found.',
+      one: 'One song found.',
+      other: '$count song found.',
+      args: [count],
+      desc: 'number of songs plural');
+
   /// Single named argument
-  String singleArgument(String name) => Intl.message('Single {name} argument',
+  String singleArgument(String name) => Intl.message('Single $name argument',
       name: 'single_argument', args: [name], desc: 'Single named argument');
 
   /// Two named arguments
   String twoArguments(String first, String second) =>
-      Intl.message('Argument {first} and {second}',
+      Intl.message('Argument $first and $second',
           name: 'two_arguments',
           args: [first, second],
           desc: 'Two named arguments');
-
-  /// number of songs plural
-  String numberOfSongsAvailable(String count) => Intl.message(
-      '{count, plural, =0 {No songs found.} =1 {One song found.} other {{count} song found.}}',
-      name: 'number_of_songs_available',
-      args: [count],
-      desc: 'number of songs plural');
 }

@@ -12,9 +12,7 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:recase/recase.dart';
 
 // TODO internal/transitive dependency
-import 'package:intl_translation/src/icu_parser.dart';
 import 'package:intl_translation/src/intl_message.dart';
-import 'package:intl_translation/generate_localized.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '_intl_translation_generator.dart';
@@ -64,39 +62,39 @@ class ArbToDartGenerator {
   }
 
   Method _getResourceFullMethod(ArbResource resource) {
-    var method = Method((MethodBuilder builder) {
-      final description = resource.attributes['description'] ??= resource.key;
-
-      var key = resource.key;
-      var value = resource.value;
-
-      builder.name = _getMethodName(key);
+    return Method((MethodBuilder builder) {
+      final key = resource.key;
+      final value = resource.value;
+      final description = resource.attributes['description'] ??= key;
 
       var args = <String>[];
       resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
         builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
           args.add(placeholder.name);
-          builder.name = placeholder.name;
-          builder.type = const Reference('String');
+          final argumentType = placeholder.type == 'num' ? 'int' : 'String';
+          builder
+            ..name = placeholder.name
+            ..type = Reference(argumentType);
         }));
       });
 
-      builder.returns = const Reference('String');
-      builder.lambda = true;
-      builder.body = Code(
-          """Intl.message('${value}', name: '${key}', args: [${args.join(", ")}], desc: '${description}')""");
-      builder.docs.add('\t/// ${description}');
+      builder
+        ..name = _getMethodName(key)
+        ..returns = const Reference('String')
+        ..lambda = true
+        ..docs.add('\t/// ${description}')
+        ..body = Code(
+            _getCode(value, key: key, args: args, description: description));
     });
-    return method;
   }
 
-  Method _getResourceGetter(ArbResource resource) {
-    final method = Method((MethodBuilder builder) {
-      var description = resource.attributes['description'];
-      description ??= resource.key;
+// """Intl.message('${value}', name: '$key', args: [${args.join(", ")}], desc: '${description}')"""
 
-      var key = resource.key;
-      var value = resource.value;
+  Method _getResourceGetter(ArbResource resource) {
+    return Method((MethodBuilder builder) {
+      final key = resource.key;
+      final value = resource.value;
+      final description = resource.attributes['description'] ??= key;
 
       builder
         ..name = _getMethodName(key)
@@ -107,31 +105,175 @@ class ArbToDartGenerator {
             '''Intl.message('${value}', name: '${key}', desc: '${description}')''')
         ..docs.add('\t/// ${description}');
     });
-    return method;
   }
 
   String _getMethodName(String key) => ReCase(key).camelCase;
-}
 
-///
-///
-///
-final Parser<dynamic> _pluralParser = IcuParser().message;
-final Parser<dynamic> _plainParser = IcuParser().nonIcuMessage;
+  ///
+  /// intl_translation
+  ///
+  final Parser<dynamic> _pluralParser = CustomIcuParser().message;
+  final Parser<dynamic> _plainParser = CustomIcuParser().nonIcuMessage;
 
-BasicTranslatedMessage _getTranslatedMessage(String id, String data) {
-  if (id.startsWith('@')) return null;
-  if (data == null) return null;
-  var parsed = _pluralParser.parse(data).value;
-  if (parsed is LiteralString && parsed.string.isEmpty) {
-    parsed = _plainParser.parse(data).value;
+  String _getCode(String value, {String key, String description, List args}) {
+    Message message = _pluralParser.parse(value).value;
+    if (message is LiteralString && message.string.isEmpty) {
+      message = _plainParser.parse(value).value;
+    }
+
+    if (message is Plural) {
+      final pluralBuilder = StringBuffer();
+      pluralBuilder.write('Intl.plural(count,');
+      void addIfNotNull(String key, Message message) {
+        if (message != null) {
+          final val = _getMessageCode(message);
+          pluralBuilder.write('$key:\'$val\',');
+        }
+      }
+
+      addIfNotNull('zero', message.zero);
+      addIfNotNull('one', message.one);
+      addIfNotNull('two', message.two);
+      addIfNotNull('few', message.few);
+      addIfNotNull('other', message.other);
+      addIfNotNull('many', message.many);
+
+      pluralBuilder.write(
+        'args: [${args.join(", ")}],',
+      );
+      pluralBuilder.write(
+        'desc: \'${description}\'',
+      );
+      pluralBuilder.write(')');
+
+      final code = pluralBuilder.toString();
+
+      return code;
+    }
+    final code = _getMessageCode(message);
+    return """Intl.message('${code}', name: '$key', args: [${args.join(", ")}], desc: '${description}')""";
   }
-  return BasicTranslatedMessage(id, parsed);
+
+  String _getMessageCode(Message message) {
+    final builder = StringBuffer();
+
+    if (message is LiteralString) {
+      return message.string;
+    }
+
+    if (message is CustomVariableSubstitution) {
+      return '\$${message.variable}';
+    }
+
+    if (message is Plural) {}
+
+    if (message is CompositeMessage) {
+      return _getComositeMessageCode(message);
+    }
+
+    return builder.toString();
+  }
+
+  String _getComositeMessageCode(CompositeMessage composite) {
+    final builder = StringBuffer();
+    for (var message in composite.pieces) {
+      builder.write(_getMessageCode(message));
+    }
+    return builder.toString();
+  }
 }
 
-class BasicTranslatedMessage extends TranslatedMessage {
-  BasicTranslatedMessage(String name, translated) : super(name, translated);
+class CustomIcuParser {
+  dynamic get openCurly => char('{');
 
-  @override
-  List<MainMessage> get originalMessages => super.originalMessages;
+  dynamic get closeCurly => char('}');
+  dynamic get quotedCurly => (string("'{'") | string("'}'")).map((x) => x[1]);
+
+  dynamic get icuEscapedText => quotedCurly | twoSingleQuotes;
+  dynamic get curly => (openCurly | closeCurly);
+  dynamic get notAllowedInIcuText => curly | char('<');
+  dynamic get icuText => notAllowedInIcuText.neg();
+  dynamic get notAllowedInNormalText => char('{');
+  dynamic get normalText => notAllowedInNormalText.neg();
+  dynamic get messageText =>
+      (icuEscapedText | icuText).plus().map((x) => x.join());
+  dynamic get nonIcuMessageText => normalText.plus().map((x) => x.join());
+  dynamic get twoSingleQuotes => string("''").map((x) => "'");
+  dynamic get number => digit().plus().flatten().trim().map(int.parse);
+  dynamic get id => (letter() & (word() | char('_')).star()).flatten().trim();
+  dynamic get comma => char(',').trim();
+
+  /// Given a list of possible keywords, return a rule that accepts any of them.
+  /// e.g., given ["male", "female", "other"], accept any of them.
+  dynamic asKeywords(list) =>
+      list.map(string).reduce((a, b) => a | b).flatten().trim();
+
+  dynamic get pluralKeyword => asKeywords(
+      ['=0', '=1', '=2', 'zero', 'one', 'two', 'few', 'many', 'other']);
+  dynamic get genderKeyword => asKeywords(['female', 'male', 'other']);
+
+  var interiorText = undefined();
+
+  dynamic get preface => (openCurly & id & comma).map((values) => values[1]);
+
+  dynamic get pluralLiteral => string('plural');
+  dynamic get pluralClause =>
+      (pluralKeyword & openCurly & interiorText & closeCurly)
+          .trim()
+          .map((result) => [result[0], result[2]]);
+  dynamic get plural =>
+      preface & pluralLiteral & comma & pluralClause.plus() & closeCurly;
+  dynamic get intlPlural =>
+      plural.map((values) => Plural.from(values.first, values[3], null));
+
+  dynamic get selectLiteral => string('select');
+  dynamic get genderClause =>
+      (genderKeyword & openCurly & interiorText & closeCurly)
+          .trim()
+          .map((result) => [result[0], result[2]]);
+  dynamic get gender =>
+      preface & selectLiteral & comma & genderClause.plus() & closeCurly;
+  dynamic get intlGender =>
+      gender.map((values) => Gender.from(values.first, values[3], null));
+  dynamic get selectClause =>
+      (id & openCurly & interiorText & closeCurly).map((x) => [x.first, x[2]]);
+  dynamic get generalSelect =>
+      preface & selectLiteral & comma & selectClause.plus() & closeCurly;
+  dynamic get intlSelect =>
+      generalSelect.map((values) => Select.from(values.first, values[3], null));
+
+  dynamic get pluralOrGenderOrSelect => intlPlural | intlGender | intlSelect;
+
+  dynamic get contents => pluralOrGenderOrSelect | parameter | messageText;
+  dynamic get simpleText => (nonIcuMessageText | parameter | openCurly).plus();
+  dynamic get empty => epsilon().map((_) => '');
+
+  dynamic get parameter => (openCurly & id & closeCurly)
+      .map((param) => CustomVariableSubstitution.named(param[1], null));
+
+  /// The primary entry point for parsing. Accepts a string and produces
+  /// a parsed representation of it as a Message.
+  Parser get message => (pluralOrGenderOrSelect | empty)
+      .map((chunk) => Message.from(chunk, null));
+
+  /// Represents an ordinary message, i.e. not a plural/gender/select, although
+  /// it may have parameters.
+  Parser get nonIcuMessage =>
+      (simpleText | empty).map((chunk) => Message.from(chunk, null));
+
+  dynamic get stuff => (pluralOrGenderOrSelect | empty)
+      .map((chunk) => Message.from(chunk, null));
+
+  CustomIcuParser() {
+    // There is a cycle here, so we need the explicit set to avoid
+    // infinite recursion.
+    interiorText.set(contents.plus() | empty);
+  }
+}
+
+class CustomVariableSubstitution extends VariableSubstitution {
+  final String variable;
+  CustomVariableSubstitution.named(String name, Message parent)
+      : variable = name,
+        super.named(name, parent);
 }

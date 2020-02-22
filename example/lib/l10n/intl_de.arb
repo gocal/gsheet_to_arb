@@ -1,11 +1,12 @@
 {
   "@@locale": "de",
-  "@@last_modified": "2020-02-22T13:16:34.663864",
+  "@@last_modified": "2020-02-22T14:52:13.574124",
   "title": "Titel",
   "message": "Nachricht",
   "app_name": "Anwendung",
   "login": "Einloggen",
   "register": "Registrieren",
+  "number_of_songs_available": "{count, plural, other {Lorem {count} ipsum}}",
   "single_argument": "Single {name} argument",
   "two_arguments": "Argument {first} and {second}"
 }

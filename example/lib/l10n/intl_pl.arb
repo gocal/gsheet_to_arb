@@ -1,12 +1,12 @@
 {
   "@@locale": "pl",
-  "@@last_modified": "2020-02-22T13:16:34.663864",
+  "@@last_modified": "2020-02-22T14:52:13.574124",
   "title": "Tytuł",
   "message": "Wiadomość",
   "app_name": "Aplikacja",
   "login": "Zaloguj",
   "register": "Zarejestruj",
+  "number_of_songs_available": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} few {Znaleziono {count} piosenki.} other {Znaleziono {count} piosenek.}}",
   "single_argument": "Single {name} argument",
-  "two_arguments": "Argument {first} and {second}",
-  "number_of_songs_available": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} few {Znaleziono {count} piosenki.} other {Znaleziono {count} piosenek.}}"
+  "two_arguments": "Argument {first} and {second}"
 }

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-22T13:16:34.663864",
+  "@@last_modified": "2020-02-22T14:52:13.574124",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -31,6 +31,15 @@
     "description": "contains registration",
     "context": "signup"
   },
+  "number_of_songs_available": "{count, plural, =0 {No songs found.} =1 {One song found.} other {{count} song found.}}",
+  "@number_of_songs_available": {
+    "type": "Text",
+    "placeholders": {
+      "count": {}
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
   "single_argument": "Single {name} argument",
   "@single_argument": {
     "type": "Text",
@@ -49,14 +58,5 @@
     },
     "description": "Two named arguments",
     "context": "placeholders"
-  },
-  "number_of_songs_available": "{count, plural, =0 {No songs found.} =1 {One song found.} other {{count} song found.}}",
-  "@number_of_songs_available": {
-    "type": "Text",
-    "placeholders": {
-      "count": {}
-    },
-    "description": "number of songs plural",
-    "context": "plurals"
   }
 }

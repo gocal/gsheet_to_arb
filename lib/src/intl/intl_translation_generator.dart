@@ -19,7 +19,7 @@ class IntlTranslationGenerator {
 
     var jsonFiles = Directory(outputDirectoryPath)
         .listSync()
-        .where((file) => file.path.endsWith('.arb'))
+        .where((file) => file.path.endsWith('all.arb'))
         .map<String>((file) => file.path);
 
     var targetDir = outputDirectoryPath;
@@ -34,7 +34,7 @@ class IntlTranslationGenerator {
   /// name.
   Map<String, List<MainMessage>> messages;
 
-  JsonCodec jsonDecoder = const JsonCodec();
+  final jsonDecoder = const JsonCodec();
 
   /// Create the file of generated code for a particular locale. We read the ARB
   /// data and create [BasicTranslatedMessage] instances from everything,

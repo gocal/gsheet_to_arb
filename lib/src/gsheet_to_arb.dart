@@ -3,7 +3,6 @@ import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'arb/arb_serializer.dart';
 import 'config/plugin_config.dart';
-import 'dart/intl_translation_generator.dart';
 import 'gsheet/ghseet_importer.dart';
 
 class GSheetToArb {
@@ -34,7 +33,7 @@ class GSheetToArb {
 
     if (generateDartCode || true) {
       /*
-      final document = _arbSerializer.loadArbDocument('${config.outputDirectoryPath}/intl_en.arb');
+      final document = _arbSerializer.loadArbDocument('${config.outputDirectoryPath}/intl_all_messages.arb');
       final localizationFileName = config.localizationFileName;
  
       final generator = ArbToDartGenerator();
@@ -42,8 +41,8 @@ class GSheetToArb {
           document, config.outputDirectoryPath, localizationFileName);
           */
 
-      final helper = IntlTranslationGenerator();
-      helper.generateDartClasses(config.outputDirectoryPath);
+      //final helper = IntlTranslationGenerator();
+      //helper.generateDartClasses(config.outputDirectoryPath);
     }
   }
 }

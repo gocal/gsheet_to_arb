@@ -11,20 +11,20 @@ class ArbDocument {
 
   ArbDocument(this.locale, this.lastModified, this.entries);
 
-  Map<String, Object> toJson() {
-    final _json = <String, Object>{};
+  Map<String, Object> toJson({bool compact = false}) {
+    final json = <String, Object>{};
 
-    _json['@@locale'] = locale;
-    _json['@@last_modified'] = lastModified.toIso8601String();
+    json['@@locale'] = locale;
+    json['@@last_modified'] = lastModified.toIso8601String();
 
     entries.forEach((ArbResource resource) {
-      _json[resource.key] = resource.value;
-      if (resource.attributes.isNotEmpty) {
-        _json['@${resource.key}'] = resource.attributes;
+      json[resource.key] = resource.value;
+      if (resource.attributes.isNotEmpty && !compact) {
+        json['@${resource.key}'] = resource.attributes;
       }
     });
 
-    return _json;
+    return json;
   }
 
   ArbDocument.fromJson(Map<String, dynamic> _json) {
@@ -61,7 +61,7 @@ class ArbResource {
       : key = key,
         value = value {
     // Possible values are "text", "image", "css"
-    // attributes['type'] = 'Text';
+    attributes['type'] = 'Text';
 
     if (placeholders != null && placeholders.isNotEmpty) {
       attributes['placeholders'] = _formatPlaceholders(placeholders);
@@ -96,4 +96,28 @@ class ArbResourcePlaceholder {
     this.description,
     this.example,
   });
+}
+
+class ArbBundle {
+  final List<ArbDocument> documents;
+
+  ArbBundle(this.documents);
+}
+
+class ArbDocumentBuilder {
+  String locale;
+  DateTime lastModified;
+  List<ArbResource> entries = [];
+
+  ArbDocumentBuilder(this.locale, this.lastModified);
+
+  ArbDocument build() {
+    final bundle = ArbDocument(locale, lastModified, entries);
+    return bundle;
+  }
+
+  ArbDocumentBuilder add(ArbResource entry) {
+    entries.add(entry);
+    return this;
+  }
 }

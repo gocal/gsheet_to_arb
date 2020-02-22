@@ -6,7 +6,6 @@
 
 import 'dart:async';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
-import 'package:gsheet_to_arb/src/arb/arb_generator.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
 import 'package:quiver/iterables.dart';
 
@@ -35,19 +34,17 @@ class SheetParser {
         final parser = parsers[index];
 
         // plural consume
-        final status = parser.consume(
-            key: item.key, value: itemValue, placeholders: itemPlaceholders);
+        final status = parser.consume(ArbResource(item.key, itemValue,
+            placeholders: itemPlaceholders,
+            context: item.category,
+            description: item.description));
 
         if (status is Consumed) {
           continue;
         }
 
         if (status is Completed) {
-          builder.add(ArbResource(
-              status.key, PluralsFormatter.format(status.values),
-              context: item.category,
-              description: item.description,
-              placeholders: status.placeholders));
+          builder.add(status.resource);
 
           // next plural
           if (status.consumed) {
@@ -63,20 +60,14 @@ class SheetParser {
     }
 
     // finalizer
-    /*
     for (var index in range(0, document.languages.length - 1)) {
+      final builder = builders[index];
       final parser = parsers[index];
       final status = parser.complete();
       if (status is Completed) {
-        /*
-        builder.add(ArbResource(
-            status.key, PluralsFormatter.format(status.values),
-            context: status.category,
-            description: status.description,
-            placeholders: status.placeholders));
-            */
+        builder.add(status.resource);
       }
-    }*/
+    }
 
     // build all documents
     var documents = <ArbDocument>[];

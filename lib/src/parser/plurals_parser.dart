@@ -12,12 +12,10 @@ class Skip extends PluralsStatus {}
 class Consumed extends PluralsStatus {}
 
 class Completed extends PluralsStatus {
-  final String key;
-  final List<ArbResourcePlaceholder> placeholders;
-  final Map<PluralCase, String> values;
+  final ArbResource resource;
   final bool consumed;
 
-  Completed({this.key, this.placeholders, this.values, this.consumed = false});
+  Completed(this.resource, {this.consumed = false});
 }
 
 class PluralsParser {
@@ -33,66 +31,60 @@ class PluralsParser {
   };
 
   String _key;
+  ArbResource _resource;
   final _placeholders = <String, ArbResourcePlaceholder>{};
   final _values = <PluralCase, String>{};
 
-  PluralsStatus consume(
-      {String key,
-      String value,
-      List<ArbResourcePlaceholder> placeholders = const []}) {
-    final pluralCase = _getCase(key);
+  PluralsStatus consume(ArbResource resource) {
+    final pluralCase = _getCase(resource.key);
 
     // normal item
     if (pluralCase == null) {
       if (_values.isNotEmpty) {
-        final status = Completed(
-            placeholders: _placeholders.values.toList(),
-            consumed: false,
-            key: _key,
-            values: Map.from(_values));
+        final status = _getCompleted();
         _key = null;
+        _resource = null;
         _placeholders.clear();
         _values.clear();
         return status;
       } else {
         _key = null;
+        _resource = null;
         _placeholders.clear();
         return Skip();
       }
     }
 
     // plural item
-    final caseKey = _getCaseKey(key);
+    final caseKey = _getCaseKey(resource.key);
 
     if (_key == caseKey) {
       // same plural - another entry
-      _values[pluralCase] = value;
+      _values[pluralCase] = resource.value;
       return Consumed();
     } else if (_key == null) {
       // first plural
       _key = caseKey;
+      _resource = resource;
       _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
           name: _countPlaceholder, description: 'plural count', type: 'num');
-      addPlaceholders(placeholders);
-      _values[pluralCase] = value;
+      addPlaceholders(resource.placeholders);
+      _values[pluralCase] = resource.value;
       return Consumed();
     } else {
       // another plural
       PluralsStatus status;
       if (_values.isNotEmpty) {
-        status = Completed(
-            consumed: true,
-            key: _key,
-            values: Map.from(_values),
-            placeholders: _placeholders.values.toList());
+        status = _getCompleted(consumed: true);
       } else {
         status = Consumed();
       }
 
       _key = caseKey;
+      _resource = resource;
       _placeholders.clear();
       _values.clear();
-      _values[pluralCase] = value;
+      _values[pluralCase] = resource.value;
 
       return status;
     }
@@ -100,10 +92,7 @@ class PluralsParser {
 
   PluralsStatus complete() {
     if (_values.isNotEmpty) {
-      return Completed(
-          key: _key,
-          placeholders: _placeholders.values.toList(),
-          values: _values);
+      return _getCompleted();
     }
 
     return Skip();
@@ -122,6 +111,15 @@ class PluralsParser {
 
   String _getCaseKey(String key) {
     return key.substring(0, key.lastIndexOf(_pluralSeparator));
+  }
+
+  Completed _getCompleted({bool consumed = false}) {
+    return Completed(
+        ArbResource(_key, PluralsFormatter.format(Map.from(_values)),
+            placeholders: _placeholders.values.toList(),
+            context: _resource.context,
+            description: _resource.description),
+        consumed: consumed);
   }
 
   void addPlaceholders(List<ArbResourcePlaceholder> placeholders) {

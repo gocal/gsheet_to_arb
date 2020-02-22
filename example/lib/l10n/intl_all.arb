@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-22T14:52:13.574124",
+  "@@last_modified": "2020-02-22T14:59:14.792820",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -35,7 +35,9 @@
   "@number_of_songs_available": {
     "type": "Text",
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "num"
+      }
     },
     "description": "number of songs plural",
     "context": "plurals"
@@ -44,7 +46,9 @@
   "@single_argument": {
     "type": "Text",
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "text"
+      }
     },
     "description": "Single named argument",
     "context": "placeholders"
@@ -53,8 +57,12 @@
   "@two_arguments": {
     "type": "Text",
     "placeholders": {
-      "first": {},
-      "second": {}
+      "first": {
+        "type": "text"
+      },
+      "second": {
+        "type": "text"
+      }
     },
     "description": "Two named arguments",
     "context": "placeholders"

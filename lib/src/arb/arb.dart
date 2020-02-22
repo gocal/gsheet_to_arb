@@ -79,7 +79,14 @@ class ArbResource {
   Map<String, Object> _formatPlaceholders(
       List<ArbResourcePlaceholder> placeholders) {
     final map = <String, Object>{};
-    placeholders.forEach((placeholder) => {map[placeholder.name] = {}});
+
+    placeholders.forEach((placeholder) {
+      final placeholderArgs = <String, Object>{};
+      if (placeholder.type != null) {
+        placeholderArgs['type'] = placeholder.type;
+      }
+      map[placeholder.name] = placeholderArgs;
+    });
     return map;
   }
 }

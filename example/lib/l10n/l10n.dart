@@ -23,7 +23,7 @@ class L10n {
       Intl.message('Register', name: 'register', desc: 'contains registration');
 
   /// number of songs plural
-  String numberOfSongsAvailable(String count) => Intl.plural(count,
+  String numberOfSongsAvailable(int count) => Intl.plural(count,
       zero: 'No songs found.',
       one: 'One song found.',
       other: '$count song found.',

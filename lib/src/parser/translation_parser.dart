@@ -88,12 +88,13 @@ class TranslationParser {
     var placeholders = <String, ArbResourcePlaceholder>{};
     matches.forEach((Match match) {
       var group = match.group(0);
-      var placeholder = group.substring(1, group.length - 1);
+      var placeholderName = group.substring(1, group.length - 1);
 
-      if (placeholders.containsKey(placeholder)) {
-        throw Exception('Placeholder $placeholder already declared');
+      if (placeholders.containsKey(placeholderName)) {
+        throw Exception('Placeholder $placeholderName already declared');
       }
-      placeholders[placeholder] = (ArbResourcePlaceholder(name: placeholder));
+      placeholders[placeholderName] = (ArbResourcePlaceholder(
+          name: placeholderName, type: 'text')); // TODO extract text
     });
     return placeholders.values.toList();
   }

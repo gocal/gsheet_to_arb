@@ -1,5 +1,4 @@
 import 'package:gsheet_to_arb/src/parser/translation_parser.dart';
-import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'arb/arb_serializer.dart';
 import 'config/plugin_config.dart';

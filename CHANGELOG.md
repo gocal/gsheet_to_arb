@@ -1,3 +1,8 @@
+## 0.1.0
+- Add plurals
+- Fix create-config flag
+- Change configuration structure - moved to pubspec.yaml
+
 ## 0.0.7
 
 - Update dependencies

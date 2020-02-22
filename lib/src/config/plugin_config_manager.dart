@@ -44,8 +44,8 @@ class PluginConfigManager {
       final config = GsheetToArbConfig(
           addContextPrefix: false,
           generateCode: true,
-          outputDirectoryPath: 'intl',
-          arbFilePrefix: 'lib/l10n',
+          outputDirectoryPath: 'lib/l10n',
+          arbFilePrefix: 'intl',
           localizationFileName: 'l10n',
           gsheet: GoogleSheetConfig(
               categoryPrefix: '# ',

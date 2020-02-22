@@ -274,6 +274,5 @@ String toUnicode(int charCode) {
 }
 
 bool _isPrintable(int character) {
-  // TODO
   return true;
 }

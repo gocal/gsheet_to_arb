@@ -20,7 +20,7 @@ dependencies:
   file_utils: ^0.1.1
   logging: ^0.11.3+2
   recase: ^3.0.0
-  quiver: 2.0.5 
+  quiver: 2.0.5
   yaml: ^2.2.0
   petitparser: '>=1.1.3 <3.0.0'
 

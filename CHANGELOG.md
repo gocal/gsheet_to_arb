@@ -1,4 +1,4 @@
-## 0.1.0
+## 0.1.1
 - Add plurals
 - Fix create-config flag
 - Change configuration structure - moved to pubspec.yaml

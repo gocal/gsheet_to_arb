@@ -71,7 +71,10 @@ class ArbToDartGenerator {
       resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
         builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
           args.add(placeholder.name);
-          final argumentType = placeholder.type == 'num' ? 'int' : 'String';
+          final argumentType =
+              placeholder.type == ArbResourcePlaceholder.typeNum
+                  ? 'int'
+                  : 'String'; // TODO
           builder
             ..name = placeholder.name
             ..type = Reference(argumentType);

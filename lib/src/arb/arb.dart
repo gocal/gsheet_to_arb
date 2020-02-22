@@ -92,6 +92,9 @@ class ArbResource {
 }
 
 class ArbResourcePlaceholder {
+  static String typeText = 'text';
+  static String typeNum = 'num';
+
   final String name;
   final String type;
   final String description;

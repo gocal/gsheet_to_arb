@@ -4,8 +4,6 @@
  * BSD-style license that can be found in the LICENSE file.
  */
 
-import 'package:gsheet_to_arb/src/arb/arb_utils.dart';
-
 class ArbDocument {
   String locale;
   DateTime lastModified;
@@ -13,20 +11,20 @@ class ArbDocument {
 
   ArbDocument(this.locale, this.lastModified, this.entries);
 
-  Map<String, Object> toJson() {
-    final _json = <String, Object>{};
+  Map<String, Object> toJson({bool compact = false}) {
+    final json = <String, Object>{};
 
-    _json['_locale'] = locale;
-    _json['@@last_modified'] = lastModified.toIso8601String();
+    json['@@locale'] = locale;
+    json['@@last_modified'] = lastModified.toIso8601String();
 
     entries.forEach((ArbResource resource) {
-      _json[resource.id.text] = resource.value.text;
-      if (resource.hasAttributes) {
-        _json['@@${resource.id.text}'] = resource.attributes;
+      json[resource.key] = resource.value;
+      if (resource.attributes.isNotEmpty && !compact) {
+        json['@${resource.key}'] = resource.attributes;
       }
     });
 
-    return _json;
+    return json;
   }
 
   ArbDocument.fromJson(Map<String, dynamic> _json) {
@@ -34,11 +32,11 @@ class ArbDocument {
     entries = <ArbResource>[];
 
     _json.forEach((key, value) {
-      if ('_locale' == key) {
+      if ('@@locale' == key) {
         locale = value;
       } else if ('@@last_modified' == key) {
         lastModified = DateTime.parse(value);
-      } else if (key.startsWith('@@')) {
+      } else if (key.startsWith('@')) {
         var entry = entriesMap[key.substring(2)];
         entry.attributes.addAll(value);
       } else {
@@ -51,44 +49,85 @@ class ArbDocument {
 }
 
 class ArbResource {
-  final ArbResourceId id;
-  final ArbResourceValue value;
+  final String key;
+  final String value;
   final Map<String, Object> attributes = {};
+  final List<ArbResourcePlaceholder> placeholders;
+  final String description;
+  final String context;
 
-  final bool hasAttributes;
+  ArbResource(String key, String value,
+      {this.description = '', this.context = '', this.placeholders = const []})
+      : key = key,
+        value = value {
+    // Possible values are "text", "image", "css"
+    attributes['type'] = 'Text';
 
-  ArbResource(String id, String value, [this.hasAttributes = true])
-      : id = ArbResourceId(id),
-        value = ArbResourceValue(value) {
-    if (hasAttributes) {
-      attributes['type'] = 'Text';
-      attributes['placeholders'] = <String, Object>{};
+    if (placeholders != null && placeholders.isNotEmpty) {
+      attributes['placeholders'] = _formatPlaceholders(placeholders);
+    }
+
+    if (description != null && description.isNotEmpty) {
+      attributes['description'] = description;
+    }
+
+    if (context != null && context.isNotEmpty) {
+      attributes['context'] = context;
     }
   }
-}
 
-class ArbResourceId {
-  final String text;
+  Map<String, Object> _formatPlaceholders(
+      List<ArbResourcePlaceholder> placeholders) {
+    final map = <String, Object>{};
 
-  ArbResourceId(this.text);
-}
-
-class ArbResourceValue {
-  final String text;
-  final placeholders = <ArbResourcePlaceholder>[];
-
-  bool get hasPlaceholders => placeholders.isNotEmpty;
-
-  ArbResourceValue(this.text) {
-    var placeholders = findPlaceholders(text);
-    if (placeholders.isNotEmpty) {
-      this.placeholders.addAll(placeholders);
-    }
+    placeholders.forEach((placeholder) {
+      final placeholderArgs = <String, Object>{};
+      if (placeholder.type != null) {
+        placeholderArgs['type'] = placeholder.type;
+      }
+      map[placeholder.name] = placeholderArgs;
+    });
+    return map;
   }
 }
 
 class ArbResourcePlaceholder {
-  final String name;
+  static String typeText = 'text';
+  static String typeNum = 'num';
 
-  ArbResourcePlaceholder(this.name);
+  final String name;
+  final String type;
+  final String description;
+  final String example;
+
+  ArbResourcePlaceholder({
+    this.name,
+    this.type,
+    this.description,
+    this.example,
+  });
+}
+
+class ArbBundle {
+  final List<ArbDocument> documents;
+
+  ArbBundle(this.documents);
+}
+
+class ArbDocumentBuilder {
+  String locale;
+  DateTime lastModified;
+  List<ArbResource> entries = [];
+
+  ArbDocumentBuilder(this.locale, this.lastModified);
+
+  ArbDocument build() {
+    final bundle = ArbDocument(locale, lastModified, entries);
+    return bundle;
+  }
+
+  ArbDocumentBuilder add(ArbResource entry) {
+    entries.add(entry);
+    return this;
+  }
 }

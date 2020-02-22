@@ -21,17 +21,11 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
     pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
     ```
 
-3. Optionally generate Dart classes from the ARB files using `gsheet_to_arb:arb_to_dart` program.
-
-    ```
-    pub run gsheet_to_arb:arb_to_dart --config gsheet_to_arb.yaml
-    ```
-
 ## Setup
 
 ### 1. Copy Google Sheet template
 
-1. Open sample Google spreadsheet template available at:
+1. Copy sample Google spreadsheet template available at:
     - https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing
 
 2. Copy sample to your Drive account 

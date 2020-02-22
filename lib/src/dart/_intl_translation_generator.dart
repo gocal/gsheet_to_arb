@@ -14,8 +14,8 @@ import 'package:intl_translation/src/icu_parser.dart';
 import 'package:intl_translation/src/intl_message.dart';
 import 'package:path/path.dart' as path;
 
-class IntlTranslationHelper {
-  void aaa(String outputDirectoryPath, String localizationFileName) {
+class IntlTranslationGenerator {
+  void generateLookupTables(String outputDirectoryPath, String localizationFileName) {
     var extraction = MessageExtraction();
     var generation = MessageGeneration();
 

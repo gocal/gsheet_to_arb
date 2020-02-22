@@ -15,7 +15,7 @@ There two possible options to provide such a access:
 ## Client Authentication
 
 1. Open Google Cloud Platform console - https://console.cloud.google.com/
-2. Create a new project or you the existing one
+2. Create a new project or use the existing one
 3. From the side menu select `APIs & Services -> Dashboard`
 4. Select `ENABLE APIS AND SERVICES` button and make sure `Google Sheets API` is enabled
 5. Open `Credentials` tab on the left

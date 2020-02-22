@@ -4,6 +4,20 @@ description: Example of how to use ghseet_to_arb plugin
 environment:
   sdk: '>=2.0.0 <3.0.0'
 
+dependencies:
+  intl:
+  intl_translation: ^0.17.9
+
 dev_dependencies:
   gsheet_to_arb:
     path: ../
+    
+gsheet_to_arb: 
+  arb_file_prefix: 'intl'
+  localization_file_name: 'l10n'
+  output_directory: 'lib/l10n'  
+  gsheet: 
+    auth_file: './gsheet_to_arb.yaml'
+    category_prefix: "# "
+    document_id: '1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU'
+    sheet_id: '0'

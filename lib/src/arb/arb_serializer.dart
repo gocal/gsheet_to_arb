@@ -7,14 +7,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../utils/log.dart';
 import 'arb.dart';
-import 'arb_generator.dart';
 
 class ArbSerializer {
-  String serialize(ArbDocument document) {
+  String serialize(ArbDocument document, {bool compact = false}) {
     var encoder = JsonEncoder.withIndent('  ');
-    var arbContent = encoder.convert(document.toJson());
+    var arbContent = encoder.convert(document.toJson(compact: compact));
     return arbContent;
   }
 
@@ -25,25 +23,26 @@ class ArbSerializer {
   }
 
   void saveArbBundle(ArbBundle bundle, String directory) {
-    Log.i('save arb files in ${directory}');
     var targetDir = Directory(directory);
     targetDir.createSync(recursive: true);
-    bundle.documents
-        .forEach((document) => _saveArbDocument(document, targetDir));
-  }
 
-  void _saveArbDocument(ArbDocument document, Directory directory) {
-    var filePath = '${directory.path}/intl_${document.locale}.arb';
-    Log.i('  => $filePath');
-    var file = File(filePath);
-    file.createSync();
-    var arbContent = serialize(document);
-    file.writeAsString(arbContent);
+    bundle.documents.forEach((document) => _saveArbDocument(document, targetDir,
+        isMain: document == bundle.documents.first));
   }
 
   ArbDocument loadArbDocument(String filePath) {
     var file = File(filePath);
     var content = file.readAsStringSync();
     return deserialize(content);
+  }
+
+  void _saveArbDocument(ArbDocument document, Directory directory,
+      {bool isMain = false}) {
+    final suffix = isMain ? 'all' : document.locale;
+    var filePath = '${directory.path}/intl_${suffix}.arb';
+    var file = File(filePath);
+    file.createSync();
+    var arbContent = serialize(document, compact: !isMain);
+    file.writeAsStringSync(arbContent);
   }
 }

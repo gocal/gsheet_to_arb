@@ -13,7 +13,3 @@ doc/api/
 # IntelliJ IDEA
 .idea/
 .iml
-
-# GSheet to ARB Configuration
-.gsheet_to_arb.yaml
-gsheet_to_arb.yaml

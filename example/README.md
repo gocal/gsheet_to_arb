@@ -3,11 +3,16 @@
 Import ARB files from Google Sheets:
 
 ```
-pub run gsheet_to_arb:import --config gsheet_to_arb.yaml
+pub run gsheet_to_arb:import
 ```
 
-Generate Messages
 
+Generate ARB
 ```
-pub run gsheet_to_arb:arb_to_dart --config gsheet_to_arb.yaml
+pub run intl_translation:extract_to_arb --output-dir=lib/l10n/ lib/main.dart
+```
+
+Generate Code
+```
+pub run intl_translation:generate_from_arb lib/main.dart lib/l10n/intl_messages.arb
 ```

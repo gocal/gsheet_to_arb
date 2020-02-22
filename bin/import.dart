@@ -54,7 +54,7 @@ void main(List<String> args) async {
   _checkAuthConfig(config.gsheet);
 
   final gsheetToArb = GSheetToArb(config: config);
-  gsheetToArb.build(generateDartCode: config.generateCode != false);
+  gsheetToArb.build();
 }
 
 void _checkAuthConfig(GoogleSheetConfig config) {

@@ -16,10 +16,15 @@ import 'package:intl_translation/src/intl_message.dart';
 import 'package:petitparser/petitparser.dart';
 
 class ArbToDartGenerator {
+  final bool addContextPrefix;
+
   final intlTranslation = IntlTranslationGenerator();
 
+  ArbToDartGenerator({this.addContextPrefix = false});
+
   void generateDartClasses(
-      ArbBundle bundle, String outputDirectoryPath, String className) {
+      ArbBundle bundle, String outputDirectoryPath, String className,
+      {bool addContextPrefix}) {
     _buildIntlListFile(bundle.documents.first, outputDirectoryPath, className);
 
     intlTranslation.generateLookupTables(outputDirectoryPath, className);
@@ -52,65 +57,64 @@ class ArbToDartGenerator {
   }
 
   Method _getResourceMethod(ArbResource resource) {
-    if (resource.placeholders.isNotEmpty) {
-      return _getResourceFullMethod(resource);
-    } else {
-      return _getResourceGetter(resource);
-    }
-  }
-
-  Method _getResourceFullMethod(ArbResource resource) {
     return Method((MethodBuilder builder) {
       final key = resource.key;
-      final value = _fixSpecialCharacters(resource.value);
       final description =
           _fixSpecialCharacters(resource.attributes['description'] ??= key);
 
-      var args = <String>[];
-      resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
-        builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
-          args.add(placeholder.name);
-          final argumentType =
-              placeholder.type == ArbResourcePlaceholder.typeNum
-                  ? 'int'
-                  : 'String';
-          builder
-            ..name = placeholder.name
-            ..type = Reference(argumentType);
-        }));
-      });
+      final methodName =
+          (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') +
+              ReCase(key).camelCase;
 
       builder
-        ..name = _getMethodName(key)
+        ..name = methodName
         ..returns = const Reference('String')
         ..lambda = true
-        ..docs.add('\t/// ${description}')
-        ..body = Code(
-            _getCode(value, key: key, args: args, description: description));
-    });
-  }
-
-// """Intl.message('${value}', name: '$key', args: [${args.join(", ")}], desc: '${description}')"""
-
-  Method _getResourceGetter(ArbResource resource) {
-    return Method((MethodBuilder builder) {
-      final key = resource.key;
-      final value = _fixSpecialCharacters(resource.value);
-      final description =
-          _fixSpecialCharacters(resource.attributes['description'] ??= key);
-
-      builder
-        ..name = _getMethodName(key)
-        ..type = MethodType.getter
-        ..returns = const Reference('String')
-        ..lambda = true
-        ..body = Code(
-            '''Intl.message('${value}', name: '${key}', desc: '${description}')''')
         ..docs.add('/// ${description.replaceAll("\\n", "\n/// ")}');
+
+      if (resource.placeholders.isNotEmpty) {
+        return _getResourceFullMethod(resource, builder);
+      } else {
+        return _getResourceGetter(resource, builder);
+      }
     });
   }
 
-  String _getMethodName(String key) => ReCase(key).camelCase;
+  void _getResourceFullMethod(ArbResource resource, MethodBuilder builder) {
+    final key = resource.key;
+    final value = _fixSpecialCharacters(resource.value);
+    final description =
+        _fixSpecialCharacters(resource.attributes['description'] ??= key);
+
+    var args = <String>[];
+    resource.placeholders.forEach((ArbResourcePlaceholder placeholder) {
+      builder.requiredParameters.add(Parameter((ParameterBuilder builder) {
+        args.add(placeholder.name);
+        final argumentType = placeholder.type == ArbResourcePlaceholder.typeNum
+            ? 'int'
+            : 'String';
+        builder
+          ..name = placeholder.name
+          ..type = Reference(argumentType);
+      }));
+    });
+
+    builder
+      ..body =
+          Code(_getCode(value, key: key, args: args, description: description));
+  }
+
+  void _getResourceGetter(ArbResource resource, MethodBuilder builder) {
+    final key = resource.key;
+    final value = _fixSpecialCharacters(resource.value);
+    final description =
+        _fixSpecialCharacters(resource.attributes['description'] ??= key);
+
+    builder
+      ..type = MethodType.getter
+      ..body = Code(
+          '''Intl.message('${value}', name: '${key}', desc: '${description}')''');
+  }
 
   ///
   /// intl_translation

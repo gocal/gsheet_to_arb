@@ -12,26 +12,27 @@ class GSheetToArb {
 
   GSheetToArb({this.config});
 
-  void build({bool generateDartCode = false}) async {
+  void build() async {
     final gsheet = config.gsheet;
     final auth = gsheet.auth;
     final documentId = gsheet.documentId;
 
-    //
+    // import TranslationsDocument
     final importer =
         GSheetImporter(auth: auth, categoryPrefix: gsheet.categoryPrefix);
     final document = await importer.import(documentId);
 
-    // Parse ARB
+    // Parse TranslationsDocument to ArbBundle
     final sheetParser = TranslationParser();
     final arbBundle = await sheetParser.parseDocument(document);
 
-    // Save ARB
+    // Save ArbBundle
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);
 
-    // Generate Code
-    if (generateDartCode) {
-      final generator = ArbToDartGenerator();
+    // Generate Code from ArbBundle
+    if (config.generateCode) {
+      final generator =
+          ArbToDartGenerator(addContextPrefix: config.addContextPrefix);
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);
     }

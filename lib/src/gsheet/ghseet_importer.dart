@@ -54,8 +54,6 @@ class GSheetImporter {
   }
 
   Future<TranslationsDocument> _importFrom(Spreadsheet spreadsheet) async {
-    Log.i('Importing from: ${spreadsheet.spreadsheetUrl}');
-
     final sheet = spreadsheet.sheets[0];
     final rows = sheet.data[0].rowData;
     final header = rows[0];
@@ -113,9 +111,6 @@ class GSheetImporter {
         lastModified: DateTime.now(),
         languages: languages, //
         items: items);
-
-    Log.i('Imported document: ${document.describe()}');
-
     return document;
   }
 }

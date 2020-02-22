@@ -14,8 +14,6 @@ class GSheetToArb {
   GSheetToArb({this.config});
 
   void build({bool generateDartCode = false}) async {
-    Log.i('importing gsheet from arb');
-
     final gsheet = config.gsheet;
     final auth = gsheet.auth;
     final documentId = gsheet.documentId;

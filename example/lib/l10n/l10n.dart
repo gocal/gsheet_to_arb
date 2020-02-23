@@ -2,6 +2,30 @@ import 'package:intl/intl.dart';
 
 //ignore_for_file: type_annotate_public_apis, non_constant_identifier_names
 class L10n {
+  /// number of songs plural
+  String numberOfSongsAvailable(int count) => Intl.plural(count,
+      zero: 'No songs found.',
+      one: 'One song found.',
+      two: '$count songs found.',
+      few: '$count songs found.',
+      other: '$count song found.',
+      many: '$count songs found.',
+      name: 'numberOfSongsAvailable',
+      args: [count],
+      desc: 'number of songs plural');
+
+  /// curreny dolars
+  String amountDollars(int count) => Intl.plural(count,
+      one: '$count Canadian dollar',
+      other: '$count Canadian dollars',
+      name: 'amountDollars',
+      args: [count],
+      desc: 'curreny dolars');
+
+  /// test special characters
+  String get specialCharacters => Intl.message('special: !@#\$%^&*()',
+      name: 'specialCharacters', desc: 'test special characters');
+
   /// contains title
   String get title =>
       Intl.message('Title', name: 'title', desc: 'contains title');
@@ -21,26 +45,6 @@ class L10n {
   /// contains registration
   String get register =>
       Intl.message('Register', name: 'register', desc: 'contains registration');
-
-  /// number of songs plural
-  String numberOfSongsAvailable(int count) => Intl.plural(count,
-      zero: 'No songs found.',
-      one: 'One song found.',
-      two: ' ',
-      other: '$count song found.',
-      name: 'numberOfSongsAvailable',
-      args: [count],
-      desc: 'number of songs plural');
-
-  /// curreny dolars
-  String get amountDollars => Intl.message(
-      '{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}',
-      name: 'amountDollars',
-      desc: 'curreny dolars');
-
-  /// test special characters
-  String get specialCharacters => Intl.message('special: !@#\$%^&*()',
-      name: 'specialCharacters', desc: 'test special characters');
 
   /// Single named argument
   String singleArgument(String name) => Intl.message('Single $name argument',

@@ -1,6 +1,34 @@
 {
   "@@locale": "pl",
-  "@@last_modified": "2020-02-23T12:40:25.441113",
+  "@@last_modified": "2020-02-23T13:04:00.794582",
+  "number_of_songs_available": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} =2 {Znaleziono {count} piosenki.} few {Znaleziono {count} piosenek.} many {Znaleziono {count} piosenek.} other {Znaleziono {count} piosenek.}}",
+  "@number_of_songs_available": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amount_dollars": "{count, plural, =1 {{count} dolar kanadyjski} other {{count} dolarów kanadyjskich}}",
+  "@amount_dollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "curreny dolars",
+    "context": "plurals"
+  },
+  "special_characters": "special: ąęśćż",
+  "@special_characters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
+  },
   "title": "Tytuł",
   "@title": {
     "type": "Text",
@@ -30,29 +58,6 @@
     "type": "Text",
     "description": "contains registration",
     "context": "signup"
-  },
-  "number_of_songs_available": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} few {Znaleziono {count} piosenki.} other {Znaleziono {count} piosenek.}}",
-  "@number_of_songs_available": {
-    "type": "Text",
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    },
-    "description": "number of songs plural",
-    "context": "plurals"
-  },
-  "amount_dollars": "{count, plural, =1 {{count} dolar kanadyjski} other {{count} dolarów kanadyjskich}}",
-  "@amount_dollars": {
-    "type": "Text",
-    "description": "curreny dolars",
-    "context": "plurals"
-  },
-  "special_characters": "special: ąęśćż",
-  "@special_characters": {
-    "type": "Text",
-    "description": "test special characters",
-    "context": "plurals"
   },
   "single_argument": "Single {name} argument",
   "@single_argument": {

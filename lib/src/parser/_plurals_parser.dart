@@ -83,6 +83,9 @@ class PluralsParser {
       _key = caseKey;
       _resource = resource;
       _placeholders.clear();
+      _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
+          name: _countPlaceholder, description: 'plural count', type: 'num');
+      addPlaceholders(resource.placeholders);
       _values.clear();
       _values[pluralCase] = resource.value;
 
@@ -94,7 +97,6 @@ class PluralsParser {
     if (_values.isNotEmpty) {
       return _getCompleted();
     }
-
     return Skip();
   }
 
@@ -116,7 +118,7 @@ class PluralsParser {
   Completed _getCompleted({bool consumed = false}) {
     return Completed(
         ArbResource(_key, PluralsFormatter.format(Map.from(_values)),
-            placeholders: _placeholders.values.toList(),
+            placeholders: List.from(_placeholders.values),
             context: _resource.context,
             description: _resource.description),
         consumed: consumed);

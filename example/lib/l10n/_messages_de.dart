@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(name) => "Einzel ${name} Argument";
 
-  static m3(first, second) => "Argument {} und {erste zweiter}";
+  static m3(first, second) => "Dwa argumenty: ${first} i ${second}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {

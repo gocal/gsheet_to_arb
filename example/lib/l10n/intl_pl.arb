@@ -1,34 +1,6 @@
 {
   "@@locale": "pl",
-  "@@last_modified": "2020-02-23T13:52:21.487542",
-  "numberOfSongsAvailable": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} =2 {Znaleziono {count} piosenki.} few {Znaleziono {count} piosenek.} many {Znaleziono {count} piosenek.} other {Znaleziono {count} piosenek.}}",
-  "@numberOfSongsAvailable": {
-    "type": "Text",
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    },
-    "description": "number of songs plural",
-    "context": "plurals"
-  },
-  "amountDollars": "{count, plural, =1 {{count} dolar kanadyjski} other {{count} dolarów kanadyjskich}}",
-  "@amountDollars": {
-    "type": "Text",
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    },
-    "description": "currency dolars",
-    "context": "plurals"
-  },
-  "specialCharacters": "special: ąęśćż",
-  "@specialCharacters": {
-    "type": "Text",
-    "description": "test special characters",
-    "context": "plurals"
-  },
+  "@@last_modified": "2020-02-23T14:01:52.379173",
   "title": "Tytuł",
   "@title": {
     "type": "Text",
@@ -58,6 +30,34 @@
     "type": "Text",
     "description": "contains registration",
     "context": "signup"
+  },
+  "numberOfSongsAvailable": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} =2 {Znaleziono {count} piosenki.} few {Znaleziono {count} piosenek.} many {Znaleziono {count} piosenek.} other {Znaleziono {count} piosenek.}}",
+  "@numberOfSongsAvailable": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amountDollars": "{count, plural, =1 {{count} dolar kanadyjski} other {{count} dolarów kanadyjskich}}",
+  "@amountDollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "currency dolars",
+    "context": "plurals"
+  },
+  "specialCharacters": "special: ąęśćż",
+  "@specialCharacters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
   },
   "singleArgument": "Pojedynczy argument  {name} ",
   "@singleArgument": {

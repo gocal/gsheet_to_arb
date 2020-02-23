@@ -1,34 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-23T13:52:21.487542",
-  "numberOfSongsAvailable": "{count, plural, =0 {No songs found.} =1 {One song found.} =2 {{count} songs found.} few {{count} songs found.} many {{count} songs found.} other {{count} song found.}}",
-  "@numberOfSongsAvailable": {
-    "type": "Text",
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    },
-    "description": "number of songs plural",
-    "context": "plurals"
-  },
-  "amountDollars": "{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}",
-  "@amountDollars": {
-    "type": "Text",
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    },
-    "description": "currency dolars",
-    "context": "plurals"
-  },
-  "specialCharacters": "special: !@#$%^&*()",
-  "@specialCharacters": {
-    "type": "Text",
-    "description": "test special characters",
-    "context": "plurals"
-  },
+  "@@last_modified": "2020-02-23T14:01:52.379173",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -58,6 +30,34 @@
     "type": "Text",
     "description": "contains registration",
     "context": "signup"
+  },
+  "numberOfSongsAvailable": "{count, plural, =0 {No songs found.} =1 {One song found.} =2 {{count} songs found.} few {{count} songs found.} many {{count} songs found.} other {{count} song found.}}",
+  "@numberOfSongsAvailable": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amountDollars": "{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}",
+  "@amountDollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "currency dolars",
+    "context": "plurals"
+  },
+  "specialCharacters": "special: !@#$%^&*()",
+  "@specialCharacters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
   },
   "singleArgument": "Single {name} argument",
   "@singleArgument": {

@@ -9,8 +9,8 @@ dependencies:
   intl_translation: ^0.17.9
 
 dev_dependencies:
-  gsheet_to_arb:
-    path: ../
+  gsheet_to_arb: ^0.1.4
+#    path: ../
   test: ^1.5.3
   mockito: ^4.0.0  
 

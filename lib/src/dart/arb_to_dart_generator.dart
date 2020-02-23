@@ -17,11 +17,9 @@ import 'package:intl_translation/src/intl_message.dart';
 import 'package:petitparser/petitparser.dart';
 
 class ArbToDartGenerator {
-  final bool addContextPrefix;
-
   final intlTranslation = IntlTranslationGenerator();
 
-  ArbToDartGenerator({this.addContextPrefix = false});
+  ArbToDartGenerator();
 
   void generateDartClasses(
       ArbBundle bundle, String outputDirectoryPath, String className,
@@ -68,9 +66,8 @@ class ArbToDartGenerator {
           _fixSpecialCharacters(resource.attributes['description'] ??= '')
               .replaceAll('\\n', '\n/// ');
 
-      final methodName =
-          (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') +
-              ReCase(key).camelCase;
+      final methodName = key;
+      // (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') + ReCase(key).camelCase;
 
       builder
         ..name = methodName
@@ -133,7 +130,6 @@ class ArbToDartGenerator {
     if (message is LiteralString && message.string.isEmpty) {
       message = _plainParser.parse(value).value;
     }
-
     if (message is Plural) {
       final pluralBuilder = StringBuffer();
       pluralBuilder.write('Intl.plural(count,');
@@ -151,6 +147,9 @@ class ArbToDartGenerator {
       addIfNotNull('other', message.other);
       addIfNotNull('many', message.many);
 
+      pluralBuilder.write(
+        'name: \'${key}\',',
+      );
       pluralBuilder.write(
         'args: [${args.join(", ")}],',
       );

@@ -1,3 +1,6 @@
+## 0.1.4
+- Fix problem with plurals generation
+
 ## 0.1.3
 - Documentation update
 

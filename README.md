@@ -46,7 +46,7 @@
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.1.3
+      gsheet_to_arb: ^0.1.4
     ```
 
 2. Updated dependencies
@@ -103,8 +103,6 @@
 - the second column contains item description
 - all the following column contains traslation files
 - make sure spreadsheet contains only valid colums - i.e. with langauge key value
-- the first langauge colum is converted to the `*_all.arb` file, and it contains all the arb details e.g. placeholders, context etc. the remaing arb files only have simple "key":"value" entries"
-
 
 ### Values
 - Placeholder 

@@ -18,6 +18,7 @@ gsheet_to_arb:
   arb_file_prefix: 'intl'
   localization_file_name: 'l10n'
   output_directory: 'lib/l10n'
+  generate_code: true
   add_context_prefix: false
   gsheet: 
     auth_file: './gsheet_to_arb.yaml'

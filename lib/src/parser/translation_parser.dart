@@ -9,17 +9,22 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
 
 import 'package:quiver/iterables.dart' as iterables;
+import 'package:recase/recase.dart';
 
 import '_plurals_parser.dart';
 
 class TranslationParser {
+  final bool addContextPrefix;
+
+  TranslationParser({this.addContextPrefix});
+
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
     final parsers = <PluralsParser>[];
 
     for (var langauge in document.languages) {
       final builder = ArbDocumentBuilder(langauge, document.lastModified);
-      final parser = PluralsParser();
+      final parser = PluralsParser(addContextPrefix);
       builders.add(builder);
       parsers.add(parser);
     }
@@ -53,7 +58,12 @@ class TranslationParser {
           }
         }
 
-        builder.add(ArbResource(item.key, itemValue,
+        final key = addContextPrefix && item.category.isNotEmpty
+            ? ReCase(item.category + '_' + item.key).camelCase
+            : ReCase(item.key).camelCase;
+
+        // add resource
+        builder.add(ArbResource(key, itemValue,
             context: item.category,
             description: item.description,
             placeholders: itemPlaceholders));

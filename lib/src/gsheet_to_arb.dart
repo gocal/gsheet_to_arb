@@ -27,7 +27,7 @@ class GSheetToArb {
     final document = await importer.import(documentId);
 
     // Parse TranslationsDocument to ArbBundle
-    final sheetParser = TranslationParser();
+    final sheetParser = TranslationParser(addContextPrefix: config.addContextPrefix);
     final arbBundle = await sheetParser.parseDocument(document);
 
     // Save ArbBundle
@@ -36,7 +36,7 @@ class GSheetToArb {
     // Generate Code from ArbBundle
     if (config.generateCode) {
       final generator =
-          ArbToDartGenerator(addContextPrefix: config.addContextPrefix);
+          ArbToDartGenerator();
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);
     }

@@ -12,7 +12,7 @@ class L10n {
 
   /// contains app name
   String get appName => Intl.message('Sample Application',
-      name: 'app_name', desc: 'contains app name');
+      name: 'appName', desc: 'contains app name');
 
   /// contains login
   String get login =>
@@ -26,18 +26,34 @@ class L10n {
   String numberOfSongsAvailable(int count) => Intl.plural(count,
       zero: 'No songs found.',
       one: 'One song found.',
+      two: '$count songs found.',
+      few: '$count songs found.',
       other: '$count song found.',
+      many: '$count songs found.',
+      name: 'numberOfSongsAvailable',
       args: [count],
       desc: 'number of songs plural');
 
+  /// currency dolars
+  String amountDollars(int count) => Intl.plural(count,
+      one: '$count Canadian dollar',
+      other: '$count Canadian dollars',
+      name: 'amountDollars',
+      args: [count],
+      desc: 'currency dolars');
+
+  /// test special characters
+  String get specialCharacters => Intl.message('special: !@#\$%^&*()',
+      name: 'specialCharacters', desc: 'test special characters');
+
   /// Single named argument
   String singleArgument(String name) => Intl.message('Single $name argument',
-      name: 'single_argument', args: [name], desc: 'Single named argument');
+      name: 'singleArgument', args: [name], desc: 'Single named argument');
 
   /// Two named arguments
   String twoArguments(String first, String second) =>
       Intl.message('Argument $first and $second',
-          name: 'two_arguments',
+          name: 'twoArguments',
           args: [first, second],
           desc: 'Two named arguments');
 
@@ -47,5 +63,5 @@ class L10n {
   /// new
   /// line
   String get longText => Intl.message('line a\nline b\nline c\nlorem\nipsum',
-      name: 'long text', desc: 'long\ndescription\n\nnew\nline');
+      name: 'longText', desc: 'long\ndescription\n\nnew\nline');
 }

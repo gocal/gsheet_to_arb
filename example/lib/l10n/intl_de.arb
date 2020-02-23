@@ -1,13 +1,93 @@
 {
   "@@locale": "de",
-  "@@last_modified": "2020-02-23T11:04:16.665467",
+  "@@last_modified": "2020-02-23T14:01:52.379173",
   "title": "Titel",
+  "@title": {
+    "type": "Text",
+    "description": "contains title",
+    "context": "common"
+  },
   "message": "Nachricht",
-  "app_name": "Anwendung",
+  "@message": {
+    "type": "Text",
+    "description": "contains message",
+    "context": "common"
+  },
+  "appName": "Anwendung",
+  "@appName": {
+    "type": "Text",
+    "description": "contains app name",
+    "context": "common"
+  },
   "login": "Einloggen",
+  "@login": {
+    "type": "Text",
+    "description": "contains login",
+    "context": "login"
+  },
   "register": "Registrieren",
-  "number_of_songs_available": "{count, plural, other {Lorem {count} ipsum}}",
-  "single_argument": "Single {name} argument",
-  "two_arguments": "Argument {first} and {second}",
-  "long text": "line a\nline b\nline c\nlorem\nipsum"
+  "@register": {
+    "type": "Text",
+    "description": "contains registration",
+    "context": "signup"
+  },
+  "numberOfSongsAvailable": "{count, plural, =0 {Keine Lieder gefunden.} =1 {Ein Lied gefunden.} =2 {{count} Songs gefunden.} few {{count} Songs gefunden.} many {{count} Songs gefunden.} other {{count} Lied gefunden.}}",
+  "@numberOfSongsAvailable": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amountDollars": "{count, plural, =1 {{count} kanadische Dollar} other {{count} kanadischen Dollar}}",
+  "@amountDollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "currency dolars",
+    "context": "plurals"
+  },
+  "specialCharacters": "special: äöüß",
+  "@specialCharacters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
+  },
+  "singleArgument": "Einzel {Name} Argument",
+  "@singleArgument": {
+    "type": "Text",
+    "placeholders": {
+      "Name": {
+        "type": "text"
+      }
+    },
+    "description": "Single named argument",
+    "context": "placeholders"
+  },
+  "twoArguments": "Dwa argumenty: {first} i {second}",
+  "@twoArguments": {
+    "type": "Text",
+    "placeholders": {
+      "first": {
+        "type": "text"
+      },
+      "second": {
+        "type": "text"
+      }
+    },
+    "description": "Two named arguments",
+    "context": "placeholders"
+  },
+  "longText": "Linie ein\nLinie b\nLinie c\nlorem\nipsum",
+  "@longText": {
+    "type": "Text",
+    "description": "long\ndescription\n\nnew\nline",
+    "context": "multiline"
+  }
 }

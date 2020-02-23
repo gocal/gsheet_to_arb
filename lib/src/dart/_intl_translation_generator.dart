@@ -15,10 +15,12 @@ import 'package:intl_translation/src/intl_message.dart';
 import 'package:path/path.dart' as path;
 
 class IntlTranslationGenerator {
-  void generateLookupTables(String outputDirectoryPath, String localizationFileName) {
+  void generateLookupTables(
+      String outputDirectoryPath, String localizationFileName) {
     var extraction = MessageExtraction();
     var generation = MessageGeneration();
 
+    // generation.codegenMode = 'release';
     generation.generatedFilePrefix = '_';
 
     var dartFiles = [

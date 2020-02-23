@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-23T11:04:16.665467",
+  "@@last_modified": "2020-02-23T14:01:52.379173",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -13,8 +13,8 @@
     "description": "contains message",
     "context": "common"
   },
-  "app_name": "Sample Application",
-  "@app_name": {
+  "appName": "Sample Application",
+  "@appName": {
     "type": "Text",
     "description": "contains app name",
     "context": "common"
@@ -31,8 +31,8 @@
     "description": "contains registration",
     "context": "signup"
   },
-  "number_of_songs_available": "{count, plural, =0 {No songs found.} =1 {One song found.} other {{count} song found.}}",
-  "@number_of_songs_available": {
+  "numberOfSongsAvailable": "{count, plural, =0 {No songs found.} =1 {One song found.} =2 {{count} songs found.} few {{count} songs found.} many {{count} songs found.} other {{count} song found.}}",
+  "@numberOfSongsAvailable": {
     "type": "Text",
     "placeholders": {
       "count": {
@@ -42,8 +42,25 @@
     "description": "number of songs plural",
     "context": "plurals"
   },
-  "single_argument": "Single {name} argument",
-  "@single_argument": {
+  "amountDollars": "{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}",
+  "@amountDollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "currency dolars",
+    "context": "plurals"
+  },
+  "specialCharacters": "special: !@#$%^&*()",
+  "@specialCharacters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
+  },
+  "singleArgument": "Single {name} argument",
+  "@singleArgument": {
     "type": "Text",
     "placeholders": {
       "name": {
@@ -53,8 +70,8 @@
     "description": "Single named argument",
     "context": "placeholders"
   },
-  "two_arguments": "Argument {first} and {second}",
-  "@two_arguments": {
+  "twoArguments": "Argument {first} and {second}",
+  "@twoArguments": {
     "type": "Text",
     "placeholders": {
       "first": {
@@ -67,8 +84,8 @@
     "description": "Two named arguments",
     "context": "placeholders"
   },
-  "long text": "line a\nline b\nline c\nlorem\nipsum",
-  "@long text": {
+  "longText": "line a\nline b\nline c\nlorem\nipsum",
+  "@longText": {
     "type": "Text",
     "description": "long\ndescription\n\nnew\nline",
     "context": "multiline"

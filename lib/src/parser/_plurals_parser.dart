@@ -1,4 +1,5 @@
 import 'package:gsheet_to_arb/src/arb/arb.dart';
+import 'package:recase/recase.dart';
 
 ///
 /// Plurals
@@ -19,6 +20,8 @@ class Completed extends PluralsStatus {
 }
 
 class PluralsParser {
+  final bool addContextPrefix;
+
   final _pluralSeparator = '=';
 
   final _pluralKeywords = {
@@ -34,6 +37,8 @@ class PluralsParser {
   ArbResource _resource;
   final _placeholders = <String, ArbResourcePlaceholder>{};
   final _values = <PluralCase, String>{};
+
+  PluralsParser(this.addContextPrefix);
 
   PluralsStatus consume(ArbResource resource) {
     final pluralCase = _getCase(resource.key);
@@ -83,6 +88,9 @@ class PluralsParser {
       _key = caseKey;
       _resource = resource;
       _placeholders.clear();
+      _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
+          name: _countPlaceholder, description: 'plural count', type: 'num');
+      addPlaceholders(resource.placeholders);
       _values.clear();
       _values[pluralCase] = resource.value;
 
@@ -94,7 +102,6 @@ class PluralsParser {
     if (_values.isNotEmpty) {
       return _getCompleted();
     }
-
     return Skip();
   }
 
@@ -114,9 +121,13 @@ class PluralsParser {
   }
 
   Completed _getCompleted({bool consumed = false}) {
+    final formattedKey = addContextPrefix && _resource.context.isNotEmpty
+        ? ReCase(_resource.context + '_' + _key).camelCase
+        : ReCase(_key).camelCase;
+
     return Completed(
-        ArbResource(_key, PluralsFormatter.format(Map.from(_values)),
-            placeholders: _placeholders.values.toList(),
+        ArbResource(formattedKey, PluralsFormatter.format(Map.from(_values)),
+            placeholders: List.from(_placeholders.values),
             context: _resource.context,
             description: _resource.description),
         consumed: consumed);

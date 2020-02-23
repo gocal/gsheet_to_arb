@@ -1,10 +1,10 @@
 import 'l10n/_messages_all.dart';
 import 'l10n/l10n.dart';
 
-void main() async {
+void main() {
   print('MAIN');
 
-  await initializeMessages('de');
+  initializeMessages('de');
 
   final l10n = L10n();
 

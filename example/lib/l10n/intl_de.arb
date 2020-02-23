@@ -1,7 +1,7 @@
 {
-  "@@locale": "en",
+  "@@locale": "de",
   "@@last_modified": "2020-02-23T13:52:21.487542",
-  "numberOfSongsAvailable": "{count, plural, =0 {No songs found.} =1 {One song found.} =2 {{count} songs found.} few {{count} songs found.} many {{count} songs found.} other {{count} song found.}}",
+  "numberOfSongsAvailable": "{count, plural, =0 {Keine Lieder gefunden.} =1 {Ein Lied gefunden.} =2 {{Count} Songs gefunden.} few {{Count} Songs gefunden.} many {{Count} Songs gefunden.} other {{Count} Lied gefunden.}}",
   "@numberOfSongsAvailable": {
     "type": "Text",
     "placeholders": {
@@ -12,79 +12,79 @@
     "description": "number of songs plural",
     "context": "plurals"
   },
-  "amountDollars": "{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}",
+  "amountDollars": "{count, plural, =1 {{Count} kanadische Dollar} other {{Count} kanadischen Dollar}}",
   "@amountDollars": {
     "type": "Text",
     "placeholders": {
       "count": {
         "type": "num"
+      },
+      "Count": {
+        "type": "text"
       }
     },
     "description": "currency dolars",
     "context": "plurals"
   },
-  "specialCharacters": "special: !@#$%^&*()",
+  "specialCharacters": "special: äöüß",
   "@specialCharacters": {
     "type": "Text",
     "description": "test special characters",
     "context": "plurals"
   },
-  "title": "Title",
+  "title": "Titel",
   "@title": {
     "type": "Text",
     "description": "contains title",
     "context": "common"
   },
-  "message": "Message",
+  "message": "Nachricht",
   "@message": {
     "type": "Text",
     "description": "contains message",
     "context": "common"
   },
-  "appName": "Sample Application",
+  "appName": "Anwendung",
   "@appName": {
     "type": "Text",
     "description": "contains app name",
     "context": "common"
   },
-  "login": "Login",
+  "login": "Einloggen",
   "@login": {
     "type": "Text",
     "description": "contains login",
     "context": "login"
   },
-  "register": "Register",
+  "register": "Registrieren",
   "@register": {
     "type": "Text",
     "description": "contains registration",
     "context": "signup"
   },
-  "singleArgument": "Single {name} argument",
+  "singleArgument": "Einzel {Name} Argument",
   "@singleArgument": {
     "type": "Text",
     "placeholders": {
-      "name": {
+      "Name": {
         "type": "text"
       }
     },
     "description": "Single named argument",
     "context": "placeholders"
   },
-  "twoArguments": "Argument {first} and {second}",
+  "twoArguments": "Argument {} und {erste zweiter}",
   "@twoArguments": {
     "type": "Text",
     "placeholders": {
-      "first": {
-        "type": "text"
-      },
-      "second": {
+      "} und {erste zweiter": {
         "type": "text"
       }
     },
     "description": "Two named arguments",
     "context": "placeholders"
   },
-  "longText": "line a\nline b\nline c\nlorem\nipsum",
+  "longText": "Linie ein\nLinie b\nLinie c\nlorem\nipsum",
   "@longText": {
     "type": "Text",
     "description": "long\ndescription\n\nnew\nline",

@@ -17,11 +17,9 @@ import 'package:intl_translation/src/intl_message.dart';
 import 'package:petitparser/petitparser.dart';
 
 class ArbToDartGenerator {
-  final bool addContextPrefix;
-
   final intlTranslation = IntlTranslationGenerator();
 
-  ArbToDartGenerator({this.addContextPrefix = false});
+  ArbToDartGenerator();
 
   void generateDartClasses(
       ArbBundle bundle, String outputDirectoryPath, String className,
@@ -68,9 +66,8 @@ class ArbToDartGenerator {
           _fixSpecialCharacters(resource.attributes['description'] ??= '')
               .replaceAll('\\n', '\n/// ');
 
-      final methodName =
-          (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') +
-              ReCase(key).camelCase;
+      final methodName = key;
+      // (addContextPrefix ? '${resource.context.toLowerCase()}_' : '') + ReCase(key).camelCase;
 
       builder
         ..name = methodName
@@ -111,7 +108,7 @@ class ArbToDartGenerator {
   }
 
   void _getResourceGetter(ArbResource resource, MethodBuilder builder) {
-    final key = ReCase(resource.key).camelCase;
+    final key = resource.key;
     final value = _escapeString(resource.value);
     final description =
         _escapeString(resource.attributes['description'] ??= key);
@@ -133,9 +130,6 @@ class ArbToDartGenerator {
     if (message is LiteralString && message.string.isEmpty) {
       message = _plainParser.parse(value).value;
     }
-
-    final formattedKey = ReCase(key).camelCase;
-
     if (message is Plural) {
       final pluralBuilder = StringBuffer();
       pluralBuilder.write('Intl.plural(count,');
@@ -154,7 +148,7 @@ class ArbToDartGenerator {
       addIfNotNull('many', message.many);
 
       pluralBuilder.write(
-        'name: \'${formattedKey}\',',
+        'name: \'${key}\',',
       );
       pluralBuilder.write(
         'args: [${args.join(", ")}],',
@@ -169,7 +163,7 @@ class ArbToDartGenerator {
       return code;
     }
     final code = _getMessageCode(message);
-    return """Intl.message('${code}', name: '$formattedKey', args: [${args.join(", ")}], desc: '${description}')""";
+    return """Intl.message('${code}', name: '$key', args: [${args.join(", ")}], desc: '${description}')""";
   }
 
   String _getMessageCode(Message message) {

@@ -20,8 +20,7 @@ class IntlTranslationGenerator {
     var extraction = MessageExtraction();
     var generation = MessageGeneration();
 
-    generation.useDeferredLoading = false;
-    generation.codegenMode = 'release';
+    // generation.codegenMode = 'release';
     generation.generatedFilePrefix = '_';
 
     var dartFiles = [

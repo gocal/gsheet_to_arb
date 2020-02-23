@@ -111,7 +111,7 @@ class ArbToDartGenerator {
   }
 
   void _getResourceGetter(ArbResource resource, MethodBuilder builder) {
-    final key = resource.key;
+    final key = ReCase(resource.key).camelCase;
     final value = _escapeString(resource.value);
     final description =
         _escapeString(resource.attributes['description'] ??= key);
@@ -134,6 +134,8 @@ class ArbToDartGenerator {
       message = _plainParser.parse(value).value;
     }
 
+    final formattedKey = ReCase(key).camelCase;
+
     if (message is Plural) {
       final pluralBuilder = StringBuffer();
       pluralBuilder.write('Intl.plural(count,');
@@ -152,6 +154,9 @@ class ArbToDartGenerator {
       addIfNotNull('many', message.many);
 
       pluralBuilder.write(
+        'name: \'${formattedKey}\',',
+      );
+      pluralBuilder.write(
         'args: [${args.join(", ")}],',
       );
       pluralBuilder.write(
@@ -164,7 +169,7 @@ class ArbToDartGenerator {
       return code;
     }
     final code = _getMessageCode(message);
-    return """Intl.message('${code}', name: '$key', args: [${args.join(", ")}], desc: '${description}')""";
+    return """Intl.message('${code}', name: '$formattedKey', args: [${args.join(", ")}], desc: '${description}')""";
   }
 
   String _getMessageCode(Message message) {

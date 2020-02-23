@@ -10,9 +10,9 @@ import 'dart:io';
 import 'arb.dart';
 
 class ArbSerializer {
-  String serialize(ArbDocument document, {bool compact = false}) {
+  String serialize(ArbDocument document) {
     var encoder = JsonEncoder.withIndent('  ');
-    var arbContent = encoder.convert(document.toJson(compact: compact));
+    var arbContent = encoder.convert(document.toJson());
     return arbContent;
   }
 
@@ -26,8 +26,8 @@ class ArbSerializer {
     var targetDir = Directory(directory);
     targetDir.createSync(recursive: true);
 
-    bundle.documents.forEach((document) => _saveArbDocument(document, targetDir,
-        isMain: document == bundle.documents.first));
+    bundle.documents
+        .forEach((document) => _saveArbDocument(document, targetDir));
   }
 
   ArbDocument loadArbDocument(String filePath) {
@@ -36,13 +36,11 @@ class ArbSerializer {
     return deserialize(content);
   }
 
-  void _saveArbDocument(ArbDocument document, Directory directory,
-      {bool isMain = false}) {
-    final suffix = isMain ? 'all' : document.locale;
-    var filePath = '${directory.path}/intl_${suffix}.arb';
+  void _saveArbDocument(ArbDocument document, Directory directory) {
+    var filePath = '${directory.path}/intl_${document.locale}.arb';
     var file = File(filePath);
     file.createSync();
-    var arbContent = serialize(document, compact: !isMain);
+    var arbContent = serialize(document);
     file.writeAsStringSync(arbContent);
   }
 }

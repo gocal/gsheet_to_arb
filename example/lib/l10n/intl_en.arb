@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-02-23T11:04:16.665467",
+  "@@last_modified": "2020-02-23T12:40:25.441113",
   "title": "Title",
   "@title": {
     "type": "Text",
@@ -31,7 +31,7 @@
     "description": "contains registration",
     "context": "signup"
   },
-  "number_of_songs_available": "{count, plural, =0 {No songs found.} =1 {One song found.} other {{count} song found.}}",
+  "number_of_songs_available": "{count, plural, =0 {No songs found.} =1 {One song found.} =2 { } other {{count} song found.}}",
   "@number_of_songs_available": {
     "type": "Text",
     "placeholders": {
@@ -40,6 +40,18 @@
       }
     },
     "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amount_dollars": "{count, plural, =1 {{count} Canadian dollar} other {{count} Canadian dollars}}",
+  "@amount_dollars": {
+    "type": "Text",
+    "description": "curreny dolars",
+    "context": "plurals"
+  },
+  "special_characters": "special: !@#$%^&*()",
+  "@special_characters": {
+    "type": "Text",
+    "description": "test special characters",
     "context": "plurals"
   },
   "single_argument": "Single {name} argument",

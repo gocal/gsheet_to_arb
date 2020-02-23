@@ -103,8 +103,6 @@
 - the second column contains item description
 - all the following column contains traslation files
 - make sure spreadsheet contains only valid colums - i.e. with langauge key value
-- the first langauge colum is converted to the `*_all.arb` file, and it contains all the arb details e.g. placeholders, context etc. the remaing arb files only have simple "key":"value" entries"
-
 
 ### Values
 - Placeholder 

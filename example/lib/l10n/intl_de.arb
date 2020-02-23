@@ -1,0 +1,13 @@
+{
+  "@@locale": "de",
+  "@@last_modified": "2020-02-23T11:04:16.665467",
+  "title": "Titel",
+  "message": "Nachricht",
+  "app_name": "Anwendung",
+  "login": "Einloggen",
+  "register": "Registrieren",
+  "number_of_songs_available": "{count, plural, other {Lorem {count} ipsum}}",
+  "single_argument": "Single {name} argument",
+  "two_arguments": "Argument {first} and {second}",
+  "long text": "line a\nline b\nline c\nlorem\nipsum"
+}

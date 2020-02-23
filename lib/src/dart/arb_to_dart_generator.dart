@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 import 'package:recase/recase.dart';
 import '_icu_parser.dart';
 import '_intl_translation_generator.dart';
@@ -25,9 +26,13 @@ class ArbToDartGenerator {
   void generateDartClasses(
       ArbBundle bundle, String outputDirectoryPath, String className,
       {bool addContextPrefix}) {
+    Log.i('Genrating Dart classes from ARB...');
+    Log.startTimeTracking();
     _buildIntlListFile(bundle.documents.first, outputDirectoryPath, className);
 
     intlTranslation.generateLookupTables(outputDirectoryPath, className);
+    Log.i(
+        'Genrating Dart classes from ARB completed, took ${Log.stopTimeTracking()}');
   }
 
   void _buildIntlListFile(

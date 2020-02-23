@@ -42,7 +42,9 @@ class Log {
     }
     final startTime = times.removeLast();
     var duration = DateTime.now().difference(startTime).inMilliseconds;
-    return '${duration}ms';
+    final durationString = (duration.toDouble() / 1000.0).toStringAsFixed(1);
+
+    return '${durationString}s';
   }
 
   static void startTimeTracking() {

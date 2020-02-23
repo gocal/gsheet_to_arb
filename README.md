@@ -49,7 +49,7 @@ This plugin allows you to:
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.1.1
+      gsheet_to_arb: ^0.1.2
     ```
 
 2. Updated dependencies

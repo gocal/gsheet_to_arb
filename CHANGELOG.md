@@ -1,3 +1,6 @@
+## 0.1.2
+- Add logging output
+
 ## 0.1.1
 - Add plurals
 - Fix create-config flag

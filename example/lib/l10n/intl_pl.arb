@@ -1,0 +1,93 @@
+{
+  "@@locale": "pl",
+  "@@last_modified": "2020-02-23T14:04:54.976442",
+  "title": "Tytuł",
+  "@title": {
+    "type": "Text",
+    "description": "contains title",
+    "context": "common"
+  },
+  "message": "Wiadomość",
+  "@message": {
+    "type": "Text",
+    "description": "contains message",
+    "context": "common"
+  },
+  "appName": "Aplikacja",
+  "@appName": {
+    "type": "Text",
+    "description": "contains app name",
+    "context": "common"
+  },
+  "login": "Zaloguj",
+  "@login": {
+    "type": "Text",
+    "description": "contains login",
+    "context": "login"
+  },
+  "register": "Zarejestruj",
+  "@register": {
+    "type": "Text",
+    "description": "contains registration",
+    "context": "signup"
+  },
+  "numberOfSongsAvailable": "{count, plural, =0 {Nie znaleziono piosenek.} =1 {Znaleziono jedną piosenkę.} =2 {Znaleziono {count} piosenki.} few {Znaleziono {count} piosenek.} many {Znaleziono {count} piosenek.} other {Znaleziono {count} piosenek.}}",
+  "@numberOfSongsAvailable": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "number of songs plural",
+    "context": "plurals"
+  },
+  "amountDollars": "{count, plural, =1 {{count} dolar kanadyjski} other {{count} dolarów kanadyjskich}}",
+  "@amountDollars": {
+    "type": "Text",
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    },
+    "description": "currency dolars",
+    "context": "plurals"
+  },
+  "specialCharacters": "special: ąęśćż",
+  "@specialCharacters": {
+    "type": "Text",
+    "description": "test special characters",
+    "context": "plurals"
+  },
+  "singleArgument": "Pojedynczy argument  {name} ",
+  "@singleArgument": {
+    "type": "Text",
+    "placeholders": {
+      "name": {
+        "type": "text"
+      }
+    },
+    "description": "Single named argument",
+    "context": "placeholders"
+  },
+  "twoArguments": "Dwa argumenty: {first} i {second}",
+  "@twoArguments": {
+    "type": "Text",
+    "placeholders": {
+      "first": {
+        "type": "text"
+      },
+      "second": {
+        "type": "text"
+      }
+    },
+    "description": "Two named arguments",
+    "context": "placeholders"
+  },
+  "longText": "lina a\nlina b\nlina c\nlorem\nipsum",
+  "@longText": {
+    "type": "Text",
+    "description": "long\ndescription\n\nnew\nline",
+    "context": "multiline"
+  }
+}

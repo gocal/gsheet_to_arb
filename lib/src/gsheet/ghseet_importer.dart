@@ -23,12 +23,19 @@ class GSheetImporter {
   GSheetImporter({this.auth, this.categoryPrefix});
 
   Future<TranslationsDocument> import(String documentId) async {
+    Log.i('Importing ARB from Google sheet...');
     var authClient = await _getAuthClient(auth);
+    Log.startTimeTracking();
     var sheetsApi = SheetsApi(authClient);
     var spreadsheet =
         await sheetsApi.spreadsheets.get(documentId, includeGridData: true);
-    final document = _importFrom(spreadsheet);
+    final document = await _importFrom(spreadsheet);
     authClient.close();
+
+    Log.i('Loaded document ${document.describe()}');
+    Log.i(
+        'Importing ARB from Google sheet completed, took ${Log.stopTimeTracking()}');
+
     return document;
   }
 

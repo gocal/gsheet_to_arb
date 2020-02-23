@@ -30,20 +30,45 @@ class Log {
     }
   }
 
+  final times = <DateTime>[];
+
+  void _startTimeTracking() {
+    times.add(DateTime.now());
+  }
+
+  String _stopTimeTracking() {
+    if (times.isEmpty) {
+      return '0ms';
+    }
+    final startTime = times.removeLast();
+    var duration = DateTime.now().difference(startTime).inMilliseconds;
+    final durationString = (duration.toDouble() / 1000.0).toStringAsFixed(1);
+
+    return '${durationString}s';
+  }
+
+  static void startTimeTracking() {
+    _singleton._startTimeTracking();
+  }
+
+  static String stopTimeTracking() {
+    return _singleton._stopTimeTracking();
+  }
+
   static void i(String text) {
-    _singleton._log.config(text);
+    _singleton._log.config('[INFO] $text');
   }
 
   static void v(String text) {
-    _singleton._log.info(text);
+    _singleton._log.info('[VERBOSE] $text');
   }
 
   static void d(String text) {
-    _singleton._log.warning(text);
+    _singleton._log.warning('[DEBUG] $text');
   }
 
   static void e(String text) {
-    _singleton._log.severe(text);
+    _singleton._log.severe('[ERROR] $text');
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:gsheet_to_arb/src/parser/translation_parser.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'arb/arb_serializer.dart';
 import 'config/plugin_config.dart';
@@ -13,6 +14,9 @@ class GSheetToArb {
   GSheetToArb({this.config});
 
   void build() async {
+    Log.i('Building translation...');
+    Log.startTimeTracking();
+
     final gsheet = config.gsheet;
     final auth = gsheet.auth;
     final documentId = gsheet.documentId;
@@ -36,5 +40,7 @@ class GSheetToArb {
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);
     }
+
+    Log.i('Succeeded after ${Log.stopTimeTracking()}');
   }
 }

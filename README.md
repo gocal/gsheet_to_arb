@@ -30,15 +30,14 @@
 
 ## Setup
 
-### 1. Create translation spreadsheet based on [the template](https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing)
-
+### 1. Create translation spreadsheet based on the [template](https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing)
 
 
 - Copy the template to your Drive account - `File -> Make a copy`
 
 - Save `DOCUMENT_ID` of your spreadsheet *https://docs.google.com/spreadsheets/d/DOCUMENT_ID/edit#gid=0*
 
-- For more details about spreasheet structure see [Spreadsheet format](#Spreashseet-format) section
+- For more details about spreasheet structure see [Spreadsheet format](#Spreadsheet-format) section
 
 ### 2. Create [Google Sheets API credentials](doc/Authentication.md) either by using Client or Server authentication.
 
@@ -47,7 +46,7 @@
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.1.2
+      gsheet_to_arb: ^0.1.3
     ```
 
 2. Updated dependencies
@@ -62,10 +61,10 @@
 4. Update plugin configuration created in ```pubspec.yaml``` e.g.
     ```yaml
     gsheet_to_arb: 
-        arb_file_prefix: 'intl' # suffix of the create arb files e.g. intl_en.arb
+        arb_file_prefix: 'intl' # suffix of the created arb files e.g. intl_en.arb
         localization_file_name: 'l10n' # Genrated intl dart file name e.g. L10n.dart
-        output_directory: 'lib/l10n' # where all the dart and arb data are sotre
-        add_context_prefix: false # should add category prefix to the keys e.g. common_title et.c
+        output_directory: 'lib/l10n' # where all the dart and arb data are stored
+        add_context_prefix: false # should add category prefix to the keys e.g. common_app_title
         gsheet: 
             auth_file: './gsheet_to_arb.yaml' # file with the gsheet authentication configuration
             category_prefix: "# " 
@@ -89,13 +88,13 @@
     ```
 ---   
 
-## Spreadshseet format
+## Spreadsheet format
 
 ### Rows
 
 - the first row is reserved for the header section and contains label of the related columns
 - other rows
-    - if rows start with the `category_prefix` value (`# ` default) the all the following rows will use the category as a context (see: ARB context, and `add_context_prefix` parameter)
+    - if rows start with the `category_prefix` value (`# ` default) all the following rows will use the category as a context (see: ARB context, and `add_context_prefix` parameter)
     - empty rows are ignored
 
 ### Columns
@@ -104,6 +103,7 @@
 - the second column contains item description
 - all the following column contains traslation files
 - make sure spreadsheet contains only valid colums - i.e. with langauge key value
+- the first langauge colum is converted to the `*_all.arb` file, and it contains all the arb details e.g. placeholders, context etc. the remaing arb files only have simple "key":"value" entries"
 
 
 ### Values
@@ -114,3 +114,7 @@
     - plurals are identified by the key metadata - if key ends with one of the following
         - zero, one, two, few, many, other - it's considered as a plural
         - plural use special placeholder `{count}` to mark value provied as a translation parameter
+
+## TODO
+- support placeholder parameter types (e.g. int, date, text, double) - {items, int}
+

@@ -1,3 +1,6 @@
+## 0.1.3
+- Documentation update
+
 ## 0.1.2
 - Add logging output
 

@@ -46,7 +46,7 @@
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.1.5
+      gsheet_to_arb: ^0.1.6
     ```
 
 2. Updated dependencies

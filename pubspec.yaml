@@ -1,5 +1,5 @@
 name: gsheet_to_arb
-version: 0.1.5
+version: 0.1.6
 description: Imports Application Resource Bundle (ARB) from Google Sheets documents
 
 homepage: https://github.com/gocal/gsheet_to_arb

@@ -99,10 +99,10 @@
 
 ### Columns
 
-- the first column contains eiter key name or category prefix
-- the second column contains item description
-- all the following column contains traslation files
-- make sure spreadsheet contains only valid colums - i.e. with langauge key value
+- the first column `key` contains either key name or category prefix
+- the second column `description` contains item description
+- all the following column (language codes e.g. `en`, `pl` etc.) contains traslation files
+- make sure spreadsheet contains only valid colums i.e. with langauge key value
 
 ### Values
 - Placeholder 

@@ -1,42 +1,48 @@
-# Import Arb and Dart intl translations from Google Sheet 
+# Import translations from Google spreadsheet 
 
-Imports Application Resource Bundle (ARB) from Google Sheets 
+This plugin allows you to:
 
-https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification
+- Imports [Application Resource Bundle](https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification) (ARB) from Google Sheets
+- automatically create dart source code
+- supports placeholders and plurals
+- groups translations by categories (context) 
+
 
 [![pub package](https://img.shields.io/pub/v/gsheet_to_arb.svg)](https://pub.dartlang.org/packages/gsheet_to_arb)
 
 ## Usage
 
-### Import ARB files from the Google Sheet
+### Import Translation files from the Google Sheet
 
-1. [Setup](#setup) plugin configuration yaml file - you only need to do it once.
+1. [Setup](#setup) plugin configuration yaml file (you only need to do it once.)
 
-2. To import ARB files from Google Sheet simply run the `gsheet_to_arb:import` program.
+2. Import ARB and Dart source files from the Google Sheet
 
     ```
     pub run gsheet_to_arb:import
+    ```
+    or for flutter
+
+    ```
+    flutter pub run gsheet_to_arb:import
     ```
 
  ![](doc/gsheet.png) 
 
 
-
-
 ## Setup
 
-### 1. Copy Google Sheet template
+### 1. Create translation spreadsheet based on [the template](https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing)
 
-1. Reference Google Sheet is avaliable at:
-    - https://docs.google.com/spreadsheets/d/1CwFRjtiCmCl8yvP55yBT70h-Yt00CcigD816hsGo7KU/edit?usp=sharing
 
-2. Copy the template to your Drive account 
-    - File -> Make a copy
 
-3. Save `DOCUMENT_ID` of the Google spreadsheet
-    - https://docs.google.com/spreadsheets/d/DOCUMENT_ID/edit#gid=0
+- Copy the template to your Drive account - `File -> Make a copy`
 
-### 2. Authenticate - Create [Google Sheets API credentials](doc/Authentication.md) either by using Client or Server authentication.
+- Save `DOCUMENT_ID` of your spreadsheet *https://docs.google.com/spreadsheets/d/DOCUMENT_ID/edit#gid=0*
+
+- For more details about spreasheet structure see [Spreadsheet format](#Spreashseet-format) section
+
+### 2. Create [Google Sheets API credentials](doc/Authentication.md) either by using Client or Server authentication.
 
 ### 3. Configure your Dart project
 
@@ -58,13 +64,13 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
 4. Update plugin configuration created in ```pubspec.yaml``` e.g.
     ```yaml
     gsheet_to_arb: 
-        arb_file_prefix: 'intl'
-        localization_file_name: 'l10n'
-        output_directory: 'lib/l10n'
-        add_context_prefix: false
+        arb_file_prefix: 'intl' # suffix of the create arb files e.g. intl_en.arb
+        localization_file_name: 'l10n' # Genrated intl dart file name e.g. L10n.dart
+        output_directory: 'lib/l10n' # where all the dart and arb data are sotre
+        add_context_prefix: false # should add category prefix to the keys e.g. common_title et.c
         gsheet: 
-            auth_file: './gsheet_to_arb.yaml'
-            category_prefix: "# "
+            auth_file: './gsheet_to_arb.yaml' # file with the gsheet authentication configuration
+            category_prefix: "# " 
             document_id: 'TODO'
             sheet_id: '0'
     ```
@@ -83,4 +89,30 @@ https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundle
         client_email: "TODO"
         private_key: "TODO"
     ```
-    
+---   
+
+## Spreadshseet format
+
+### Rows
+
+- the first row is reserved for the header section and contains label of the related columns
+- other rows
+    - if rows start with the `category_prefix` value (`# ` default) the all the following rows will use the category as a context (see: ARB context, and `add_context_prefix` parameter)
+    - empty rows are ignored
+
+### Columns
+
+- the first column contains eiter key name or category prefix
+- the second column contains item description
+- all the following column contains traslation files
+- make sure spreadsheet contains only valid colums - i.e. with langauge key value
+
+
+### Values
+- Placeholder 
+    - simply add `{placeholder_name}` to the translation
+
+- Plurals
+    - plurals are identified by the key metadata - if key ends with one of the following
+        - zero, one, two, few, many, other - it's considered as a plural
+        - plural use special placeholder `{count}` to mark value provied as a translation parameter

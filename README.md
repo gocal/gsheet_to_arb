@@ -25,7 +25,7 @@
     flutter pub run gsheet_to_arb:import
     ```
 
- ![](doc/gsheet.png) 
+ ![Spreasheet](gsheet.png) 
 
 
 ## Setup
@@ -39,14 +39,14 @@
 
 - For more details about spreasheet structure see [Spreadsheet format](#Spreadsheet-format) section
 
-### 2. Create [Google Sheets API credentials](doc/Authentication.md) either by using Client or Server authentication.
+### 2. Create [Google Sheets API credentials](Authentication.md) either by using Client or Server authentication.
 
 ### 3. Configure your Dart project
 
 1. Add gsheet_to_arb dev dependency to the pubspec.yaml
     ```yaml
     dev_dependencies:
-      gsheet_to_arb: ^0.1.4
+      gsheet_to_arb: ^0.1.5
     ```
 
 2. Updated dependencies

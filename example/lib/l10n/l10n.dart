@@ -14,13 +14,13 @@ class L10n {
       args: [count],
       desc: 'number of songs plural');
 
-  /// curreny dolars
+  /// currency dolars
   String amountDollars(int count) => Intl.plural(count,
       one: '$count Canadian dollar',
       other: '$count Canadian dollars',
       name: 'amountDollars',
       args: [count],
-      desc: 'curreny dolars');
+      desc: 'currency dolars');
 
   /// test special characters
   String get specialCharacters => Intl.message('special: !@#\$%^&*()',

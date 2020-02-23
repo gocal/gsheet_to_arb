@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "@@last_modified": "2020-02-23T13:04:00.794582",
+  "@@last_modified": "2020-02-23T13:11:33.255657",
   "number_of_songs_available": "{count, plural, =0 {Keine Lieder gefunden.} =1 {Ein Lied gefunden.} =2 {{Count} Songs gefunden.} few {{Count} Songs gefunden.} many {{Count} Songs gefunden.} other {{Count} Lied gefunden.}}",
   "@number_of_songs_available": {
     "type": "Text",
@@ -23,7 +23,7 @@
         "type": "text"
       }
     },
-    "description": "curreny dolars",
+    "description": "currency dolars",
     "context": "plurals"
   },
   "special_characters": "special: äöüß",

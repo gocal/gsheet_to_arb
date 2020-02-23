@@ -1,14 +1,12 @@
-# Import translations from Google spreadsheet 
-
-This plugin allows you to:
-
-- Imports [Application Resource Bundle](https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification) (ARB) from Google Sheets
-- automatically create dart source code
-- supports placeholders and plurals
-- groups translations by categories (context) 
-
+# Import translations from Google Sheets 
 
 [![pub package](https://img.shields.io/pub/v/gsheet_to_arb.svg)](https://pub.dartlang.org/packages/gsheet_to_arb)
+
+
+- Import [Application Resource Bundle](https://github.com/googlei18n/app-resource-bundle/wiki/ApplicationResourceBundleSpecification) (ARB) from Google Sheets
+- automatically create Dart [intl](https://pub.dev/packages/intl) classes
+- group translations by categories (context) 
+- supports placeholders and plurals
 
 ## Usage
 

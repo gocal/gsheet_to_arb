@@ -1,3 +1,7 @@
+## 0.1.8
+- Update pubspec dependencies (thanks to [@jarekb123](https://github.com/jarekb123))
+
+
 ## 0.1.7
 - Readme fix
 

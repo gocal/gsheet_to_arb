@@ -96,6 +96,7 @@
 - other rows
     - if rows start with the `category_prefix` value (`# ` default) all the following rows will use the category as a context (see: ARB context, and `add_context_prefix` parameter)
     - empty rows are ignored
+    - rows with an empty key column are ignored
 
 ### Columns
 

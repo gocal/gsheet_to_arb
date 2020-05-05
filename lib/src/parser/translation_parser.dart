@@ -33,10 +33,6 @@ class TranslationParser {
     for (var item in document.items) {
       // for each language
       for (var index in iterables.range(0, document.languages.length)) {
-        if(item.values.length != document.languages.length) {
-          print(item.values.toString());
-        }
-        
         var itemValue;
         //incase value does not exist
         if(index < item.values.length) {

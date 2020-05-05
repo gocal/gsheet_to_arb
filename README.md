@@ -102,7 +102,7 @@
 - the first column `key` contains either key name or category prefix
 - the second column `description` contains item description
 - all the following column (language codes e.g. `en`, `pl` etc.) contains traslation files
-- make sure spreadsheet contains only valid colums i.e. with langauge key value
+- will start parsing from the first language column and stop parsing on the last column or the first empty column, which ever comes first
 
 ### Values
 - Placeholder 

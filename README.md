@@ -70,6 +70,13 @@
             category_prefix: "# " 
             document_id: 'TODO'
             sheet_id: '0'
+            columns: # This is an optional setting, if unused will fallback to default values
+                key: 0 # The column where the key for the translation is, defaults to 0
+                description: 1 # The column where the description is, defaults to 1
+                first_language_key: 2 # The first column for the language copy, assumes that all other columns after this one also contains a language translation, defaults to 2
+            rows: # This is an optional setting, if unused will fallback to default values
+                header_row: 0 # The header row containing the title for each column, such as language codes, defaults to 0
+                first_translation_row: 1 # The first row containing transaltions that should be parsed, assumes that all rows after this one also should be parsed, defaults 1
     ```
 
 5. Update gsheet authentication configuration created in ```gsheet_to_arb.yaml```

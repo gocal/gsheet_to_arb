@@ -49,6 +49,8 @@ GoogleSheetConfig _$GoogleSheetConfigFromJson(Map<String, dynamic> json) {
     documentId: json['document_id'] as String,
     sheetId: json['sheet_id'] as String,
     categoryPrefix: json['category_prefix'] as String,
+    sheetColumns: SheetColumns.generateFromJson(json['columns']),
+    sheetRows: SheetRows.generateFromJson(json['rows']),
   );
 }
 
@@ -58,6 +60,35 @@ Map<String, dynamic> _$GoogleSheetConfigToJson(GoogleSheetConfig instance) =>
       'sheet_id': instance.sheetId,
       'category_prefix': instance.categoryPrefix,
       'auth_file': instance.authFile,
+      'columns': instance.sheetColumns,
+      'rows': instance.sheetRows,
+    };
+
+SheetColumns _$SheetColumnsFromJson(Map<String, dynamic> json) {
+  return SheetColumns(
+    key: json['key'] as int ?? 0,
+    description: json['description'] as int ?? 1,
+    first_language_key: json['first_language_key'] as int ?? 2,
+  );
+}
+
+Map<String, dynamic> _$SheetColumnsToJson(SheetColumns instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'description': instance.description,
+      'first_language_key': instance.first_language_key,
+    };
+
+SheetRows _$SheetRowsFromJson(Map<String, dynamic> json) {
+  return SheetRows(
+    header_row: json['header_row'] as int ?? 0,
+    first_translation_row: json['first_translation_row'] as int ?? 1,
+  );
+}
+
+Map<String, dynamic> _$SheetRowsToJson(SheetRows instance) => <String, dynamic>{
+      'header_row': instance.header_row,
+      'first_translation_row': instance.first_translation_row,
     };
 
 AuthConfig _$AuthConfigFromJson(Map<String, dynamic> json) {

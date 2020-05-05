@@ -5,26 +5,15 @@ import 'package:gsheet_to_arb/src/translation_document.dart';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
-class _SheetColumns {
-  static int key = 0;
-  static int description = 1;
-  static int first_language_key = 2;
-}
-
-class _SheetRows {
-  static int header_row = 0;
-  static int first_translation_row = 1;
-}
-
 class GSheetImporter {
-  final AuthConfig auth;
-  final String categoryPrefix;
+  final GoogleSheetConfig config;
+  
 
-  GSheetImporter({this.auth, this.categoryPrefix});
+  GSheetImporter({this.config});
 
   Future<TranslationsDocument> import(String documentId) async {
     Log.i('Importing ARB from Google sheet...');
-    var authClient = await _getAuthClient(auth);
+    var authClient = await _getAuthClient(config.auth);
     Log.startTimeTracking();
     var sheetsApi = SheetsApi(authClient);
     var spreadsheet =
@@ -74,8 +63,8 @@ class GSheetImporter {
     final languages = <String>[];
     final items = <TranslationRow>[];
 
-    var firstLanguageColumn = _SheetColumns.first_language_key;
-    var firstTranslationsRow = _SheetRows.first_translation_row;
+    var firstLanguageColumn = config.sheetColumns.first_language_key;
+    var firstTranslationsRow = config.sheetRows.first_translation_row;
 
     var currentCategory = '';
 
@@ -100,20 +89,20 @@ class GSheetImporter {
         continue;
       }
 
-      var key = languages[_SheetColumns.key].formattedValue;
+      var key = languages[config.sheetColumns.key].formattedValue;
 
       //Skip rows with missing key value
       if(key == null) {
         continue;
       }
 
-      if (key.startsWith(categoryPrefix)) {
-        currentCategory = key.substring(categoryPrefix.length);
+      if (key.startsWith(config.categoryPrefix)) {
+        currentCategory = key.substring(config.categoryPrefix.length);
         continue;
       }
 
       final description =
-          languages[_SheetColumns.description].formattedValue ?? '';
+          languages[config.sheetColumns.description].formattedValue ?? '';
 
       final values = row.values
           .sublist(firstLanguageColumn, row.values.length)

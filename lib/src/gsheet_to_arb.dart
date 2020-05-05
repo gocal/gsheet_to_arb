@@ -18,12 +18,10 @@ class GSheetToArb {
     Log.startTimeTracking();
 
     final gsheet = config.gsheet;
-    final auth = gsheet.auth;
     final documentId = gsheet.documentId;
 
     // import TranslationsDocument
-    final importer =
-        GSheetImporter(auth: auth, categoryPrefix: gsheet.categoryPrefix);
+    final importer = GSheetImporter(config: gsheet);
     final document = await importer.import(documentId);
 
     // Parse TranslationsDocument to ArbBundle

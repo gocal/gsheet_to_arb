@@ -40,6 +40,10 @@ class TranslationParser {
         } else {
           itemValue = '';
         }
+
+        if(itemValue == '') {
+          print('WARNING: empty string in lang: '+ document.languages[index] + ', key: '+ item.key);
+        }
         
         final itemPlaceholders = _findPlaceholders(itemValue);
 

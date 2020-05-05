@@ -33,11 +33,24 @@ class TranslationParser {
     for (var item in document.items) {
       // for each language
       for (var index in iterables.range(0, document.languages.length)) {
-        final itemValue = item.values[index];
+        if(item.values.length != document.languages.length) {
+          print(item.values.toString());
+        }
+        
+        var itemValue;
+        //incase value does not exist
+        if(index < item.values.length) {
+          itemValue = item.values[index];
+        } else {
+          itemValue = '';
+        }
+        
         final itemPlaceholders = _findPlaceholders(itemValue);
 
         final builder = builders[index];
         final parser = parsers[index];
+
+
 
         // plural consume
         final status = parser.consume(ArbResource(item.key, itemValue,

@@ -82,8 +82,12 @@ class GSheetImporter {
     for (var column = firstLanguageColumn;
         column < headerValues.length;
         column++) {
-        final language = headerValues[column].formattedValue;
-        languages.add(language);
+      //Stop parsing on first empty language code
+      if(headerValues[column].formattedValue == null) {
+        break;
+      }
+      final language = headerValues[column].formattedValue;
+      languages.add(language);
     }
 
     // rows

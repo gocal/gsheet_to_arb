@@ -7,6 +7,7 @@
 import 'dart:async';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'package:quiver/iterables.dart' as iterables;
 import 'package:recase/recase.dart';
@@ -42,15 +43,13 @@ class TranslationParser {
         }
 
         if(itemValue == '') {
-          print('WARNING: empty string in lang: '+ document.languages[index] + ', key: '+ item.key);
+          Log.i('WARNING: empty string in lang: '+ document.languages[index] + ', key: '+ item.key);
         }
         
         final itemPlaceholders = _findPlaceholders(itemValue);
 
         final builder = builders[index];
         final parser = parsers[index];
-
-
 
         // plural consume
         final status = parser.consume(ArbResource(item.key, itemValue,

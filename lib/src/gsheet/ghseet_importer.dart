@@ -82,18 +82,24 @@ class GSheetImporter {
     for (var column = firstLanguageColumn;
         column < headerValues.length;
         column++) {
-      final language = headerValues[column].formattedValue;
-      languages.add(language);
+        final language = headerValues[column].formattedValue;
+        languages.add(language);
     }
 
     // rows
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var languages = row.values;
+
+      //Skip empty rows
+      if(languages == null) {
+        continue;
+      }
+
       var key = languages[_SheetColumns.key].formattedValue;
 
-      //Skip if empty row is found
-      if (key == null) {
+      //Skip rows with missing key value
+      if(key == null) {
         continue;
       }
 

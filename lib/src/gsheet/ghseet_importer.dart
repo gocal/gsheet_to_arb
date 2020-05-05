@@ -71,6 +71,10 @@ class GSheetImporter {
     for (var column = firstLanguageColumn;
         column < headerValues.length;
         column++) {
+      //Stop parsing on first empty language code
+      if(headerValues[column].formattedValue == null) {
+        break;
+      }
       final language = headerValues[column].formattedValue;
       languages.add(language);
     }
@@ -79,10 +83,16 @@ class GSheetImporter {
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var languages = row.values;
+
+      //Skip empty rows
+      if(languages == null) {
+        continue;
+      }
+
       var key = languages[config.sheetColumns.key].formattedValue;
 
-      //Skip if empty row is found
-      if (key == null) {
+      //Skip rows with missing key value
+      if(key == null) {
         continue;
       }
 

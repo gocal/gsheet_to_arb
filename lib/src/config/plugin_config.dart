@@ -78,16 +78,94 @@ class GoogleSheetConfig {
   @JsonKey(name: 'auth_file')
   String authFile;
 
+  @JsonKey(name: 'columns', fromJson: SheetColumns.generateFromJson)
+  SheetColumns sheetColumns;
+
+  @JsonKey(name: 'rows', fromJson: SheetRows.generateFromJson)
+  SheetRows sheetRows;
+
   @JsonKey(ignore: true)
   AuthConfig auth;
 
   GoogleSheetConfig(
-      {this.authFile, this.documentId, this.sheetId, this.categoryPrefix});
+      {this.authFile, this.documentId, this.sheetId, this.categoryPrefix, this.sheetColumns, this.sheetRows});
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$GoogleSheetConfigToJson(this);
+
+
+}
+
+class DefaultSheetColumns {
+  static const int key = 0;
+  static const int description = 1;
+  static const int first_language_key = 2;
+}
+
+@JsonSerializable()
+class SheetColumns {
+  @JsonKey(name: 'key', defaultValue: DefaultSheetColumns.key)
+  final int key;
+
+  @JsonKey(name: 'description', defaultValue: DefaultSheetColumns.description)
+  final int description;
+
+  @JsonKey(name: 'first_language_key', defaultValue: DefaultSheetColumns.first_language_key)
+  final int first_language_key;
+
+  SheetColumns({
+    this.key = DefaultSheetColumns.key,
+    this.description = DefaultSheetColumns.description,
+    this.first_language_key = DefaultSheetColumns.first_language_key,
+  });
+
+  static SheetColumns generateFromJson(json) {
+    if(json == null) {
+      return SheetColumns();
+    }
+    return SheetColumns.fromJson(Map<String, dynamic>.from(json));
+  }
+
+  factory SheetColumns.fromJson(Map<String, dynamic> json) {
+    
+    return _$SheetColumnsFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() => _$SheetColumnsToJson(this);
+}
+
+class DefaultSheetRows {
+  static const int header_row = 0;
+  static const int first_translation_row = 1;
+}
+
+@JsonSerializable()
+class SheetRows {
+  @JsonKey(name: 'header_row', defaultValue: DefaultSheetRows.header_row)
+  final int header_row;
+
+  @JsonKey(name: 'first_translation_row', defaultValue: DefaultSheetRows.first_translation_row)
+  final int first_translation_row;
+
+  SheetRows({
+    this.header_row = DefaultSheetRows.header_row,
+    this.first_translation_row = DefaultSheetRows.first_translation_row,
+  });
+
+  static SheetRows generateFromJson(json) {
+    if(json == null) {
+      return SheetRows();
+    }
+    return SheetRows.fromJson(Map<String, dynamic>.from(json));
+  }
+
+
+  factory SheetRows.fromJson(Map<String, dynamic> json) =>
+      _$SheetRowsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SheetRowsToJson(this);
 }
 
 ///

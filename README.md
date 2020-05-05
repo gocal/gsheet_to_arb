@@ -96,13 +96,14 @@
 - other rows
     - if rows start with the `category_prefix` value (`# ` default) all the following rows will use the category as a context (see: ARB context, and `add_context_prefix` parameter)
     - empty rows are ignored
+    - rows with an empty key column are ignored
 
 ### Columns
 
 - the first column `key` contains either key name or category prefix
 - the second column `description` contains item description
 - all the following column (language codes e.g. `en`, `pl` etc.) contains traslation files
-- make sure spreadsheet contains only valid colums i.e. with langauge key value
+- will start parsing from the first language column and stop parsing on the last column or the first empty column, which ever comes first
 
 ### Values
 - Placeholder 

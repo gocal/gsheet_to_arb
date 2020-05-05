@@ -7,6 +7,7 @@
 import 'dart:async';
 import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
+import 'package:gsheet_to_arb/src/utils/log.dart';
 
 import 'package:quiver/iterables.dart' as iterables;
 import 'package:recase/recase.dart';
@@ -33,7 +34,18 @@ class TranslationParser {
     for (var item in document.items) {
       // for each language
       for (var index in iterables.range(0, document.languages.length)) {
-        final itemValue = item.values[index];
+        var itemValue;
+        //incase value does not exist
+        if(index < item.values.length) {
+          itemValue = item.values[index];
+        } else {
+          itemValue = '';
+        }
+
+        if(itemValue == '') {
+          Log.i('WARNING: empty string in lang: '+ document.languages[index] + ', key: '+ item.key);
+        }
+        
         final itemPlaceholders = _findPlaceholders(itemValue);
 
         final builder = builders[index];

@@ -5,22 +5,36 @@ import 'package:gsheet_to_arb/src/translation_document.dart';
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
-class _SheetColumns {
-  static int key = 0;
-  static int description = 1;
-  static int first_language_key = 2;
+class SheetColumns {
+  final int key;
+  final int description;
+  final int first_language_key;
+
+  SheetColumns({
+    this.key = 0,
+    this.description = 1,
+    this.first_language_key = 2,
+  });
 }
 
-class _SheetRows {
-  static int header_row = 0;
-  static int first_translation_row = 1;
+class SheetRows {
+  final int header_row;
+  final int first_translation_row;
+
+  SheetRows({
+    this.header_row = 0,
+    this.first_translation_row = 1,
+  });
 }
 
 class GSheetImporter {
   final AuthConfig auth;
   final String categoryPrefix;
+  final SheetColumns sheetColumns;
+  final SheetRows sheetRows;
+  
 
-  GSheetImporter({this.auth, this.categoryPrefix});
+  GSheetImporter({this.auth, this.categoryPrefix, this.sheetColumns, this.sheetRows});
 
   Future<TranslationsDocument> import(String documentId) async {
     Log.i('Importing ARB from Google sheet...');
@@ -74,8 +88,8 @@ class GSheetImporter {
     final languages = <String>[];
     final items = <TranslationRow>[];
 
-    var firstLanguageColumn = _SheetColumns.first_language_key;
-    var firstTranslationsRow = _SheetRows.first_translation_row;
+    var firstLanguageColumn = sheetColumns.first_language_key;
+    var firstTranslationsRow = sheetRows.first_translation_row;
 
     var currentCategory = '';
 
@@ -90,7 +104,7 @@ class GSheetImporter {
     for (var i = firstTranslationsRow; i < rows.length; i++) {
       var row = rows[i];
       var languages = row.values;
-      var key = languages[_SheetColumns.key].formattedValue;
+      var key = languages[sheetColumns.key].formattedValue;
 
       //Skip if empty row is found
       if (key == null) {
@@ -103,7 +117,7 @@ class GSheetImporter {
       }
 
       final description =
-          languages[_SheetColumns.description].formattedValue ?? '';
+          languages[sheetColumns.description].formattedValue ?? '';
 
       final values = row.values
           .sublist(firstLanguageColumn, row.values.length)

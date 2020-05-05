@@ -22,8 +22,12 @@ class GSheetToArb {
     final documentId = gsheet.documentId;
 
     // import TranslationsDocument
-    final importer =
-        GSheetImporter(auth: auth, categoryPrefix: gsheet.categoryPrefix);
+    final importer = GSheetImporter(
+      auth: auth, 
+      categoryPrefix: gsheet.categoryPrefix,
+      sheetColumns: SheetColumns(),
+      sheetRows: SheetRows(),
+    );
     final document = await importer.import(documentId);
 
     // Parse TranslationsDocument to ArbBundle

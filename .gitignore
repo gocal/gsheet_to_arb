@@ -13,3 +13,5 @@ doc/api/
 # IntelliJ IDEA
 .idea/
 .iml
+.fvm/
+.vscode/

@@ -1,3 +1,6 @@
+## 0.1.9
+- Flutter SDK 1.20.1 compatibility
+
 ## 0.1.8
 - Add ability to configure Sheet columns and rows (@Isakdl)
 - Update pubspec dependencies (@jarekb123)

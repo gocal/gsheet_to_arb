@@ -67,7 +67,7 @@ class CustomIcuParser {
   Parser get empty => epsilon().map((_) => '');
 
   Parser get parameter => (openCurly & id & closeCurly)
-      .map((param) => VariableSubstitution.named(param[1], null));
+      .map((param) => CustomVariableSubstitution.named(param[1], null));
 
   /// The primary entry point for parsing. Accepts a string and produces
   /// a parsed representation of it as a Message.
@@ -87,4 +87,11 @@ class CustomIcuParser {
     // infinite recursion.
     interiorText.set(contents.plus() | empty);
   }
+}
+
+class CustomVariableSubstitution extends VariableSubstitution {
+  final String variable;
+  CustomVariableSubstitution.named(String name, Message parent)
+      : variable = name,
+        super.named(name, parent);
 }

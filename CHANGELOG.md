@@ -1,4 +1,4 @@
-## 0.1.10
+## 0.1.11
 - Flutter SDK 1.20.1 compatibility
 
 ## 0.1.8

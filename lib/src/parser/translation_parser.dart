@@ -16,8 +16,9 @@ import '_plurals_parser.dart';
 
 class TranslationParser {
   final bool addContextPrefix;
+  final String caseType;
 
-  TranslationParser({this.addContextPrefix});
+  TranslationParser({this.addContextPrefix, this.caseType});
 
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
@@ -25,7 +26,7 @@ class TranslationParser {
 
     for (var langauge in document.languages) {
       final builder = ArbDocumentBuilder(langauge, document.lastModified);
-      final parser = PluralsParser(addContextPrefix);
+      final parser = PluralsParser(addContextPrefix, caseType);
       builders.add(builder);
       parsers.add(parser);
     }
@@ -70,9 +71,11 @@ class TranslationParser {
           }
         }
 
-        final key = addContextPrefix && item.category.isNotEmpty
-            ? ReCase(item.category + '_' + item.key).camelCase
-            : ReCase(item.key).camelCase;
+        final key = PluralsParser.reCase(
+            addContextPrefix && item.category.isNotEmpty
+                ? item.category + '_' + item.key
+                : item.key,
+            caseType);
 
         // add resource
         builder.add(ArbResource(key, itemValue,

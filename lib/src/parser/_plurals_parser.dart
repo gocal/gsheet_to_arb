@@ -21,6 +21,7 @@ class Completed extends PluralsStatus {
 
 class PluralsParser {
   final bool addContextPrefix;
+  String caseType;
 
   final _pluralSeparator = '=';
 
@@ -38,7 +39,7 @@ class PluralsParser {
   final _placeholders = <String, ArbResourcePlaceholder>{};
   final _values = <PluralCase, String>{};
 
-  PluralsParser(this.addContextPrefix);
+  PluralsParser(this.addContextPrefix, this.caseType);
 
   PluralsStatus consume(ArbResource resource) {
     final pluralCase = _getCase(resource.key);
@@ -98,6 +99,15 @@ class PluralsParser {
     }
   }
 
+  static String reCase(String s, caseType) {
+    switch (caseType ?? '') {
+      case 'camelCase':
+        return s.camelCase;
+      default:
+        return s;
+    }
+  }
+
   PluralsStatus complete() {
     if (_values.isNotEmpty) {
       return _getCompleted();
@@ -121,9 +131,11 @@ class PluralsParser {
   }
 
   Completed _getCompleted({bool consumed = false}) {
-    final formattedKey = addContextPrefix && _resource.context.isNotEmpty
-        ? ReCase(_resource.context + '_' + _key).camelCase
-        : ReCase(_key).camelCase;
+    final formattedKey = reCase(
+        addContextPrefix && _resource.context.isNotEmpty
+            ? _resource.context + '_' + _key
+            : _key,
+        caseType);
 
     return Completed(
         ArbResource(formattedKey, PluralsFormatter.format(Map.from(_values)),

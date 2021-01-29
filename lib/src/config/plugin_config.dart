@@ -44,6 +44,9 @@ class GsheetToArbConfig {
   @JsonKey(name: 'add_context_prefix')
   bool addContextPrefix;
 
+  @JsonKey(name: 'caseType')
+  String caseType;
+
   @JsonKey(name: 'gsheet')
   GoogleSheetConfig gsheet;
 
@@ -53,7 +56,8 @@ class GsheetToArbConfig {
       this.gsheet,
       this.localizationFileName,
       this.generateCode,
-      this.addContextPrefix});
+      this.addContextPrefix,
+      this.caseType});
 
   factory GsheetToArbConfig.fromJson(Map<String, dynamic> json) =>
       _$GsheetToArbConfigFromJson(json);
@@ -129,7 +133,7 @@ class SheetColumns {
   }
 
   factory SheetColumns.fromJson(Map<String, dynamic> json) {
-    
+
     return _$SheetColumnsFromJson(json);
   }
 

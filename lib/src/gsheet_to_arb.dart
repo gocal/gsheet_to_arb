@@ -11,7 +11,7 @@ class GSheetToArb {
 
   final _arbSerializer = ArbSerializer();
 
-  GSheetToArb({this.config});
+  GSheetToArb({required this.config});
 
   void build() async {
     Log.i('Building translation...');
@@ -25,15 +25,17 @@ class GSheetToArb {
     final document = await importer.import(documentId);
 
     // Parse TranslationsDocument to ArbBundle
-    final sheetParser =
-        TranslationParser(addContextPrefix: config.addContextPrefix);
+    final sheetParser = TranslationParser(
+      addContextPrefix: config.addContextPrefix,
+      caseType: config.caseType,
+    );
     final arbBundle = await sheetParser.parseDocument(document);
 
     // Save ArbBundle
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);
 
     // Generate Code from ArbBundle
-    if (config.generateCode) {
+    if (config.generateCode ?? false) {
       final generator = ArbToDartGenerator();
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);

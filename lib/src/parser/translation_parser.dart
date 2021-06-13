@@ -9,15 +9,13 @@ import 'package:gsheet_to_arb/src/arb/arb.dart';
 import 'package:gsheet_to_arb/src/translation_document.dart';
 import 'package:gsheet_to_arb/src/utils/log.dart';
 
-import 'package:quiver/iterables.dart' as iterables;
-import 'package:recase/recase.dart';
-
 import '_plurals_parser.dart';
 
 class TranslationParser {
   final bool addContextPrefix;
+  final String? caseType;
 
-  TranslationParser({this.addContextPrefix});
+  TranslationParser({required this.addContextPrefix, this.caseType});
 
   Future<ArbBundle> parseDocument(TranslationsDocument document) async {
     final builders = <ArbDocumentBuilder>[];
@@ -25,7 +23,7 @@ class TranslationParser {
 
     for (var langauge in document.languages) {
       final builder = ArbDocumentBuilder(langauge, document.lastModified);
-      final parser = PluralsParser(addContextPrefix);
+      final parser = PluralsParser(addContextPrefix, caseType);
       builders.add(builder);
       parsers.add(parser);
     }
@@ -33,19 +31,22 @@ class TranslationParser {
     // for each row
     for (var item in document.items) {
       // for each language
-      for (var index in iterables.range(0, document.languages.length)) {
+      for (var index in Iterable<int>.generate(document.languages.length)) {
         var itemValue;
         //incase value does not exist
-        if(index < item.values.length) {
+        if (index < item.values.length) {
           itemValue = item.values[index];
         } else {
           itemValue = '';
         }
 
-        if(itemValue == '') {
-          Log.i('WARNING: empty string in lang: '+ document.languages[index] + ', key: '+ item.key);
+        if (itemValue == '') {
+          Log.i('WARNING: empty string in lang: ' +
+              document.languages[index] +
+              ', key: ' +
+              item.key);
         }
-        
+
         final itemPlaceholders = _findPlaceholders(itemValue);
 
         final builder = builders[index];
@@ -70,9 +71,11 @@ class TranslationParser {
           }
         }
 
-        final key = addContextPrefix && item.category.isNotEmpty
-            ? ReCase(item.category + '_' + item.key).camelCase
-            : ReCase(item.key).camelCase;
+        final key = PluralsParser.reCase(
+            addContextPrefix && item.category.isNotEmpty
+                ? item.category + '_' + item.key
+                : item.key,
+            caseType);
 
         // add resource
         builder.add(ArbResource(key, itemValue,
@@ -83,7 +86,7 @@ class TranslationParser {
     }
 
     // finalizer
-    for (var index in iterables.range(0, document.languages.length - 1)) {
+    for (var index in Iterable<int>.generate(document.languages.length - 1)) {
       final builder = builders[index];
       final parser = parsers[index];
       final status = parser.complete();
@@ -100,7 +103,7 @@ class TranslationParser {
 
   final _placeholderRegex = RegExp('\\{(.+?)\\}');
 
-  List<ArbResourcePlaceholder> _findPlaceholders(String text) {
+  List<ArbResourcePlaceholder> _findPlaceholders(String? text) {
     if (text == null || text.isEmpty) {
       return <ArbResourcePlaceholder>[];
     }
@@ -109,13 +112,16 @@ class TranslationParser {
     var placeholders = <String, ArbResourcePlaceholder>{};
     matches.forEach((Match match) {
       var group = match.group(0);
-      var placeholderName = group.substring(1, group.length - 1);
 
-      if (placeholders.containsKey(placeholderName)) {
-        throw Exception('Placeholder $placeholderName already declared');
+      if (group != null) {
+        var placeholderName = group.substring(1, group.length - 1);
+
+        if (placeholders.containsKey(placeholderName)) {
+          throw Exception('Placeholder $placeholderName already declared');
+        }
+        placeholders[placeholderName] =
+            (ArbResourcePlaceholder(name: placeholderName, type: 'text'));
       }
-      placeholders[placeholderName] =
-          (ArbResourcePlaceholder(name: placeholderName, type: 'text'));
     });
     return placeholders.values.toList();
   }

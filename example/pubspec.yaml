@@ -2,17 +2,16 @@ name: gsheet_to_arb_example
 description: Example of how to use ghseet_to_arb plugin
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.0.1 <3.0.0'
 
 dependencies:
-  intl:
-  intl_translation: ^0.17.9
+  intl: any
 
 dev_dependencies:
-  gsheet_to_arb: ^0.1.8
-#    path: ../
-  test: ^1.5.3
-  mockito: ^4.0.0  
+  gsheet_to_arb: #^0.1.8
+   path: ../
+  test: any
+  mockito: any
 
 gsheet_to_arb: 
   arb_file_prefix: 'intl'

@@ -45,7 +45,7 @@ void _writeYamlString(
   } else if (node is Iterable) {
     _listToYamlString(node, indent, ss, isTopLevel);
   } else if (node is String) {
-    ss..writeln('"${_escapeString(node)}"');
+    ss.writeln('"${_escapeString(node)}"');
   } else if (node is double) {
     ss.writeln('!!float $node');
   } else {
@@ -62,14 +62,16 @@ void _mapToYamlString(Map node, int indent, StringSink ss, bool isTopLevel) {
     indent += 2;
   }
 
-  final keys = _sortKeys(node);
+  if (node is Map<String, dynamic>) {
+    final keys = _sortKeys(node);
 
-  keys.forEach((k) {
-    final v = node[k];
-    _writeIndent(indent, ss);
-    ss..write(k)..write(': ');
-    _writeYamlString(v, indent, ss, false);
-  });
+    keys.forEach((k) {
+      final v = node[k];
+      _writeIndent(indent, ss);
+      ss..write(k)..write(': ');
+      _writeYamlString(v, indent, ss, false);
+    });
+  }
 }
 
 Iterable<String> _sortKeys(Map<String, dynamic> m) {

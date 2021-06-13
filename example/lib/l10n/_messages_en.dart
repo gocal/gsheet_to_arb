@@ -19,26 +19,30 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(count) => "${Intl.plural(count, one: '${count} Canadian dollar', other: '${count} Canadian dollars')}";
+  static String m0(count) =>
+      "${Intl.plural(count, one: '${count} Canadian dollar', other: '${count} Canadian dollars')}";
 
-  static m1(count) => "${Intl.plural(count, zero: 'No songs found.', one: 'One song found.', two: '${count} songs found.', few: '${count} songs found.', many: '${count} songs found.', other: '${count} song found.')}";
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'No songs found.', one: 'One song found.', two: '${count} songs found.', few: '${count} songs found.', many: '${count} songs found.', other: '${count} song found.')}";
 
-  static m2(name) => "Single ${name} argument";
+  static String m2(name) => "Single ${name} argument";
 
-  static m3(first, second) => "Argument ${first} and ${second}";
+  static String m3(first, second) => "Argument ${first} and ${second}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "amountDollars" : m0,
-    "appName" : MessageLookupByLibrary.simpleMessage("Sample Application"),
-    "login" : MessageLookupByLibrary.simpleMessage("Login"),
-    "longText" : MessageLookupByLibrary.simpleMessage("line a\nline b\nline c\nlorem\nipsum"),
-    "message" : MessageLookupByLibrary.simpleMessage("Message"),
-    "numberOfSongsAvailable" : m1,
-    "register" : MessageLookupByLibrary.simpleMessage("Register"),
-    "singleArgument" : m2,
-    "specialCharacters" : MessageLookupByLibrary.simpleMessage("special: !@#\$%^&*()"),
-    "title" : MessageLookupByLibrary.simpleMessage("Title"),
-    "twoArguments" : m3
-  };
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "amountDollars": m0,
+        "appName": MessageLookupByLibrary.simpleMessage("Sample Application"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "longText": MessageLookupByLibrary.simpleMessage(
+            "line a\nline b\nline c\nlorem\nipsum"),
+        "message": MessageLookupByLibrary.simpleMessage("Message"),
+        "numberOfSongsAvailable": m1,
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "singleArgument": m2,
+        "specialCharacters":
+            MessageLookupByLibrary.simpleMessage("special: !@#\$%^&*()"),
+        "title": MessageLookupByLibrary.simpleMessage("Title"),
+        "twoArguments": m3
+      };
 }

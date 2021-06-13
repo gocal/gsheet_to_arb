@@ -19,26 +19,30 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'pl';
 
-  static m0(count) => "${Intl.plural(count, one: '${count} dolar kanadyjski', other: '${count} dolarów kanadyjskich')}";
+  static String m0(count) =>
+      "${Intl.plural(count, one: '${count} dolar kanadyjski', other: '${count} dolarów kanadyjskich')}";
 
-  static m1(count) => "${Intl.plural(count, zero: 'Nie znaleziono piosenek.', one: 'Znaleziono jedną piosenkę.', two: 'Znaleziono ${count} piosenki.', few: 'Znaleziono ${count} piosenek.', many: 'Znaleziono ${count} piosenek.', other: 'Znaleziono ${count} piosenek.')}";
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'Nie znaleziono piosenek.', one: 'Znaleziono jedną piosenkę.', two: 'Znaleziono ${count} piosenki.', few: 'Znaleziono ${count} piosenek.', many: 'Znaleziono ${count} piosenek.', other: 'Znaleziono ${count} piosenek.')}";
 
-  static m2(name) => "Pojedynczy argument  ${name} ";
+  static String m2(name) => "Pojedynczy argument  ${name} ";
 
-  static m3(first, second) => "Dwa argumenty: ${first} i ${second}";
+  static String m3(first, second) => "Dwa argumenty: ${first} i ${second}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "amountDollars" : m0,
-    "appName" : MessageLookupByLibrary.simpleMessage("Aplikacja"),
-    "login" : MessageLookupByLibrary.simpleMessage("Zaloguj"),
-    "longText" : MessageLookupByLibrary.simpleMessage("lina a\nlina b\nlina c\nlorem\nipsum"),
-    "message" : MessageLookupByLibrary.simpleMessage("Wiadomość"),
-    "numberOfSongsAvailable" : m1,
-    "register" : MessageLookupByLibrary.simpleMessage("Zarejestruj"),
-    "singleArgument" : m2,
-    "specialCharacters" : MessageLookupByLibrary.simpleMessage("special: ąęśćż"),
-    "title" : MessageLookupByLibrary.simpleMessage("Tytuł"),
-    "twoArguments" : m3
-  };
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "amountDollars": m0,
+        "appName": MessageLookupByLibrary.simpleMessage("Aplikacja"),
+        "login": MessageLookupByLibrary.simpleMessage("Zaloguj"),
+        "longText": MessageLookupByLibrary.simpleMessage(
+            "lina a\nlina b\nlina c\nlorem\nipsum"),
+        "message": MessageLookupByLibrary.simpleMessage("Wiadomość"),
+        "numberOfSongsAvailable": m1,
+        "register": MessageLookupByLibrary.simpleMessage("Zarejestruj"),
+        "singleArgument": m2,
+        "specialCharacters":
+            MessageLookupByLibrary.simpleMessage("special: ąęśćż"),
+        "title": MessageLookupByLibrary.simpleMessage("Tytuł"),
+        "twoArguments": m3
+      };
 }

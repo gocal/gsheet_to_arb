@@ -91,7 +91,7 @@ class CustomIcuParser {
 
 class CustomVariableSubstitution extends VariableSubstitution {
   final String variable;
-  CustomVariableSubstitution.named(String name, Message parent)
+  CustomVariableSubstitution.named(String name, Message? parent)
       : variable = name,
         super.named(name, parent);
 }

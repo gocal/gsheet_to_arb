@@ -14,7 +14,7 @@ part 'plugin_config.g.dart';
 @JsonSerializable()
 class PluginConfigRoot {
   @JsonKey(name: 'gsheet_to_arb')
-  GsheetToArbConfig content;
+  GsheetToArbConfig? content;
 
   PluginConfigRoot(this.content);
 
@@ -39,24 +39,24 @@ class GsheetToArbConfig {
   String localizationFileName;
 
   @JsonKey(name: 'generate_code')
-  bool generateCode;
+  bool? generateCode;
 
   @JsonKey(name: 'add_context_prefix')
   bool addContextPrefix;
 
   @JsonKey(name: 'caseType')
-  String caseType;
+  String? caseType;
 
   @JsonKey(name: 'gsheet')
   GoogleSheetConfig gsheet;
 
   GsheetToArbConfig(
-      {this.outputDirectoryPath,
-      this.arbFilePrefix,
-      this.gsheet,
-      this.localizationFileName,
-      this.generateCode,
-      this.addContextPrefix,
+      {required this.outputDirectoryPath,
+      required this.arbFilePrefix,
+      required this.gsheet,
+      required this.localizationFileName,
+      required this.generateCode,
+      required this.addContextPrefix,
       this.caseType});
 
   factory GsheetToArbConfig.fromJson(Map<String, dynamic> json) =>
@@ -89,17 +89,21 @@ class GoogleSheetConfig {
   SheetRows sheetRows;
 
   @JsonKey(ignore: true)
-  AuthConfig auth;
+  AuthConfig? auth;
 
-  GoogleSheetConfig(
-      {this.authFile, this.documentId, this.sheetId, this.categoryPrefix, this.sheetColumns, this.sheetRows});
+  GoogleSheetConfig({
+    required this.authFile,
+    required this.documentId,
+    required this.sheetId,
+    required this.categoryPrefix,
+    required this.sheetColumns,
+    required this.sheetRows,
+  });
 
   factory GoogleSheetConfig.fromJson(Map<String, dynamic> json) =>
       _$GoogleSheetConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$GoogleSheetConfigToJson(this);
-
-
 }
 
 class DefaultSheetColumns {
@@ -116,7 +120,9 @@ class SheetColumns {
   @JsonKey(name: 'description', defaultValue: DefaultSheetColumns.description)
   final int description;
 
-  @JsonKey(name: 'first_language_key', defaultValue: DefaultSheetColumns.first_language_key)
+  @JsonKey(
+      name: 'first_language_key',
+      defaultValue: DefaultSheetColumns.first_language_key)
   final int first_language_key;
 
   SheetColumns({
@@ -126,14 +132,13 @@ class SheetColumns {
   });
 
   static SheetColumns generateFromJson(json) {
-    if(json == null) {
+    if (json == null) {
       return SheetColumns();
     }
     return SheetColumns.fromJson(Map<String, dynamic>.from(json));
   }
 
   factory SheetColumns.fromJson(Map<String, dynamic> json) {
-
     return _$SheetColumnsFromJson(json);
   }
 
@@ -150,7 +155,9 @@ class SheetRows {
   @JsonKey(name: 'header_row', defaultValue: DefaultSheetRows.header_row)
   final int header_row;
 
-  @JsonKey(name: 'first_translation_row', defaultValue: DefaultSheetRows.first_translation_row)
+  @JsonKey(
+      name: 'first_translation_row',
+      defaultValue: DefaultSheetRows.first_translation_row)
   final int first_translation_row;
 
   SheetRows({
@@ -159,12 +166,11 @@ class SheetRows {
   });
 
   static SheetRows generateFromJson(json) {
-    if(json == null) {
+    if (json == null) {
       return SheetRows();
     }
     return SheetRows.fromJson(Map<String, dynamic>.from(json));
   }
-
 
   factory SheetRows.fromJson(Map<String, dynamic> json) =>
       _$SheetRowsFromJson(json);
@@ -178,10 +184,10 @@ class SheetRows {
 @JsonSerializable()
 class AuthConfig {
   @JsonKey(name: 'oauth_client_id')
-  OAuthClientId oauthClientId;
+  OAuthClientId? oauthClientId;
 
   @JsonKey(name: 'service_account_key')
-  ServiceAccountKey serviceAccountKey;
+  ServiceAccountKey? serviceAccountKey;
 
   AuthConfig({this.oauthClientId, this.serviceAccountKey});
 
@@ -197,10 +203,10 @@ class AuthConfig {
 @JsonSerializable()
 class OAuthClientId {
   @JsonKey(name: 'client_id')
-  String clientId;
+  String? clientId;
 
   @JsonKey(name: 'client_secret')
-  String clientSecret;
+  String? clientSecret;
 
   OAuthClientId({this.clientId, this.clientSecret});
 
@@ -215,19 +221,19 @@ class OAuthClientId {
 ///
 @JsonSerializable()
 class ServiceAccountKey {
-  @JsonKey(name: 'client_id', nullable: false)
+  @JsonKey(name: 'client_id')
   String clientId;
 
-  @JsonKey(name: 'client_email', nullable: false)
+  @JsonKey(name: 'client_email')
   String clientEmail;
 
-  @JsonKey(name: 'private_key', nullable: false)
+  @JsonKey(name: 'private_key')
   String privateKey;
 
   ServiceAccountKey({
-    this.clientId,
-    this.clientEmail,
-    this.privateKey,
+    required this.clientId,
+    required this.clientEmail,
+    required this.privateKey,
   });
 
   factory ServiceAccountKey.fromJson(Map<String, dynamic> json) =>

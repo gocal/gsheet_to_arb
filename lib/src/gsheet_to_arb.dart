@@ -11,7 +11,7 @@ class GSheetToArb {
 
   final _arbSerializer = ArbSerializer();
 
-  GSheetToArb({this.config});
+  GSheetToArb({required this.config});
 
   void build() async {
     Log.i('Building translation...');
@@ -35,7 +35,7 @@ class GSheetToArb {
     _arbSerializer.saveArbBundle(arbBundle, config.outputDirectoryPath);
 
     // Generate Code from ArbBundle
-    if (config.generateCode) {
+    if (config.generateCode ?? false) {
       final generator = ArbToDartGenerator();
       generator.generateDartClasses(
           arbBundle, config.outputDirectoryPath, config.localizationFileName);

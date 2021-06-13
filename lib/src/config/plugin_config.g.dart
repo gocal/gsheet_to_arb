@@ -24,12 +24,11 @@ GsheetToArbConfig _$GsheetToArbConfigFromJson(Map<String, dynamic> json) {
   return GsheetToArbConfig(
     outputDirectoryPath: json['output_directory'] as String,
     arbFilePrefix: json['arb_file_prefix'] as String,
-    gsheet: json['gsheet'] == null
-        ? null
-        : GoogleSheetConfig.fromJson(json['gsheet'] as Map<String, dynamic>),
+    gsheet: GoogleSheetConfig.fromJson(json['gsheet'] as Map<String, dynamic>),
     localizationFileName: json['localization_file_name'] as String,
-    generateCode: json['generate_code'] as bool,
+    generateCode: json['generate_code'] as bool?,
     addContextPrefix: json['add_context_prefix'] as bool,
+    caseType: json['caseType'] as String?,
   );
 }
 
@@ -40,6 +39,7 @@ Map<String, dynamic> _$GsheetToArbConfigToJson(GsheetToArbConfig instance) =>
       'localization_file_name': instance.localizationFileName,
       'generate_code': instance.generateCode,
       'add_context_prefix': instance.addContextPrefix,
+      'caseType': instance.caseType,
       'gsheet': instance.gsheet,
     };
 
@@ -66,9 +66,9 @@ Map<String, dynamic> _$GoogleSheetConfigToJson(GoogleSheetConfig instance) =>
 
 SheetColumns _$SheetColumnsFromJson(Map<String, dynamic> json) {
   return SheetColumns(
-    key: json['key'] as int ?? 0,
-    description: json['description'] as int ?? 1,
-    first_language_key: json['first_language_key'] as int ?? 2,
+    key: json['key'] as int? ?? 0,
+    description: json['description'] as int? ?? 1,
+    first_language_key: json['first_language_key'] as int? ?? 2,
   );
 }
 
@@ -81,8 +81,8 @@ Map<String, dynamic> _$SheetColumnsToJson(SheetColumns instance) =>
 
 SheetRows _$SheetRowsFromJson(Map<String, dynamic> json) {
   return SheetRows(
-    header_row: json['header_row'] as int ?? 0,
-    first_translation_row: json['first_translation_row'] as int ?? 1,
+    header_row: json['header_row'] as int? ?? 0,
+    first_translation_row: json['first_translation_row'] as int? ?? 1,
   );
 }
 
@@ -112,8 +112,8 @@ Map<String, dynamic> _$AuthConfigToJson(AuthConfig instance) =>
 
 OAuthClientId _$OAuthClientIdFromJson(Map<String, dynamic> json) {
   return OAuthClientId(
-    clientId: json['client_id'] as String,
-    clientSecret: json['client_secret'] as String,
+    clientId: json['client_id'] as String?,
+    clientSecret: json['client_secret'] as String?,
   );
 }
 

@@ -16,8 +16,8 @@ import 'package:gsheet_to_arb/src/utils/log.dart';
 void main(List<String> args) async {
   var parser = ArgParser();
 
-  bool showHelp;
-  bool createConfig;
+  var showHelp = false;
+  var createConfig = false;
 
   parser.addFlag('help',
       negatable: false,
@@ -59,29 +59,31 @@ void main(List<String> args) async {
 
 void _checkAuthConfig(GoogleSheetConfig config) {
   final placeholder = 'TODO';
+  final auth = config.auth;
 
-  if (config.auth == null) {
+  if (auth == null) {
     Log.i(
         'Authetnication config not found - please add config to ${config.authFile} file');
     exit(1);
   }
 
-  final auth = config.auth;
+  final oauthClientId = auth.oauthClientId;
+  final serviceAccountKey = auth.serviceAccountKey;
 
-  if (auth.oauthClientId == null && auth.serviceAccountKey == null) {
+  if (oauthClientId == null && serviceAccountKey == null) {
     Log.i(
         'Authetnication config is invalid - please add config to ${config.authFile} file');
     exit(1);
   }
 
-  if (auth.oauthClientId != null) {
-    if (auth.oauthClientId.clientId == placeholder ||
-        auth.oauthClientId.clientSecret == placeholder) {
+  if (oauthClientId != null) {
+    if (oauthClientId.clientId == placeholder ||
+        oauthClientId.clientSecret == placeholder) {
       Log.i('Please use valid auth client configuration');
       exit(1);
     }
-  } else if (auth.serviceAccountKey != null) {
-    if (auth.serviceAccountKey.privateKey == placeholder) {
+  } else if (serviceAccountKey != null) {
+    if (serviceAccountKey.privateKey == placeholder) {
       Log.i('Please use valid auth server configuration');
       exit(1);
     }

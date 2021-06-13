@@ -21,7 +21,7 @@ class Completed extends PluralsStatus {
 
 class PluralsParser {
   final bool addContextPrefix;
-  String caseType;
+  String? caseType;
 
   final _pluralSeparator = '=';
 
@@ -34,8 +34,8 @@ class PluralsParser {
     'other': PluralCase.other
   };
 
-  String _key;
-  ArbResource _resource;
+  String? _key;
+  ArbResource? _resource;
   final _placeholders = <String, ArbResourcePlaceholder>{};
   final _values = <PluralCase, String>{};
 
@@ -73,7 +73,10 @@ class PluralsParser {
       _key = caseKey;
       _resource = resource;
       _placeholders[_countPlaceholder] = ArbResourcePlaceholder(
-          name: _countPlaceholder, description: 'plural count', type: 'num');
+        name: _countPlaceholder,
+        description: 'plural count',
+        type: 'num',
+      );
       addPlaceholders(resource.placeholders);
       _values[pluralCase] = resource.value;
       return Consumed();
@@ -115,7 +118,7 @@ class PluralsParser {
     return Skip();
   }
 
-  PluralCase _getCase(String key) {
+  PluralCase? _getCase(String key) {
     if (key.contains(_pluralSeparator)) {
       for (var plural in _pluralKeywords.keys) {
         if (key.endsWith('$_pluralSeparator$plural')) {
@@ -131,21 +134,33 @@ class PluralsParser {
   }
 
   Completed _getCompleted({bool consumed = false}) {
+    final resourceContext = _resource?.context;
+    final key = (addContextPrefix &&
+            resourceContext != null &&
+            resourceContext.isNotEmpty)
+        ? resourceContext + '_' + _key!
+        : _key;
+
     final formattedKey = reCase(
-        addContextPrefix && _resource.context.isNotEmpty
-            ? _resource.context + '_' + _key
-            : _key,
-        caseType);
+      key!,
+      caseType,
+    );
 
     return Completed(
-        ArbResource(formattedKey, PluralsFormatter.format(Map.from(_values)),
-            placeholders: List.from(_placeholders.values),
-            context: _resource.context,
-            description: _resource.description),
+        ArbResource(
+          formattedKey,
+          PluralsFormatter.format(Map.from(_values)),
+          placeholders: List.from(_placeholders.values),
+          context: _resource?.context,
+          description: _resource?.description,
+        ),
         consumed: consumed);
   }
 
-  void addPlaceholders(List<ArbResourcePlaceholder> placeholders) {
+  void addPlaceholders(List<ArbResourcePlaceholder>? placeholders) {
+    if (placeholders == null) {
+      return;
+    }
     for (var placeholder in placeholders) {
       if (!_placeholders.containsKey(placeholder.name)) {
         _placeholders[placeholder.name] = placeholder;
@@ -166,7 +181,7 @@ class PluralsFormatter {
     PluralCase.other: 'other'
   };
 
-  static String format(Map<PluralCase, String> plural) {
+  static String format(Map<PluralCase, String?> plural) {
     final builder = StringBuffer();
     builder.write('{$_countPlaceholder, plural,');
     plural.forEach((key, value) {

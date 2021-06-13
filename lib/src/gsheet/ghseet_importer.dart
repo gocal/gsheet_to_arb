@@ -7,13 +7,12 @@ import 'package:googleapis_auth/auth_io.dart';
 
 class GSheetImporter {
   final GoogleSheetConfig config;
-  
 
-  GSheetImporter({this.config});
+  GSheetImporter({required this.config});
 
   Future<TranslationsDocument> import(String documentId) async {
     Log.i('Importing ARB from Google sheet...');
-    var authClient = await _getAuthClient(config.auth);
+    var authClient = await _getAuthClient(config.auth!);
     Log.startTimeTracking();
     var sheetsApi = SheetsApi(authClient);
     var spreadsheet =
@@ -29,8 +28,10 @@ class GSheetImporter {
   }
 
   Future<AuthClient> _getAuthClient(AuthConfig auth) async {
-    final scopes = [SheetsApi.SpreadsheetsReadonlyScope];
+    final scopes = [SheetsApi.spreadsheetsReadonlyScope];
     var authClient;
+    final service = auth.serviceAccountKey;
+
     if (auth.oauthClientId != null) {
       void clientAuthPrompt(String url) {
         Log.i(
@@ -38,15 +39,16 @@ class GSheetImporter {
       }
 
       final client = auth.oauthClientId;
+      final clientId = client?.clientId;
+      final clientSecret = client?.clientSecret;
 
-      if (client.clientId == null || client.clientSecret == null) {
+      if (clientId == null || clientSecret == null) {
         throw Exception('Auth client config is invalid');
       }
 
-      var id = ClientId(client.clientId, client.clientSecret);
+      var id = ClientId(clientId, clientSecret);
       authClient = await clientViaUserConsent(id, scopes, clientAuthPrompt);
-    } else if (auth.serviceAccountKey != null) {
-      final service = auth.serviceAccountKey;
+    } else if (service != null) {
       var credentials = ServiceAccountCredentials(service.clientEmail,
           ClientId(service.clientId, null), service.privateKey);
       authClient = await clientViaServiceAccount(credentials, scopes);
@@ -55,10 +57,10 @@ class GSheetImporter {
   }
 
   Future<TranslationsDocument> _importFrom(Spreadsheet spreadsheet) async {
-    final sheet = spreadsheet.sheets[0];
-    final rows = sheet.data[0].rowData;
-    final header = rows[0];
-    final headerValues = header.values;
+    final sheet = spreadsheet.sheets?[0];
+    final rows = sheet?.data?[0].rowData;
+    final header = rows?[0];
+    final headerValues = header?.values;
 
     final languages = <String>[];
     final items = <TranslationRow>[];
@@ -69,30 +71,30 @@ class GSheetImporter {
     var currentCategory = '';
 
     for (var column = firstLanguageColumn;
-        column < headerValues.length;
+        column < (headerValues?.length ?? 0);
         column++) {
       //Stop parsing on first empty language code
-      if(headerValues[column].formattedValue == null) {
+      final formattedValue = headerValues?[column].formattedValue;
+      if (formattedValue == null) {
         break;
       }
-      final language = headerValues[column].formattedValue;
-      languages.add(language);
+      languages.add(formattedValue);
     }
 
     // rows
-    for (var i = firstTranslationsRow; i < rows.length; i++) {
-      var row = rows[i];
-      var languages = row.values;
+    for (var i = firstTranslationsRow; i < (rows?.length ?? 0); i++) {
+      final row = rows?[i];
+      final languages = row?.values;
 
       //Skip empty rows
-      if(languages == null) {
+      if (languages == null) {
         continue;
       }
 
       var key = languages[config.sheetColumns.key].formattedValue;
 
       //Skip rows with missing key value
-      if(key == null) {
+      if (key == null) {
         continue;
       }
 
@@ -104,8 +106,8 @@ class GSheetImporter {
       final description =
           languages[config.sheetColumns.description].formattedValue ?? '';
 
-      final values = row.values
-          .sublist(firstLanguageColumn, row.values.length)
+      final values = languages
+          .sublist(firstLanguageColumn, row?.values?.length)
           .map((data) => data.formattedValue ?? '')
           .toList();
 

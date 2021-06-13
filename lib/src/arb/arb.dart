@@ -5,17 +5,22 @@
  */
 
 class ArbDocument {
-  String locale;
-  DateTime lastModified;
-  List<ArbResource> entries;
+  String? locale;
+  DateTime? lastModified;
+  List<ArbResource> entries = <ArbResource>[];
 
   ArbDocument(this.locale, this.lastModified, this.entries);
 
   Map<String, Object> toJson({bool compact = false}) {
     final json = <String, Object>{};
 
-    json['@@locale'] = locale;
-    json['@@last_modified'] = lastModified.toIso8601String();
+    if (locale != null) {
+      json['@@locale'] = locale!;
+    }
+
+    if (lastModified != null) {
+      json['@@last_modified'] = lastModified!.toIso8601String();
+    }
 
     entries.forEach((ArbResource resource) {
       json[resource.key] = resource.value;
@@ -38,7 +43,7 @@ class ArbDocument {
         lastModified = DateTime.parse(value);
       } else if (key.startsWith('@')) {
         var entry = entriesMap[key.substring(2)];
-        entry.attributes.addAll(value);
+        entry?.attributes.addAll(value);
       } else {
         var entry = ArbResource(key, value);
         entries.add(entry);
@@ -52,9 +57,9 @@ class ArbResource {
   final String key;
   final String value;
   final Map<String, Object> attributes = {};
-  final List<ArbResourcePlaceholder> placeholders;
-  final String description;
-  final String context;
+  final List<ArbResourcePlaceholder>? placeholders;
+  final String? description;
+  final String? context;
 
   ArbResource(String key, String value,
       {this.description = '', this.context = '', this.placeholders = const []})
@@ -63,16 +68,16 @@ class ArbResource {
     // Possible values are "text", "image", "css"
     attributes['type'] = 'Text';
 
-    if (placeholders != null && placeholders.isNotEmpty) {
-      attributes['placeholders'] = _formatPlaceholders(placeholders);
+    if (placeholders != null && placeholders!.isNotEmpty) {
+      attributes['placeholders'] = _formatPlaceholders(placeholders!);
     }
 
-    if (description != null && description.isNotEmpty) {
-      attributes['description'] = description;
+    if (description != null && description!.isNotEmpty) {
+      attributes['description'] = description!;
     }
 
-    if (context != null && context.isNotEmpty) {
-      attributes['context'] = context;
+    if (context != null && context!.isNotEmpty) {
+      attributes['context'] = context!;
     }
   }
 
@@ -82,9 +87,7 @@ class ArbResource {
 
     placeholders.forEach((placeholder) {
       final placeholderArgs = <String, Object>{};
-      if (placeholder.type != null) {
-        placeholderArgs['type'] = placeholder.type;
-      }
+      placeholderArgs['type'] = placeholder.type;
       map[placeholder.name] = placeholderArgs;
     });
     return map;
@@ -97,12 +100,12 @@ class ArbResourcePlaceholder {
 
   final String name;
   final String type;
-  final String description;
-  final String example;
+  final String? description;
+  final String? example;
 
   ArbResourcePlaceholder({
-    this.name,
-    this.type,
+    required this.name,
+    required this.type,
     this.description,
     this.example,
   });

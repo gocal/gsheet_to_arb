@@ -18,7 +18,7 @@ class FileUtils {
   static String getContent(String filePath) {
     final expandedFilePath = FilePath.expand(filePath);
     final file = File(expandedFilePath);
-    assert(file.existsSync(), "filePath ${filePath} doesn't exist");
+    assert(file.existsSync(), "filePath $filePath doesn't exist");
     final content = file.readAsStringSync();
     return content;
   }
@@ -35,7 +35,7 @@ class FileUtils {
   static void append(String filePath, String content) {
     final expandedFilePath = FilePath.expand(filePath);
     final file = File(expandedFilePath);
-    assert(file.existsSync(), "filePath ${filePath} doesn't exist");
+    assert(file.existsSync(), "filePath $filePath doesn't exist");
     file.writeAsString(content, mode: FileMode.append);
   }
 }
